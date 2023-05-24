@@ -22,6 +22,3 @@
   (define-key evil-insert-state-map   (kbd "C-g") #'evil-keyboard-quit)
   (define-key evil-window-map         (kbd "C-g") #'evil-keyboard-quit)
   (define-key evil-operator-state-map (kbd "C-g") #'evil-keyboard-quit))
-
-
-
