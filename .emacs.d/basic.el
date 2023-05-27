@@ -71,34 +71,34 @@
 
 (use-package diminish :ensure t)
 
-(use-package paredit
-  :ensure t
-  :hook ((emacs-lisp-mode . enable-paredit-mode)
-         (eval-expression-minibuffer-setup . enable-paredit-mode)
-         (ielm-mode . enable-paredit-mode)
-         (lisp-mode . enable-paredit-mode) 
-         (lisp-interaction-mode . enable-paredit-mode)
-         (scheme-mode . enable-paredit-mode)
-         (slime-repl-mode . enable-paredit-mode) 
-         (clojure-mode . enable-paredit-mode)
-         (clojurescript-mode . enable-paredit-mode)
-         (cider-repl-mode . enable-paredit-mode)
-         (cider-mode . enable-paredit-mode)
-         (clojure-mode . enable-paredit-mode))
-  :config
-  (show-paren-mode t)
-  ;; paredit makes evil column editing error.
-  ;; do comment by select "va(" and M-;
-  ;; the key binds to (paredit-comment-dwin)
-  ;; it toggles the comment/uncomment
-  :bind (("C->" . paredit-forward-slurp-sexp)
-         ("C-<" . paredit-forward-barf-sexp)
-         ("C-M-<" . paredit-backward-slurp-sexp)
-         ("C-M->" . paredit-backward-barf-sexp)
-         ("<C-right>" .  nil)
-         ("<C-left>" .  nil)
-         ("M-[" . paredit-wrap-square)
-         ("M-{" . paredit-wrap-curly)))
+;(use-package paredit
+;  :ensure t
+;  :hook ((emacs-lisp-mode . enable-paredit-mode)
+;         (eval-expression-minibuffer-setup . enable-paredit-mode)
+;         (ielm-mode . enable-paredit-mode)
+;         (lisp-mode . enable-paredit-mode) 
+;         (lisp-interaction-mode . enable-paredit-mode)
+;         (scheme-mode . enable-paredit-mode)
+;         (slime-repl-mode . enable-paredit-mode) 
+;         (clojure-mode . enable-paredit-mode)
+;         (clojurescript-mode . enable-paredit-mode)
+;         (cider-repl-mode . enable-paredit-mode)
+;         (cider-mode . enable-paredit-mode)
+;         (clojure-mode . enable-paredit-mode))
+;  :config
+;  (show-paren-mode t)
+;  ;; paredit makes evil column editing error.
+;  ;; do comment by select "va(" and M-;
+;  ;; the key binds to (paredit-comment-dwin)
+;  ;; it toggles the comment/uncomment
+;  :bind (("C->" . paredit-forward-slurp-sexp)
+;         ("C-<" . paredit-forward-barf-sexp)
+;         ("C-M-<" . paredit-backward-slurp-sexp)
+;         ("C-M->" . paredit-backward-barf-sexp)
+;         ("<C-right>" .  nil)
+;         ("<C-left>" .  nil)
+;         ("M-[" . paredit-wrap-square)
+;         ("M-{" . paredit-wrap-curly)))
 
 
 (use-package dired :ensure nil

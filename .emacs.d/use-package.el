@@ -1,6 +1,5 @@
 (setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
                          ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")))
-(package-initialize) ;; You might already have this line
 
 
 (defun melpa_raw ()

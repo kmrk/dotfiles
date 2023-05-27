@@ -51,16 +51,13 @@
 
 
 (add-hook 'markdown-mode-hook #'(lambda () (treesit-parser-create 'markdown)))
-
 (add-hook 'emacs-lisp-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
 (add-hook 'ielm-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
 (add-hook 'json-mode-hook #'(lambda () (treesit-parser-create 'json)))
 (add-hook 'go-mode-hook #'(lambda () (treesit-parser-create 'go)))
 (add-hook 'dart-mode-hook #'(lambda () (treesit-parser-create 'dart)))
 
-
-
-(use-package treesit-auto
-  :ensure t
-  :config
-  (global-treesit-auto-mode))
+;(use-package treesit-auto
+;  :ensure t
+;  :config
+;  (global-treesit-auto-mode))

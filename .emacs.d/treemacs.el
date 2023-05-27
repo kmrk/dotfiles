@@ -1,8 +1,8 @@
 (defun treemacs-mode-handler()
-       (set (make-local-variable 'face-remapping-alist)
-            '((default :background "#303030"))))
+   (set (make-local-variable 'face-remapping-alist)
+        '((default :background "#303030"))))
 
-(setq need-scale (and (not (eq ":0" (getenv "DISPLAY"))) (eq 'gnu/linux system-type)))
+(setq scale (if (and (equal ":0" (getenv "DISPLAY")) (eq 'gnu/linux system-type)) 1.5 1))
 (use-package treemacs
   :ensure t
   :defer t
@@ -73,7 +73,7 @@
                    treemacs-directory-collapsed-face
                    treemacs-file-face
                    treemacs-tags-face))
-      (set-face-attribute face nil :family "Noto Sans CJK HK" :height (if need-scale 100 100)))
+      (set-face-attribute face nil :family "Noto Sans CJK HK" :height (round (* scale 100))))
     (treemacs-filewatch-mode t)
     (treemacs-fringe-indicator-mode t)
     (pcase (cons (not (null (executable-find "git")))

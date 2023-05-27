@@ -21,7 +21,6 @@ return {
   --     --colorscheme = "catppuccin",
   --     colorscheme = "monokai",
   --     --colorscheme = "tokyonight",
-  --     --style = "moon",
   --     ----style = "day", --"moon", -- "day" -- "night"
   --   },
   -- },
@@ -29,22 +28,23 @@ return {
   {
 
     -- "catppuccin/nvim",
-    -- "ellisonleao/gruvbox.nvim",
-    -- "folke/tokyonight.nvim",
+    --  "ellisonleao/gruvbox.nvim",
+    --"folke/tokyonight.nvim",
     "tanvirtin/monokai.nvim",
     opts = {
-      transparent = true,
-      styles = {
+      --transparent = true,
+      --  style = "night", --"moon", -- "day" -- "night"
+      --[[styles = {
         sidebars = "transparent",
         floats = "transparent",
-      },
+      },]]
     },
   },
 
-  {
+  --[[{
     "rcarriga/nvim-notify",
     opts = {
       background_colour = "#000000",
     },
-  },
+  },]]
 }
