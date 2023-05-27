@@ -10,7 +10,7 @@
 (load "~/.emacs.d/indent-line.el")
 (load "~/.emacs.d/org-roam.el")
 (load "~/.emacs.d/font.el")
-(load "~/.emacs.d/web.el")
+;(load "~/.emacs.d/web.el")
 
 (if (>= emacs-major-version 29) (load "~/.emacs.d/tree-sitter.el"))
 
