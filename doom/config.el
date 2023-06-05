@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "kmrk"
+      user-mail-address "kmrkgo@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -32,7 +32,9 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-material)
+
+
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -41,6 +43,19 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+
+(load! "~/.config/.emacs.d.my/font.el")
+
+(defcustom which-key-idle-delay 1.0
+  "Delay (in seconds) for which-key buffer to popup. This
+ variable should be set before activating `which-key-mode'.
+
+A value of zero might lead to issues, so a non-zero value is
+recommended
+(see https://github.com/justbur/emacs-which-key/issues/134)."
+  :group 'which-key
+  :type 'float)
+
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an

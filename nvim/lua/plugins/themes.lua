@@ -28,17 +28,48 @@ return {
   {
 
     -- "catppuccin/nvim",
-    --  "ellisonleao/gruvbox.nvim",
+    --"ellisonleao/gruvbox.nvim",
+    --opts = {},
     --"folke/tokyonight.nvim",
+    --
+    --"cpea2506/one_monokai.nvim",
     "tanvirtin/monokai.nvim",
-    opts = {
-      --transparent = true,
-      --  style = "night", --"moon", -- "day" -- "night"
-      --[[styles = {
+    opts = {},
+    --
+    --
+    --
+    --#region
+    --"marko-cerovac/material.nvim",
+    --opts = function(_, opts)
+    --  vim.g.material_style = "palenight"
+    --  vim.cmd("colorscheme material")
+    --  opts.transparent = false
+    --end,
+
+    --style = "palenight", --"deep ocean",
+    --transparent = true, -- enable transparent window
+    --colors = {
+    --  lmao = "#ffffff", -- add new color
+    --  pink = "#ec6075", -- replace default color
+    -- },
+    -- themes = function(colors)
+    --   -- change highlight of some groups,
+    --   -- the key and value will be passed respectively to "nvim_set_hl"
+    --   return {
+    --     Normal = { bg = colors.lmao },
+    --     ErrorMsg = { fg = colors.pink, bg = "#ec6075", standout = true },
+    --     ["@lsp.type.keyword"] = { link = "@keyword" },
+    --  }
+    --end,
+
+    ----
+    --transparent = true,
+    --  style = "night", --"moon", -- "day" -- "night"
+    --[[styles = {
         sidebars = "transparent",
         floats = "transparent",
       },]]
-    },
+    --},
   },
 
   --[[{
