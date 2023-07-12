@@ -1,0 +1,979 @@
+clear
+ls
+clear
+ls
+history 
+ls
+clear
+ls
+cd codz/project_jd/
+ls
+clear
+ls
+clear
+ls
+clear
+ls
+clear
+ls
+clear
+ls
+more
+top
+htop
+clear
+ls
+clear
+ls
+clear
+ls
+emacsc ./doc/
+emacsc ./doc
+emacsc 
+emacsclient 
+clear
+ls
+vi ~/.profile
+ls
+cd
+clear
+ls
+cd .config/nushell/
+ls
+vi config.nu
+ls
+cd
+cd codz/project_jd/
+clear
+emacsclient .
+clear
+ls
+ls
+clear
+ls
+clear 
+DISPLAY=0:0 emacs
+DISPLAY=:0 emacs
+clear
+ls
+clear
+ls
+cd ~/org/
+ls
+lazygit 
+clear
+ls
+systemctl status emacs
+systemctl status --user emacs
+ps -ef|grep emacs
+emacsclient 
+emacsclient -f 
+emacsclient -fc
+emacsclient -c
+clear
+ls
+emacsclient . 
+ps -ef|grep emacs
+ps |grep emacs
+kill 2813
+emacsclient codz/
+ps |grep emacs
+clear
+ls
+ps |grep emacs
+emacsclient .
+ps |grep emacs
+clear
+ls
+zellij 
+clear
+ls
+clear
+clear
+clear
+ls
+ls
+ls
+cd codz/project_jd/
+cd codz/project_jd/
+cd codz/project_jd/
+ls
+ls
+ls
+clear
+clear
+clear
+ls
+ls
+ls
+clear
+clear
+clear
+vi ~/.profile
+vi ~/.zshrc
+sudo systemctl start postgres.service
+sudo systemctl start postgressql.service
+sudo systemctl start postgressql
+vi ~/.zshrc
+sudo systemctl start postgressql.service
+sudo systemctl start postgresql.service
+clear
+ls
+clear
+ps -ef|grep post
+ps -f|grep post
+ps|grep post
+clear
+code .
+ls
+emacsclient ./doc
+lazygit 
+clear
+ls
+zellij 
+emacsclient 
+emacsclient .
+ps|grep emeacs
+ps|grep emacs
+emacsclient .
+syste
+systemctl restart --user emacs
+emacsclient .
+cd codz/project_jd/
+cd doc/
+emac
+emacsclient .
+cleawr
+ls
+clear
+ls
+exit
+clear
+clear
+clear
+ls
+ls
+ls
+cd 
+cd 
+cd 
+cd codz/project_jd/
+cd codz/project_jd/
+cd codz/project_jd/
+ls
+ls
+ls
+clear
+clear
+clear
+ls
+ls
+clear
+clear
+ls
+ls
+clear
+clear
+ls
+clera
+clear
+cd
+cd codz/project_jd/
+clear
+sudo systemctl start postgresql.service
+clear
+ls
+clear
+ls
+clear
+emacsclient ./doc/
+vi ~/.config/doom/
+vi ~/.config/doom/packages.el
+~/.config/emacs/bin/doom sync
+clear
+ls
+systemctl restart --user emacs
+ls
+emacsclient ./doc/
+clear
+ls
+emacsclient ./doc/
+cler
+clear
+ls
+zellij 
+exit
+cd codz/project_jd/
+cd codz/project_jd/
+cd codz/project_jd/
+clear
+clear
+clear
+ls
+ls
+ls
+clear
+clear
+clear
+code .
+clear
+ls
+clear
+ps|grep post
+clear
+sudo systemctl start postgresql.service
+clear
+ls
+ls
+clear
+ls
+cd
+cd org/
+ls
+clear
+ls
+mv learn.org twitter.org
+ls
+emacsclient ./doc/
+DISPLAY=:0 emacs
+c;ear
+clear
+emacsclient ./doc/
+clear
+ls
+clear
+clear
+clear
+pnpm dev
+pnpm dev
+pnpm dev
+clear
+clear
+clear
+code .
+clear
+emacsclient ./doc/
+emacsclient ./doc/
+systemctl restart --user emacs
+emacsclient ./doc/
+clear
+emacsclient ./doc/
+systemctl restart --user emacs
+emacsclient ./doc/
+clear
+ls
+clear
+ls
+emac
+emacsclient ./doc/
+systemctl restart --user emacs
+DISPLAY=:0 emacs
+emacsclient ./doc/
+clear
+code .
+emacsclient ./doc/
+cd codz/project_jd/
+emacsclient ./doc/
+clear
+ls
+clear
+ls
+clear
+c;ear
+clear
+emacsclient ./doc/
+cd codz/project_jd/
+cd codz/project_jd/
+cd codz/project_jd/
+emacsclient ./doc/
+emacsclient ./doc/
+c;ear
+c;ear
+clear
+clear
+emacsclient ./doc/
+emacsclient ./doc/
+systemctl restart --user emacs
+emacsclient ./doc/
+nvim
+ls
+clear
+vi ~/.config/doom/init.el
+vi ~/.config/doom/packages.el
+emacsclient ./doc/
+~/.config/emacs/bin/doom sync
+emacsclient ./doc/
+systemctl restart --user emacs
+clear
+ls
+clear
+DISPLAY=:0 emacs
+clear
+code .
+clear
+ls
+clear
+emacsclient ./doc/
+systemctl restart --user emacs
+emacsclient ./doc/
+clear
+ls
+clear
+DISPLAY=:0 emacs
+clear
+ls
+cd codz/project_jd/
+clear
+code .
+clear
+ls
+clear
+cd codz/project_jd/
+ps -f|grep postgres
+ps -f|grep postg
+ps |grep postg
+ps grep postg
+ps | grep postg
+ps | grep post
+clear
+sudo systemctl start postgresql.service
+clear
+code .
+ls
+clear
+ls
+clear
+pnpm dev
+clear
+ls
+8704/1024
+python 8704/1024
+8704 /1024
+clear
+clear
+clear
+code .
+ls
+clear
+clear
+clear
+code .
+clear
+ls
+emacsclient ./doc/
+clear
+ps |grep node
+ps |grep node
+ps |grep node
+ps |grep next
+ps |grep next
+ps |grep next
+clear
+clear
+clear
+ls
+ls
+ls
+clear
+clear
+clear
+ls
+ls
+ls
+cler
+cler
+cler
+clear
+clear
+clear
+ls
+clear
+ls
+lazygit 
+clear
+ls
+clear
+pnpm dev
+clear
+ps |grep next
+ps |grep pnpm
+ps |greo node
+ps |grep node
+pkill node
+pnpm dev
+code .
+clear
+sudo systemctl start postgresql.service
+code .
+pnpm 
+pnpm dev
+pkill node
+pnpm dev
+code .
+pnpm dev
+clear
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+pnpm dev
+sudo systemctl stop postgresql.service
+clear
+pnpm dev
+clear
+sudo systemctl start postgresql.service
+pnpm dev
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+cd codz/project_jd/
+emacsclient ./doc/
+emacsclient ./doc/
+systemctl restart --user emacs
+clear
+ls
+clear
+clear
+clear
+code .
+sudo systemctl start postgresql.service
+pnpm dev
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+cd codz/project_jd/
+emacsclient ./doc/
+ls
+cd codz/project_jd/
+pnpm dev
+clear
+pnpm dev
+clear
+sudo systemctl start postgresql.service
+sudo systemctl stop postgresql.service
+sudo systemctl start postgresql.service
+pnpm dev
+lazygit 
+pnpm dev
+clearl
+clear
+ls
+clear
+zellij 
+cd codz/project_jd/
+pnpm dev
+la
+lazygit 
+pnpm dev
+zelli
+clear
+clear
+lazygit 
+emacsclient ./doc/
+lazygit 
+emacsclient ./doc/
+zellij 
+clear
+clear
+clear
+cd codz/project_jd/
+cd codz/project_jd/
+cd codz/project_jd/
+clear
+code .
+clear
+ls
+clear
+emacsclient ./doc/
+clear
+pnpm dev
+clear
+ls
+clear
+ls
+clear
+ls
+claer
+clear
+cd ../jojo/
+cd ../jojo/
+cd ../jojo/
+ls
+ls
+ls
+code .
+pnpm update
+ls
+pnpm install
+clear
+pnpm install
+pnpm update
+pnpm add -D unocss
+pnpm dev
+pnpm add -D @unocss/preset-attributify @unocss/preset-icons 
+pnpm add -D @unocss/core
+pnpm add -D @unocss/preset-uno
+cd ..
+ls
+git clone https://github.com/solidjs/solid-site.git
+clear
+cd solid-site/
+code .
+pnpm install
+pnpm dev
+clear
+ls
+cd ../jojo/
+ls
+emacsclient ./doc/
+clear
+ls
+clear
+ npm i -g @nestjs/cli
+sudo npm i -g @nestjs/cli
+sudo cnpm i -g @nestjs/cli 
+sudo pnpm i -g @nestjs/cli 
+clear
+sudo pnpm i -g @nestjs/cli --registry=https://registry.npmmirror.com
+sudo npm i -g @nestjs/cli --registry=https://registry.npmmirror.com
+cd ,,
+cd ..
+ls
+clear
+ls
+npx nest new nest-demo
+ls
+cd nest-demo/
+code .
+pnpm dev
+clear
+pnpm add path
+pnpm add @nestjs/core
+pnpm add import { AppModule } from './app.module'
+pnpm add @nestjs/platform-express
+pnpm add  -D @types/node
+pnpm add @nestjs/common
+pnpm install
+pnpm update
+pnpm add rimraf
+pnpm add babel-preset-solid
+pnpm add hbs
+pnpm add babel-preset-solid
+pnpm start
+pnpm add class-transformer class-validator
+pnpm start
+clear
+ls
+cd ..
+ls
+mkdir solid-site
+cd solid-site/
+ls
+npx degit solidjs/templates/ts front
+ls
+cd ..
+ls
+mv solid-site/front/ .
+ls
+mkdir wwwtemplate
+cd wwwtemplate/
+mv ../front/ .
+ls
+npx nest new server
+code .
+cd front/
+pnpm add unocss
+pnpm start
+pnpm add  -D @unocss/core @unocss/preset-attributify @unocss/preset-icons @unocss/preset-uno
+pnpm install
+pnpm start
+pnpm install
+pnpm start
+pnpm update
+pnpm start
+pnpm update
+pnpm start
+cd ..
+cd server/
+pnpm install
+pnpm start
+pnpm dev
+pnpm start:dev
+pnpm add fp-ts
+pnpm add prisma
+clear
+ls
+cd ..
+ls
+cd ..
+ls
+cd jojo/
+ls
+rm -rf ./*
+ls
+cd ..
+rm -r jojo
+cp wwwtemplate/ jojo.games -R
+cp wwwtemplate/ jojo.games -r
+cd jojo.games/
+code .
+ls
+cd ..
+rm -rf jojo.games/
+cp -R wwwtemplate jojo.games 
+cp -r wwwtemplate jojo.games 
+cd jojo.games/
+ls
+cd ..
+ls
+rm -rf jojo.games/
+ls
+cd wwwtemplate/
+ls
+cd ..
+ls
+cp wwwtemplate jojo.games
+cp --rescursive wwwtemplate jojo.games
+cp wwwtemplate jojo.games --recursive
+cd jojo.games/
+ls
+cd ..
+ls
+rm -rf jojo.games/
+exit
+clear
+ls
+cd ..
+ls
+exit
+clear
+ls
+clear
+cls
+clear
+ls
+clear
+exit
+exit
+mkdir src
+cd src/
+mkdir 1 2 3 4
+ls
+cd ..
+cp -r src/ dest
+cd dest/
+ls
+cd 1/
+ls
+cd ../
+ls
+cd ..
+rm -r dest/
+ls
+cd src/
+ls
+cd 1/
+touch 1.tt
+cd ..
+cp -r src/ dest
+cd ..
+cp -r src/ dest
+cd dest/
+ls
+cd 1
+ls
+cd ..
+ls
+cd ..
+ls
+rm -r src/ dest/
+cd codz/project_jd/
+ls
+cd ..
+ls
+cp wwwtemplate nn -rp
+ls
+cd nn/
+ls
+code .
+ls
+clear
+ls
+exit
+cp -r wwwtemplate nnn
+ls wwwtemplate/
+ls nnn/
+ls -a wwwtemplate/
+ls -a nnn
+ls
+rm -r nn nnn
+ls
+cd wwwtemplate/
+ls
+cp -r front/ fo
+cd fo/
+ls
+cd ..
+ls
+rm -r fo
+cd ..
+ls
+cp -r wwwtemplate/ t1
+c;ear
+clear
+ls
+rm -r t1
+ls
+clear
+ls -a wwwtemplate/
+cp -r wwwtemplate/ t1/
+cp -r wwwtemplate/ t1
+ls -a t1/
+ls
+rm -r t1
+ls
+clear
+ls
+clear
+ls -a wwwtemplate/
+ls -a wwwtemplate/front/
+cp -r wwwtemplate/ t1
+ls t1
+clear
+ls -a wwwtemplate/
+ls -a t1/
+clear
+ls
+rm -r t1
+ls
+ls -a wwwtemplate/
+cp -r wwwtemplate/ t1
+ls -a t1
+clear
+exit
+clear
+clear
+clear
+cd codz/project_jd/
+cd codz/project_jd/
+cd codz/project_jd/
+clear
+clear
+clear
+pnpm dev
+cd project_jd/
+cd project_jd/
+cd project_jd/
+clear
+clear
+clear
+code .
+pnpm dev
+clear
+cd ../jojo.games/
+cd ..
+cd jojo.games/
+cd ..
+cd ..
+cd ..
+cd jojo.games/
+cd jojo.games/
+cd jojo.games/
+ls
+ls
+ls
+clear
+clear
+clear
+ls
+clear
+code .
+cd front/
+ls
+cd server/
+pnpm dev
+ls
+pnpm start:dev
+clear
+pnpm dev
+clear
+ls
+cd ..
+ls
+cd ..
+cd solid-site/
+clear
+ls
+cd ..
+ls
+cd ..
+ls
+cd wwwtemplate/
+ls
+code .
+pnpm dev
+ls
+cd front/
+ls
+cd ..
+ls
+cd solid-site/
+code .
+pnpm dev
+clear
+ps |grep dev
+ps |grep node
+pkill node
+pnpm dev
+pnpm dev
+code .
+clear
+cd ..
+code .
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
+docker compose up
+sudo docker compose up
+vi  /etc/docker/daemon.json
+vim  /etc/docker/daemon.json
+sudo vim  /etc/docker/daemon.json
+mkdir -p /etc/docker
+cd /etc/
+ls
+mkdir docker
+sudo mkdir docker
+exit
+ls
+sudo vim  /etc/docker/daemon.json
+sudo systemctl restart docker.service
+docker compose up
+sudo docker compose up
+sudo rm /etc/docker/ -r
+ls
+clear
+sudo systemctl stop docker.service
+clear
+sudo vim /etc/systemd/system/docker.service.d/proxy.conf
+ls
+clear
+ls
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+sudo nvim /etc/docker/daemon.json
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+docker info
+sudo docker info
+docker rmi node:latest
+sudo docker rmi node:latest
+sudo docker rmi node
+ls
+rm -rf `<<-'EOF'`
+ls
+cdlear
+clear
+ls
+sudo docker compose up
+sudo nvim /etc/docker/daemon.json
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+sudo docker compose up
+clear
+ls
+cd ..
+ls
+cd ..
+ls
+clear
+ls
+clear
+ls
+clear
+ls
+cd wwwtemplate/
+ls
+pnpm dev
+cd front/
+ls
+clear
+ls
+pnpm dev
+cd ..
+ls
+cd ..
+ls
+cleawr
+clear
+ls
+cd project_jd/
+ls
+pnpm dev
+clear
+ls
+clear
+ls
+pnpm dev
+sudo systemctl start postgresql.service
+pnpm dev
+clear
+exit
+clear
+pnpm dev
+cd
+cd
+cd
+cd codz/project_jd/
+cd codz/project_jd/
+cd codz/project_jd/
+clear
+clear
+clear
+ls
+ls
+ls
+clear
+ls
+clear
+npm i -D unocss @unocss/postcss
+pnpm dev
+pnpm install
+pnpm dev
+pnpm install
+pnpm dev
+pnpm update
+pnpm add -D typescript
+pnpm dev
+ps |grep node
+pkill node
+ps |grep node
+cd ..
+ls
+git cloen https://github.com/unocss/unocss.git
+git clone https://github.com/unocss/unocss.git
+cd unocss/
+ls
+clear
+code .
+ls
+clear
+ls
+cd examples/
+cd next/
+ls
+pnpm install
+systemctl restart --user emacs
+ls
+clear
+ls
+clear
+ls
+clear
+ls
+docker container ls --all
+sudp docker container ls --all
+sudo docker container ls --all
+exit

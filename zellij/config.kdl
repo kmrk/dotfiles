@@ -221,7 +221,7 @@ plugins {
 themes {
    my-rose-pine {
 		bg "#191724"
-		fg "#e0def4"
+		fg "#c2e0fc"
 		red "#eb6f92"
 		//green "#4287f5"
 		green "#42f584"
