@@ -977,3 +977,23 @@ docker container ls --all
 sudp docker container ls --all
 sudo docker container ls --all
 exit
+clear
+ls
+pkill zellij
+clear
+ls
+clear
+ls
+cd
+zellij 
+clear
+ls
+exit
+clear
+ls
+cd .config/
+ls
+lazygit 
+nvim .
+nvim 
+lazygit 
