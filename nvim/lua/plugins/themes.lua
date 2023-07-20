@@ -1,6 +1,5 @@
 return {
   {
-
     --"marko-cerovac/material.nvim",
     -- --"tanvirtin/monokai.nvim",
     "cpea2506/one_monokai.nvim",
@@ -8,8 +7,8 @@ return {
     opts = {
       transparent = false, -- true, -- enable transparent window
       colors = {
-        lmao = "#282c34", -- add new color
         pink = "#ec6075", -- replace default color
+        bg = "#292d35", --"#282c34",
       },
       themes = function(colors)
         -- change highlight of some groups,
@@ -19,6 +18,10 @@ return {
           PmenuSel = { fg = colors.white, bg = colors.cyan:darken(0.7) },
           Error = { fg = colors.red, underline = true },
           ["@variable"] = { fg = colors.aqua },
+
+          ["@punctuation.bracket"] = { fg = colors.aqua },
+          ["@punctuation.delimiter"] = { fg = colors.light_gray },
+          ["@punctuation.special"] = { fg = colors.aqua },
         }
       end,
       italics = false, -- disable italics

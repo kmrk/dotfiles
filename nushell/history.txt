@@ -997,3 +997,20 @@ lazygit
 nvim .
 nvim 
 lazygit 
+clear
+ls
+cd
+ls
+clear
+ls
+systemctl restart --user emacs
+clear
+ls
+clear
+ls
+exit
+ls
+clear
+ls
+clear
+ls
