@@ -11,7 +11,7 @@ return {
         renamed = "✎",
         -- Status type
         untracked = "",
-        ignored = "",
+        ignored = "🗷",
         unstaged = "8",
         staged = "",
         conflict = "",

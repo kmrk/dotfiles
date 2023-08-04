@@ -5,20 +5,19 @@ return {
     "cpea2506/one_monokai.nvim",
     --"navarasu/onedark.nvim",
     opts = {
-      transparent = false, -- true, -- enable transparent window
+      transparent = false, -- true, -- false, -- true, -- enable transparent window
       colors = {
         pink = "#ec6075", -- replace default color
-        bg = "#292d35", --"#282c34",
       },
       themes = function(colors)
         -- change highlight of some groups,
         -- the key and value will be passed respectively to "nvim_set_hl"
         return {
-          Delimiter = { fg = colors.light_gray },
-          PmenuSel = { fg = colors.white, bg = colors.cyan:darken(0.7) },
+          Delimiter = { fg = colors.white:darken(0.9) },
+          Pmenu = { bg = colors.bg:darken(0.8) },
+          PmenuSel = { fg = colors.white, bg = colors.green:darken(0.7) },
           Error = { fg = colors.red, underline = true },
           ["@variable"] = { fg = colors.aqua },
-
           ["@punctuation.bracket"] = { fg = colors.aqua },
           ["@punctuation.delimiter"] = { fg = colors.light_gray },
           ["@punctuation.special"] = { fg = colors.aqua },

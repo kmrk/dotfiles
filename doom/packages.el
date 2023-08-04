@@ -54,4 +54,5 @@
 (package! org-present)
 (package! rime)
 (unpin! org-roam company-org-roam)
-(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+(package! lsp-tailwindcss)
+(package! ob-typescript)

@@ -44,7 +44,7 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-(load! "~/.config/.emacs.d.my/font.el")
+;(load! "~/.config/.emacs.d.my/font.el")
 
 (defcustom which-key-idle-delay 1.0
   "Delay (in seconds) for which-key buffer to popup. This
@@ -93,4 +93,25 @@ recommended
 
 (setq org-roam-directory "~/org/roam/")
 (setq org-roam-complete-everywhere t)
-(use-package! lsp-tailwindcss)
+(use-package! lsp-tailwindcss :init (setq lsp-tailwindcss-add-on-mode t))
+
+
+(after! org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+     (emacs-lisp . t)
+     (js . t)
+     (typescript . t)
+     (shell . t))))
+
+
+(setq scale (if (and (equal ":0" (getenv "DISPLAY")) (eq 'gnu/linux system-type)) 1.5 1))
+
+(set-face-attribute 'default nil :font "JetBrains Mono" :height (round ( * scale 100)))
+
+(defun set-font-face (family height)
+  (face-remap-add-relative 'default `(:family ,family :height ,height)))
+
+(add-hook 'org-mode-hook (lambda () (set-font-face "Iosevka Aile" (round (* scale 120)))))
+(setq highlight-indent-guides-method 'column)
