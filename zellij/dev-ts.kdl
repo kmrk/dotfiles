@@ -24,9 +24,9 @@ layout {
           pane name="console-server" command="bash"{
             args "-c" "cd ~/codz/jd_mono/server && pnpm dev"
           }
-          //pane name="console-nushell" command="bash"{
-          //  args "-c" "cd ~/codz/jd_mono/ && nu"
-          //}
+          pane name="console-nushell" command="bash"{
+            args "-c" "cd ~/codz/jd_mono/ && nu"
+          }
         }
       }
     }
