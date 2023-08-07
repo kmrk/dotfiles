@@ -7,9 +7,7 @@ return {
 
 
 
-
-    荒谬nthcdr
-
+      void => void
 
 
 
