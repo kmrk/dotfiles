@@ -35,7 +35,15 @@
 (setq doom-theme 'doom-one)
 
 
-
+(custom-theme-set-faces! 'doom-one
+  '(font-lock-function-name-face :foreground "#98be65")
+  '(font-lock-builtin-face :foreground "#da8548")
+  '(font-lock-keyword-face :foreground "#ff6c6b")
+  '(font-lock-variable-name-face :foreground "#51afef")
+  '(font-lock-constant-face :foreground "#51afef")
+  '(font-lock-string-face :foreground "#ECBE7B")
+  '(font-lock-type-face :foreground "#51afef")
+  )
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -44,7 +52,7 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-;(load! "~/.config/.emacs.d.my/font.el")
+                                        ;(load! "~/.config/.emacs.d.my/font.el")
 
 (defcustom which-key-idle-delay 1.0
   "Delay (in seconds) for which-key buffer to popup. This
