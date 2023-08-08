@@ -65,40 +65,6 @@ recommended
   :type 'float)
 
 
-
-;; Whenever you reconfigure a package, make sure to wrap your config in an
-;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
-;;
-;;   (after! PACKAGE
-;;     (setq x y))
-;;
-;; The exceptions to this rule:
-;;
-;;   - Setting file/directory variables (like `org-directory')
-;;   - Setting variables which explicitly tell you to set them before their
-;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
-;;   - Setting doom variables (which start with 'doom-' or '+').
-;;
-;; Here are some additional functions/macros that will help you configure Doom.
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
-;; etc).
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
-;; org-roa0q0m
-
 (setq org-roam-directory "~/org/roam/")
 (setq org-roam-complete-everywhere t)
 (use-package! lsp-tailwindcss :init (setq lsp-tailwindcss-add-on-mode t))
@@ -113,13 +79,14 @@ recommended
      (typescript . t)
      (shell . t))))
 
-
 (setq scale (if (and (equal ":0" (getenv "DISPLAY")) (eq 'gnu/linux system-type)) 1.5 1))
-
 (set-face-attribute 'default nil :font "JetBrains Mono" :height (round ( * scale 100)))
-
 (defun set-font-face (family height)
   (face-remap-add-relative 'default `(:family ,family :height ,height)))
 
 (add-hook 'org-mode-hook (lambda () (set-font-face "Iosevka Aile" (round (* scale 120)))))
 (setq highlight-indent-guides-method 'column)
+
+(map! "C-S-<right>" #'er/expand-region
+      "C-S-<left>" #'er/contract-region
+      )
