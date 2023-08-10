@@ -85,8 +85,18 @@ recommended
   (face-remap-add-relative 'default `(:family ,family :height ,height)))
 
 (add-hook 'org-mode-hook (lambda () (set-font-face "Iosevka Aile" (round (* scale 120)))))
-(setq highlight-indent-guides-method 'column)
+
 
 (map! "C-S-<right>" #'er/expand-region
-      "C-S-<left>" #'er/contract-region
-      )
+      "C-S-<left>" #'er/contract-region)
+
+(setq highlight-indent-guides-method 'character)
+;(set-face-background 'highlight-indent-guides-odd-face "#002608")
+;(set-face-background 'highlight-indent-guides-even-face "dimgray")
+;(set-face-foreground 'highlight-indent-guides-character-face "dimgray")
+(defun my-highlighter (level responsive display)
+  (if (> 2 level)
+      nil
+    (highlight-indent-guides--highlighter-default level responsive display)))
+
+(setq highlight-indent-guides-highlighter-function 'my-highlighter)
