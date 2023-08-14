@@ -1,4 +1,3 @@
-
 # Nushell Config File
 #
 # version = 0.80.1
@@ -287,9 +286,9 @@ $env.config = {
     format: "auto" # b, kb, kib, mb, mib, gb, gib, tb, tib, pb, pib, eb, eib, zb, zib, auto
   }
   cursor_shape: {
-    emacs: block # block, underscore, line, blink_block, blink_underscore, blink_line (line is the default)
+    emacs: line # block, underscore, line, blink_block, blink_underscore, blink_line (line is the default)
     vi_insert: block # block, underscore, line , blink_block, blink_underscore, blink_line (block is the default)
-    vi_normal: block # block, underscore, line, blink_block, blink_underscore, blink_line (underscore is the default)
+    vi_normal: underscore # block, underscore, line, blink_block, blink_underscore, blink_line (underscore is the default)
   }
   color_config: $dark_theme   # if you want a light theme, replace `$dark_theme` to `$light_theme`
   use_grid_icons: true
