@@ -3,8 +3,8 @@ layout {
     pane size=1 borderless=true{
       plugin location="zellij:tab-bar"
     }
-    children
-    pane size=1 borderless=true {
+    children 
+    pane size=1 borderless=true  {
       plugin location="zellij:status-bar"
     }
   }
@@ -22,13 +22,14 @@ layout {
             args "-c" "cd ~/codz/jd_mono/app && pnpm dev"
           }
           pane name="console-server" command="bash"{
-            args "-c" "cd ~/codz/jd_mono/server && pnpm dev"
+            args "-c" "cd ~/codz/jd_mono/server"// && pnpm dev"
           }
           pane name="console-nushell" command="bash"{
-            args "-c" "cd ~/codz/jd_mono/ && nu"
+            args "-c" "cd ~/codz/jd_mono/admin && pnpm dev"
           }
         }
       }
     }
   }
 }
+pane_frames true
