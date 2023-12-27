@@ -8,7 +8,6 @@
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "kmrk"
       user-mail-address "kmrkgo@gmail.com")
-
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -66,9 +65,19 @@ recommended
 
 
 (setq org-roam-directory "~/org/roam/")
+(setq default-input-method "rime")
+
+(use-package! rime
+  :custom
+  (default-input-method "rime")
+  (rime-show-candidate 'posframe))
+
+(setq rime-user-data-dir "~/.local/share/fcitx/rime")
 (setq org-roam-complete-everywhere t)
 (use-package! lsp-tailwindcss :init (setq lsp-tailwindcss-add-on-mode t))
 
+;(after! rime
+;  (rime-select-schema "luna_pinyin_simp"))
 
 (after! org
   (org-babel-do-load-languages

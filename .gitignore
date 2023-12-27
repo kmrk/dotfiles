@@ -9,3 +9,6 @@ configstore
 Electron
 electron-builder.json
 layzigit
+ghc
+htop
+zellij
