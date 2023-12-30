@@ -32,7 +32,6 @@ return {
   },
 }
 
---
 --return {
 --  -- { "folke/tokyonight.nvim", name = "tokyonight" },
 --  -- { "catppuccin/nvim", name = "catppuccin" },
