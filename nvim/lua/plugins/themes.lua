@@ -1,9 +1,10 @@
 return {
   {
     --"marko-cerovac/material.nvim",
+    -- "navarasu/onedark.nvim",
     -- --"tanvirtin/monokai.nvim",
+    "Shatur/neovim-ayu",
     "cpea2506/one_monokai.nvim",
-    --"navarasu/onedark.nvim",
     opts = {
       transparent = false, -- true, -- false, -- true, -- enable transparent window
       colors = {
