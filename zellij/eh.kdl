@@ -11,21 +11,21 @@ layout {
   tab name="ts-dev" split_direction="Vertical" {
     pane split_direction="Vertical" {
       pane name="front" size="50%" command="bash" {
-        args "-c" "cd ~/codz/jd_mono/app && nvim ."
+        args "-c" "cd ~/codz/ehealth_start/app && nvim ."
       }
       pane split_direction="Vertical" size="50%"  {
         pane name="server" size="30%" command="bash" {
-          args "-c" "cd ~/codz/jd_mono/server && TERM=xterm-direct emacsclient ."
+          args "-c" "cd ~/codz/ehealth_start/server && TERM=xterm-direct emacsclient ."
         }
         pane split_direction="horizontal" size="15%"{
           pane name="console-front" command="bash" size="30%"{ 
-            args "-c" "cd ~/codz/jd_mono/app && pnpm dev"
+            args "-c" "cd ~/codz/ehealth_start/app && pnpm dev"
           }
           pane name="console-server" command="bash"{
-            args "-c" "cd ~/codz/jd_mono/server"// && pnpm dev"
+            args "-c" "cd ~/codz/ehealth_start/server"// && pnpm dev"
           }
           pane name="console-nushell" command="bash"{
-            args "-c" "cd ~/codz/jd_mono/admin && pnpm dev"
+            args "-c" "cd ~/codz/ehealth_start/"
           }
         }
       }

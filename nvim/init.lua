@@ -1,6 +1,3 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
-
--- if vim.g.fvim_loaded then
 if vim.g.vscode then -- do nothing config
 else
   require("config.lazy")
@@ -20,3 +17,5 @@ else
     filetype = "fsharp",
   }
 end
+require("config.lazy")
+

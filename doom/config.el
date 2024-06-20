@@ -8,7 +8,6 @@
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "kmrk"
       user-mail-address "kmrkgo@gmail.com")
-
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -66,12 +65,28 @@ recommended
 
 
 (setq org-roam-directory "~/org/roam/")
+                                        ;(setq default-input-method "rime")
+
+;; emacs-module.h: No such file or directory
+                                        ;(setq rime-emacs-module-header-root "/snap/emacs/current/usr/include /usr/include/x86_64-linux-gun")
+
+                                        ;(use-package! rime
+                                        ;  :custom
+                                        ;  (default-input-method "rime")
+                                        ;  (rime-show-candidate 'posframe))
+
+                                        ;(setq rime-user-data-dir "~/.local/share/fcitx/rime")
 (setq org-roam-complete-everywhere t)
 (use-package! lsp-tailwindcss :init (setq lsp-tailwindcss-add-on-mode t))
 
+                                        ;(after! rime
+                                        ;  (rime-select-schema "luna_pinyin_simp"))
 
+
+
+(setq pyim-cloudim 'google)
 (after! org
-  (org-babel-do-load-languages
+   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t)
      (emacs-lisp . t)
@@ -91,9 +106,9 @@ recommended
       "C-S-<left>" #'er/contract-region)
 
 (setq highlight-indent-guides-method 'character)
-;(set-face-background 'highlight-indent-guides-odd-face "#002608")
-;(set-face-background 'highlight-indent-guides-even-face "dimgray")
-;(set-face-foreground 'highlight-indent-guides-character-face "dimgray")
+                                        ;(set-face-background 'highlight-indent-guides-odd-face "#002608")
+                                        ;(set-face-background 'highlight-indent-guides-even-face "dimgray")
+                                        ;(set-face-foreground 'highlight-indent-guides-character-face "dimgray")
 (defun my-highlighter (level responsive display)
   (if (> 2 level)
       nil

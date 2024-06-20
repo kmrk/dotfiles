@@ -1,17 +1,19 @@
 lastupdatecheck: 0
 recentrepos:
-    - /home/ysong/.config
-    - /home/ysong/codz/jd_mono
-    - /home/ysong/codz/learn/programming-language/fp-ts
-    - /home/ysong/codz/jd_next
-    - /home/ysong/codz/gptfuse.com
-    - /home/ysong/codz/supabase
-    - /home/ysong/codz/learn
-    - /home/ysong/codz/www
-    - /home/ysong/codz/project_jd
-    - /home/ysong/org
-    - /home/ysong/codz/kue/kue_downloader
+- /home/kk/codz/jd_mono
+- /home/kk/codz/jd/jd_mono
+- /home/ysong/.config
+- /home/ysong/codz/ehealth_start
+- /home/ysong/codz/jd_mono
+- /home/ysong/codz/learn/programming-language/fp-ts
+- /home/ysong/codz/jd_next
+- /home/ysong/codz/gptfuse.com
+- /home/ysong/codz/learn
+- /home/ysong/codz/www
+- /home/ysong/codz/project_jd
+- /home/ysong/org
+- /home/ysong/codz/kue/kue_downloader
 startuppopupversion: 5
 customcommandshistory:
-    - q
+- q
 hidecommandlog: false

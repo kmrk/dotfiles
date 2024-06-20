@@ -5,7 +5,50 @@ if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
-vim.opt.guifont = { "JetBrains Mono:h8" }
+vim.opt.guifont = { "JetBrainsMono Nerd Font Mono", ":h12" }
+
+--vim.g.clipboard = {
+--  name = "WslClipboard",
+--  copy = {
+--    ["+"] = "clip.exe",
+--    ["*"] = "clip.exe",
+--  },
+--  paste = {
+--    ["+"] = 'vim.fn.system("pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))")',
+--    ["*"] = 'vim.fn.system("pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))")',
+--  },
+--  cache_enabled = 0,
+--}
+--vim.g.clipboard = {
+--     'name': 'WslClipboard',
+--     'copy': {
+--        '+': 'clip.exe',
+--        '*': 'clip.exe',
+--      },
+--     'paste': {
+--        '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+--        '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+--     },
+--     'cache_enabled': 0,
+--   }
+--  }
+--
+
+
+
+vim.g.clipboard = {
+  name = "WslClipboard",
+  copy = {
+	  ["+"] = "clip.exe",
+	  ["*"] = "clip.exe",
+  },
+  paste = {
+	  ["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+	  ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+  },
+  cache_enabled = true,
+};
+
 require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
