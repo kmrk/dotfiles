@@ -3,6 +3,7 @@ else
   require("config.lazy")
   vim.g.FVimCursorSmoothMove = true
   vim.g.FVimCursorSmoothBlink = true
+  vim.g.cursor_movement_animation = false
   vim.filetype.add({ extension = { purs = "purescript" } })
   vim.g.ayucolor = "mirage"
   local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -18,4 +19,3 @@ else
   }
 end
 require("config.lazy")
-

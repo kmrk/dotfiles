@@ -5,6 +5,11 @@ return {
     "Mofiqul/vscode.nvim",
     opts = {
       style = "light",
+      transparent = false, --true,
+      color_overrides = {
+        vscBack = "#f6f6f6",
+        vscPopupBack = "#f0f0f0",
+      },
     },
   },
   {
@@ -16,4 +21,14 @@ return {
       vim.cmd.colorscheme("sonokai")
     end,
   },
+  {
+    "comfysage/evergarden",
+    priority = 1000, -- Colorscheme plugin is loaded first before any other plugins
+    opts = {
+      transparent_background = false, --true,
+      contrast_dark = "medium", -- 'hard'|'medium'|'soft'
+      overrides = {}, -- add custom overrides
+    },
+  },
+  { "jacoborus/tender.vim" },
 }
