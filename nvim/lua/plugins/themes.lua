@@ -7,8 +7,8 @@ return {
       style = "light",
       transparent = false, --true,
       color_overrides = {
-        vscBack = "#f6f6f6",
-        vscPopupBack = "#f0f0f0",
+        vscBack = "#fafafa",
+        vscPopupBack = "#f3f3f3",
       },
     },
   },
