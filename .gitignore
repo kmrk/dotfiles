@@ -14,3 +14,9 @@ htop
 zellij
 direnv
 nextjs-nodejs
+enchant
+nix
+guix
+fcitx
+guix/*
+guix/current
