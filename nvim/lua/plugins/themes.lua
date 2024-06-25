@@ -18,7 +18,8 @@ return {
     config = function()
       vim.g.sonokai_enable_italic = false
       vim.g.sonokai_style = "atlantis"
-      vim.cmd.colorscheme("sonokai")
+      --vim.cmd.colorscheme("sonokai")
+      vim.cmd.colorscheme("vscode")
     end,
   },
   {

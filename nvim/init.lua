@@ -17,5 +17,45 @@ else
     },
     filetype = "fsharp",
   }
+
+  vim.o.shell = "powershell"
+  -- Setting shell command flags
+  vim.o.shellcmdflag =
+    "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new();$PSDefaultParameterValues['Out-File:Encoding']='utf8';"
+
+  -- Setting shell redirection
+  vim.o.shellredir = '2>&1 | %{ "$_" } | Out-File %s; exit $LastExitCode'
+
+  -- Setting shell pipe
+  vim.o.shellpipe = '2>&1 | %{ "$_" } | Tee-Object %s; exit $LastExitCode'
+
+  -- Setting shell quote options
+  vim.o.shellquote = ""
+  vim.o.shellxquote = ""
+
+  require("telescope").setup({
+    defaults = {
+      vimgrep_arguments = {
+        "rg",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
+        "--hidden",
+        "--glob=!.git/",
+        "--path-separator",
+        "/",
+      },
+    },
+    pickers = {
+      live_grep = {
+        additional_args = function(opts)
+          return { "--hidden" }
+        end,
+      },
+    },
+  })
 end
 require("config.lazy")
