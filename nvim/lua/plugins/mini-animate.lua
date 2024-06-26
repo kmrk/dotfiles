@@ -4,7 +4,7 @@ return {
   event = "VeryLazy",
   opts = {
     cursor = {
-      enable = false,
+      enable = false, -- disable cursor jump anim
     },
   },
 }

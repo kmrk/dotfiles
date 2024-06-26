@@ -1,5 +1,0 @@
-return {
- {
-   "guns/vim-sexp",
- },
-}

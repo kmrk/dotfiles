@@ -1,5 +1,0 @@
-return {
-  {
-    "theniceboy/joshuto.nvim",
-  },
-}
