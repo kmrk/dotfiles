@@ -16,4 +16,4 @@ local function map(mode, lhs, rhs, opts)
 end
 
 map({ "n", "i" }, "<C-x><C-s>", "<cmd>update<cr><esc>", { desc = "Emacs-style save" })
-map({ "n" }, "<leader>_", "<cmd>split<cr>", { desc = "Emacs-style save" })
+map({ "n" }, "<leader>_", "<cmd>10split<cr>", { desc = "Emacs-style save" })

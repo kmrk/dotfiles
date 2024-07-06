@@ -1,4 +1,5 @@
 if vim.g.vscode then -- do nothing config
+  return
 else
   require("config.lazy")
   vim.g.FVimCursorSmoothMove = true
@@ -31,30 +32,5 @@ else
   -- Setting shell quote options
   vim.o.shellquote = ""
   vim.o.shellxquote = ""
-
-  require("telescope").setup({
-    defaults = {
-      vimgrep_arguments = {
-        "rg",
-        "--color=never",
-        "--no-heading",
-        "--with-filename",
-        "--line-number",
-        "--column",
-        "--smart-case",
-        "--hidden",
-        "--glob=!.git/",
-        "--path-separator",
-        "/",
-      },
-    },
-    pickers = {
-      live_grep = {
-        additional_args = function(opts)
-          return { "--hidden" }
-        end,
-      },
-    },
-  })
 end
 require("config.lazy")
