@@ -7,7 +7,7 @@ return {
       style = "light",
       transparent = false, --true,
       color_overrides = {
-        vscBack = "#f9f9f9",
+        vscBack = "#f1f1f1",
         vscPopupBack = "#e8e8e8",
         vscSplitDark = "#6699cc",
       },
@@ -25,18 +25,9 @@ return {
       --vim.g.sonokai_style = "shusia"
       --vim.g.sonokai_style = "andromeda"
       --vim.g.sonokai_style = "espresso"
-      vim.cmd.colorscheme("vscode")
+      vim.cmd.colorscheme("sonokai")
     end,
   },
-  { "Shatur/neovim-ayu" },
+  { "slugbyte/lackluster.nvim" },
   { "joshdick/onedark.vim" },
-  {
-    "uloco/bluloco.nvim",
-    lazy = false,
-    priority = 1000,
-    dependencies = { "rktjmp/lush.nvim" },
-    config = function()
-      -- your optional config goes here, see below.
-    end,
-  },
 }

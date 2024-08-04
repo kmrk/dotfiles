@@ -1,4 +1,5 @@
-if vim.g.vscode then -- do nothing config
+-- if startup by vscode-neovim, disable all scripts
+if vim.g.vscode then
   return
 else
   require("config.lazy")
@@ -33,4 +34,3 @@ else
   vim.o.shellquote = ""
   vim.o.shellxquote = ""
 end
-require("config.lazy")
