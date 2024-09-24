@@ -3,9 +3,11 @@ if vim.g.vscode then
   return
 else
   require("config.lazy")
+
   vim.g.FVimCursorSmoothMove = true
   vim.g.FVimCursorSmoothBlink = true
   vim.g.cursor_movement_animation = false
+  vim.o.spell = false
   vim.filetype.add({ extension = { purs = "purescript" } })
   local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
   parser_config.fsharp = {

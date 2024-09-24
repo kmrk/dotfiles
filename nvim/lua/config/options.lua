@@ -5,3 +5,4 @@
 --
 vim.opt.timeoutlen = 40
 vim.g.root_spec = { "cwd" }
+vim.o.spell = false
