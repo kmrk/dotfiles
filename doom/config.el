@@ -93,11 +93,11 @@ recommended
 
 (setq scale (if (and (equal ":0" (getenv "DISPLAY")) (eq 'gnu/linux system-type)) 1 1))
 (set-frame-font "JetBrainsMono Nerd Font Propo")
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Propo" :weight 'Normal :height (round ( * scale 120)))
+(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font Propo" :weight 'Normal :height (round ( * scale 80)))
 (defun set-font-face (family height)
   (face-remap-add-relative 'default `(:family ,family :height ,height)))
 
-(add-hook 'org-mode-hook (lambda () (set-font-face "Iosevka Aile" (round (* scale 120)))))
+(add-hook 'org-mode-hook (lambda () (set-font-face "Iosevka Aile" (round (* scale 80)))))
 
 
 (map! "C-S-<right>" #'er/expand-region
