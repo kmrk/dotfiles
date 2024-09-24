@@ -1,13 +1,3 @@
--- since this is just an example spec, don't actually load anything here and return an empty spec
--- stylua: ignore
-if true then return {} end
-
--- every spec file under config.plugins will be loaded automatically by lazy.nvim
---
--- In your plugin files, you can:
--- * add extra plugins
--- * disable/enabled LazyVim plugins
--- * override the configuration of LazyVim plugins
 return {
 
   {
@@ -17,7 +7,7 @@ return {
   },
 
   -- disable trouble
-  { "folke/trouble.nvim", enabled = false },
+  -- { "folke/trouble.nvim", enabled = false },
 
   -- add symbols-outline
   {
@@ -54,9 +44,29 @@ return {
     opts = {
       defaults = {
         layout_strategy = "horizontal",
-        layout_config = { prompt_position = "top" },
-        sorting_strategy = "ascending",
+        layout_config = { prompt_position = "bottom" },
+        -- sorting_strategy = "ascending",
         winblend = 0,
+        vimgrep_arguments = {
+          "rg",
+          "--follow", -- Follow symbolic links
+          "--hidden", -- Search for hidden files
+          "--no-heading", -- Don't group matches by each file
+          "--with-filename", -- Print the file path with the matched lines
+          "--line-number", -- Show line numbers
+          "--column", -- Show column numbers
+          "--smart-case", -- Smart case search
+
+          -- Exclude some patterns from search
+          "--glob=!**/.git/*",
+          "--glob=!**/.idea/*",
+          "--glob=!**/.vscode/*",
+          "--glob=!**/.next/*",
+          "--glob=!**/build/*",
+          "--glob=!**/dist/*",
+          "--glob=!**/yarn.lock",
+          "--glob=!**/package-lock.json",
+        },
       },
     },
   },
@@ -92,7 +102,7 @@ return {
     dependencies = {
       "jose-elias-alvarez/typescript.nvim",
       init = function()
-        require("lazyvim.util").on_attach(function(_, buffer)
+        require("lazyvim.util").lsp.on_attach(function(_, buffer)
           -- stylua: ignore
           vim.keymap.set( "n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
           vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
@@ -123,7 +133,6 @@ return {
 
   -- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
   -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
-  { import = "lazyvim.plugins.extras.lang.typescript" },
 
   -- add more treesitter parsers
   {
