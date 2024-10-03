@@ -1,8 +1,15 @@
 ;(setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
 ;                         ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")))
 
-(setq package-archives '(("gnu"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
-                         ("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/")))
+
+(defun melpa_raw ()
+  (setq url-gateway-method 'socks)
+  ;(setq socks-server '("Default server" "172.28.176.1" 1080 5))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t))
+
+(melpa_raw)
+
 
 
 (package-initialize)

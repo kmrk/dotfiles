@@ -72,47 +72,52 @@
 
 (use-package diminish :ensure t)
 
-;(use-package paredit
-;  :ensure t
-;  :hook ((emacs-lisp-mode . enable-paredit-mode)
-;         (eval-expression-minibuffer-setup . enable-paredit-mode)
-;         (ielm-mode . enable-paredit-mode)
-;         (lisp-mode . enable-paredit-mode) 
-;         (lisp-interaction-mode . enable-paredit-mode)
-;         (scheme-mode . enable-paredit-mode)
-;         (slime-repl-mode . enable-paredit-mode) 
-;         (clojure-mode . enable-paredit-mode)
-;         (clojurescript-mode . enable-paredit-mode)
-;         (cider-repl-mode . enable-paredit-mode)
-;         (cider-mode . enable-paredit-mode)
-;         (clojure-mode . enable-paredit-mode))
-;  :config
-;  (show-paren-mode t)
-;  ;; paredit makes evil column editing error.
-;  ;; do comment by select "va(" and M-;
-;  ;; the key binds to (paredit-comment-dwin)
-;  ;; it toggles the comment/uncomment
-;  :bind (("C->" . paredit-forward-slurp-sexp)
-;         ("C-<" . paredit-forward-barf-sexp)
-;         ("C-M-<" . paredit-backward-slurp-sexp)
-;         ("C-M->" . paredit-backward-barf-sexp)
-;         ("<C-right>" .  nil)
-;         ("<C-left>" .  nil)
-;         ("M-[" . paredit-wrap-square)
-;         ("M-{" . paredit-wrap-curly)))
 
 
-(use-package dired :ensure nil
+
+
+; (use-package paredit
+;   :ensure t
+;   :hook ((emacs-lisp-mode . enable-paredit-mode)
+; 	 (eval-expression-minibuffer-setup . enable-paredit-mode)
+; 	 (ielm-mode . enable-paredit-mode)
+; 	 (lisp-mode . enable-paredit-mode) 
+; 	 (lisp-interaction-mode . enable-paredit-mode)
+; 	 (scheme-mode . enable-paredit-mode)
+; 	 (slime-repl-mode . enable-paredit-mode) 
+; 	 (clojure-mode . enable-paredit-mode)
+; 	 (clojurescript-mode . enable-paredit-mode)
+; 	 (cider-repl-mode . enable-paredit-mode)
+; 	 (cider-mode . enable-paredit-mode)
+; 	 (clojure-mode . enable-paredit-mode))
+;   :config
+;   (show-paren-mode t)
+;   ;; paredit makes evil column editing error.
+;   ;; do comment by select "va(" and M-;
+;   ;; the key binds to (paredit-comment-dwin)
+;   ;; it toggles the comment/uncomment
+;   :bind (("C->" . paredit-forward-slurp-sexp)
+; 	 ("C-<" . paredit-forward-barf-sexp)
+; 	 ("C-M-<" . paredit-backward-slurp-sexp)
+; 	 ("C-M->" . paredit-backward-barf-sexp)
+; 	 ("<C-right>" .  nil)
+; 	 ("<C-left>" .  nil)
+; 	 ("M-[" . paredit-wrap-square)
+; 	 ("M-{" . paredit-wrap-curly)))
+
+
+(use-package dired :ensure nil 
   :commands (dired dired-jump)
   :after evil
   :bind (("C-x C-j" . dired-jump))
   :custom ((dired-listing-switches "-agho --group-directories-first"))
-  :config
-  (evil-define-key 'normal 'dired-mode-map
-    "h" 'dired-up-directory
-    "l" 'dired-find-file))
+					;  :config
+					;  (evil-define-key 'normal 'dired-mode-map
+					;    "h" 'dired-up-directory
+					;    "l" 'dired-find-file)
+  )
 
-(setq delete-by-moving-to-trash t)
+					;(setq delete-by-moving-to-trash t)
 
 
 ;;
@@ -130,14 +135,14 @@
 (add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode) t)
 (autoload 'dart-mode "dart-mode")
 
-;(use-package flutter :ensure t)
+					;(use-package flutter :ensure t)
 
 
 (use-package command-log-mode :ensure t) 
 
 
-(use-package rainbow-delimiters :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode))
+					;(use-package rainbow-delimiters :ensure t
+					;  :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package which-key :ensure t
   :init (which-key-mode)
@@ -165,7 +170,7 @@
                   (org-level-6 . 1.1)
                   (org-level-7 . 1.1)
                   (org-level-8 . 1.1)))
-   (set-face-attribute (car face) nil :font "Cantarell Regular" :weight 'regular :height (cdr face)))
+    (set-face-attribute (car face) nil :font "Cantarell Regular" :weight 'regular :height (cdr face)))
 
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
@@ -193,3 +198,18 @@
 
 
 (use-package edn :ensure t)
+
+(use-package company
+  :hook (prog-mode . company-mode)
+  :ensure t
+  :config
+  (add-hook 'eglot-managed-mode-hook (lambda ()
+                                       (add-to-list 'company-backends
+                                                    '(company-capf :with company-yasnippet))))
+  (setq company-dabbrev-downcase 0)
+  (setq company-idle-delay 0))
+
+(use-package cider
+  :ensure t)
+
+(use-package racket-mode :ensure t)

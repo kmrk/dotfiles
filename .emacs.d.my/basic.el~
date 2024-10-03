@@ -1,4 +1,4 @@
-
+(setq menu-bar-mode nil)
 ;;
 ;; ivy mode
 ;;
