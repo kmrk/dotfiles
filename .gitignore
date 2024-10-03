@@ -21,5 +21,4 @@ fcitx
 guix/*
 nvm
 nvm/*
-.emacs.d
-emacs
+
