@@ -1,11 +1,11 @@
 (setq inhibit-startup-message t)
-(load-theme 'tango-dark t)
+;(load-theme 'tango-dark t)
 
-(defun dont-kill-emacs()
-  "Disable C-x C-c binding execute kill-emacs."
-  (interactive)
-  (error (substitute-command-keys "To exit emacs: \\[kill-emacs]")))
-(global-set-key (kbd "C-x C-c") 'dont-kill-emacs)
+;(defun dont-kill-emacs()
+;  "Disable C-x C-c binding execute kill-emacs."
+;  (interactive)
+;  (error (substitute-command-keys "To exit emacs: \\[kill-emacs]")))
+;(global-set-key (kbd "C-x C-c") 'dont-kill-emacs)
 
 (setq-default line-spacing 0)
 (setq frame-title-format "%b - Emacs")
@@ -81,3 +81,5 @@
 (add-hook 'org-mode-hook
           (lambda () 
             (org-cycle-global '(1))))
+
+(use-package eziam-theme :ensure t)
