@@ -1,3 +1,15 @@
+(require 'package)
+
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                        ("gnu" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
 
 ;;
 ;; ivy mode
@@ -73,9 +85,6 @@
 (use-package diminish :ensure t)
 
 
-
-
-
 ; (use-package paredit
 ;   :ensure t
 ;   :hook ((emacs-lisp-mode . enable-paredit-mode)
@@ -107,52 +116,52 @@
 
 
 (use-package dired :ensure nil 
-  :commands (dired dired-jump)
-  :after evil
-  :bind (("C-x C-j" . dired-jump))
-  :custom ((dired-listing-switches "-agho --group-directories-first"))
-					;  :config
-					;  (evil-define-key 'normal 'dired-mode-map
-					;    "h" 'dired-up-directory
-					;    "l" 'dired-find-file)
-  )
+             :commands (dired dired-jump)
+             :after evil
+             :bind (("C-x C-j" . dired-jump))
+             :custom ((dired-listing-switches "-agho --group-directories-first"))
+             ;  :config
+             ;  (evil-define-key 'normal 'dired-mode-map
+             ;    "h" 'dired-up-directory
+             ;    "l" 'dired-find-file)
+             )
 
-					;(setq delete-by-moving-to-trash t)
+;(setq delete-by-moving-to-trash t)
 
 
 ;;
 ;; expand region
 ;;
 (use-package expand-region :ensure t
-  :bind ("C-=" . er/expand-region))
+             :bind ("C-=" . er/expand-region))
 
 
 
 (use-package dart-mode :ensure t
-  :config
-  :hook (dart-mode . flutter-test-mode))
+             :config
+             :hook (dart-mode . flutter-test-mode))
 
 (add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode) t)
 (autoload 'dart-mode "dart-mode")
 
-					;(use-package flutter :ensure t)
+;(use-package flutter :ensure t)
 
 
 (use-package command-log-mode :ensure t) 
 
 
-					;(use-package rainbow-delimiters :ensure t
-					;  :hook (prog-mode . rainbow-delimiters-mode))
+;(use-package rainbow-delimiters :ensure t
+;  :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package which-key :ensure t
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 1))
+             :init (which-key-mode)
+             :diminish which-key-mode
+             :config
+             (setq which-key-idle-delay 1))
 
 
 (use-package ivy-rich :ensure t
-  :init (ivy-rich-mode 1))
+             :init (ivy-rich-mode 1))
 
 
 (defun org-font-setup ()
@@ -181,35 +190,69 @@
   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
-;; (use-package org
-;;   :hook (org-mode . org-mode-setup)
-;;   :config
-;;   ;(setq org-ellipsis " ▾")
-;;   ;(org-font-setup)
-;;   :bind
-;;   (("TAB" .'org-cycle)))
 
 (use-package org-bullets
-  :ensure t
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+             :ensure t
+             :after org
+             :hook (org-mode . org-bullets-mode)
+             :custom
+             (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 
 (use-package edn :ensure t)
 
 (use-package company
-  :hook (prog-mode . company-mode)
-  :ensure t
-  :config
-  (add-hook 'eglot-managed-mode-hook (lambda ()
-                                       (add-to-list 'company-backends
-                                                    '(company-capf :with company-yasnippet))))
-  (setq company-dabbrev-downcase 0)
-  (setq company-idle-delay 0))
+             :hook (prog-mode . company-mode)
+             :ensure t
+             :config
+             (add-hook 'eglot-managed-mode-hook (lambda ()
+                                                  (add-to-list 'company-backends
+                                                               '(company-capf :with company-yasnippet))))
+             (setq company-dabbrev-downcase 0)
+             (setq company-idle-delay 0))
 
 (use-package cider
-  :ensure t)
+             :ensure t)
 
 (use-package racket-mode :ensure t)
+
+
+(defun evil-keyboard-quit ()
+  "Keyboard quit and force normal state."
+  (interactive)
+  (and evil-mode (evil-force-normal-state))
+  (keyboard-quit))
+
+(use-package
+  evil
+  :ensure t
+  :init
+  (setq evil-want-integration t) (setq evil-want-keybinding nil)
+  (fset 'evil-visual-update-x-selection 'ignore)
+  :config
+  (evil-mode 1)
+  (define-key evil-motion-state-map (kbd "C-z") 'suspend-frame)
+  (evil-ex-define-cmd "q" 'kill-this-buffer)
+  (evil-ex-define-cmd "quit" 'evil-quit)
+  (evil-ex-define-cmd "wq"  (lambda () (interactive) (save-buffer)(kill-this-buffer)))
+  (evil-ex-define-cmd "x"  (lambda ()  (interactive) (save-buffer)(kill-this-buffer)))
+  (define-key evil-normal-state-map (kbd "gt") 'next-buffer)
+  (define-key evil-normal-state-map (kbd "gT") 'previous-buffer)
+  (define-key evil-normal-state-map   (kbd "C-g") #'evil-keyboard-quit)
+  (define-key evil-motion-state-map   (kbd "C-g") #'evil-keyboard-quit)
+  (define-key evil-insert-state-map   (kbd "C-g") #'evil-keyboard-quit)
+  (define-key evil-window-map         (kbd "C-g") #'evil-keyboard-quit)
+  (define-key evil-operator-state-map (kbd "C-g") #'evil-keyboard-quit))
+
+
+(use-package evil-terminal-cursor-changer
+  :ensure t
+  :config
+  (evil-terminal-cursor-changer-activate)
+  (setq evil-motion-state-cursor 'box)
+  (setq evil-visual-state-cursor 'box)  ; █
+  (setq evil-normal-state-cursor 'box)  ; █
+  (setq evil-insert-state-cursor 'bar)  ; ⎸
+  (setq evil-replace-state-cursor 'hbar) ; _
+  )
+

@@ -9,7 +9,6 @@
 
 (setq-default line-spacing 0)
 (setq frame-title-format "%b - Emacs")
-
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (setq tree-widget-image-enable nil)
@@ -29,20 +28,10 @@
 
 (setq electric-pair-pairs '((?\' . ?\')))
 
-(load-theme 'eziam-light t)
 
 (custom-set-faces
  '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
  '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold)))))
 
 
-(use-package evil-terminal-cursor-changer
-  :ensure t
-  :config
-  (evil-terminal-cursor-changer-activate)
-  (setq evil-motion-state-cursor 'box)
-  (setq evil-visual-state-cursor 'box)  ; █
-  (setq evil-normal-state-cursor 'box)  ; █
-  (setq evil-insert-state-cursor 'bar)  ; ⎸
-  (setq evil-replace-state-cursor 'hbar) ; _
-  )
+(load-theme 'eziam-light t)
