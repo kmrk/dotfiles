@@ -1,15 +1,17 @@
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                        ("gnu" . "https://elpa.gnu.org/packages/")))
+                         ("gnu" . "https://elpa.gnu.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
-(require 'use-package)
-(setq use-package-always-ensure t)
+(eval-when-compile (require 'use-package))
+(setq use-package-always-ensure t) 
+
 
 ;;
 ;; ivy mode
@@ -62,7 +64,6 @@
 (use-package magit
   :ensure t
   :after evil
-                                        ;:init (evil-collection-init)
   :bind ("\C-x g" . magit-status))
 
 
@@ -85,83 +86,102 @@
 (use-package diminish :ensure t)
 
 
-; (use-package paredit
-;   :ensure t
-;   :hook ((emacs-lisp-mode . enable-paredit-mode)
-; 	 (eval-expression-minibuffer-setup . enable-paredit-mode)
-; 	 (ielm-mode . enable-paredit-mode)
-; 	 (lisp-mode . enable-paredit-mode) 
-; 	 (lisp-interaction-mode . enable-paredit-mode)
-; 	 (scheme-mode . enable-paredit-mode)
-; 	 (slime-repl-mode . enable-paredit-mode) 
-; 	 (clojure-mode . enable-paredit-mode)
-; 	 (clojurescript-mode . enable-paredit-mode)
-; 	 (cider-repl-mode . enable-paredit-mode)
-; 	 (cider-mode . enable-paredit-mode)
-; 	 (clojure-mode . enable-paredit-mode))
-;   :config
-;   (show-paren-mode t)
-;   ;; paredit makes evil column editing error.
-;   ;; do comment by select "va(" and M-;
-;   ;; the key binds to (paredit-comment-dwin)
-;   ;; it toggles the comment/uncomment
-;   :bind (("C->" . paredit-forward-slurp-sexp)
-; 	 ("C-<" . paredit-forward-barf-sexp)
-; 	 ("C-M-<" . paredit-backward-slurp-sexp)
-; 	 ("C-M->" . paredit-backward-barf-sexp)
-; 	 ("<C-right>" .  nil)
-; 	 ("<C-left>" .  nil)
-; 	 ("M-[" . paredit-wrap-square)
-; 	 ("M-{" . paredit-wrap-curly)))
+					; (use-package paredit
+					;   :ensure t
+					;   :hook ((emacs-lisp-mode . enable-paredit-mode)
+					; 	 (eval-expression-minibuffer-setup . enable-paredit-mode)
+					; 	 (ielm-mode . enable-paredit-mode)
+					; 	 (lisp-mode . enable-paredit-mode) 
+					; 	 (lisp-interaction-mode . enable-paredit-mode)
+					; 	 (scheme-mode . enable-paredit-mode)
+					; 	 (slime-repl-mode . enable-paredit-mode) 
+					; 	 (clojure-mode . enable-paredit-mode)
+					; 	 (clojurescript-mode . enable-paredit-mode)
+					; 	 (cider-repl-mode . enable-paredit-mode)
+					; 	 (cider-mode . enable-paredit-mode)
+					; 	 (clojure-mode . enable-paredit-mode))
+					;   :config
+					;   (show-paren-mode t)
+					;   ;; paredit makes evil column editing error.
+					;   ;; do comment by select "va(" and M-;
+					;   ;; the key binds to (paredit-comment-dwin)
+					;   ;; it toggles the comment/uncomment
+					;   :bind (("C->" . paredit-forward-slurp-sexp)
+					; 	 ("C-<" . paredit-forward-barf-sexp)
+					; 	 ("C-M-<" . paredit-backward-slurp-sexp)
+					; 	 ("C-M->" . paredit-backward-barf-sexp)
+					; 	 ("<C-right>" .  nil)
+					; 	 ("<C-left>" .  nil)
+					; 	 ("M-[" . paredit-wrap-square)
+					; 	 ("M-{" . paredit-wrap-curly)))
 
+(defun dired-create-empty-file (filename)
+  "Create an empty file named FILENAME in the current directory."
+  (interactive "F新建文件名: ")
+  (let ((full-path (expand-file-name filename (dired-current-directory))))
+    (if (file-exists-p full-path)
+        (message "文件已存在")
+      (write-region "" nil full-path)
+      (dired-add-file full-path)
+      (revert-buffer)
+      (message "文件 %s 创建成功" filename))))
 
 (use-package dired :ensure nil 
-             :commands (dired dired-jump)
-             :after evil
-             :bind (("C-x C-j" . dired-jump))
-             :custom ((dired-listing-switches "-agho --group-directories-first"))
-             ;  :config
-             ;  (evil-define-key 'normal 'dired-mode-map
-             ;    "h" 'dired-up-directory
-             ;    "l" 'dired-find-file)
-             )
+  :commands (dired dired-jump)
+  :after evil
+  :bind (("C-x C-j" . dired-jump))
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :hook
+  (dired-mode
+   .
+   (lambda ()
+     (evil-define-key 'normal dired-mode-map
+       (kbd "h") 'dired-up-directory
+       (kbd "l") 'dired-find-file
+       (kbd "a") 'dired-create-empty-file
+       (kbd "A") 'dired-create-directory
+       (kbd "D") 'dired-do-delete
+       (kbd "r") 'dired-do-rename
+       (kbd "R") 'revert-buffer
+       (kbd ".") 'dired-omit-mode))))
 
-;(setq delete-by-moving-to-trash t)
+
+(setq delete-by-moving-to-trash t)
 
 
 ;;
 ;; expand region
 ;;
-(use-package expand-region :ensure t
-             :bind ("C-=" . er/expand-region))
-
-
+(use-package expand-region
+  :ensure t
+  :bind (("<C-S-right>" . er/expand-region)  ; 扩展区域
+         ("<C-S-left>" . er/contract-region))) ; 缩减区域
 
 (use-package dart-mode :ensure t
-             :config
-             :hook (dart-mode . flutter-test-mode))
+  :config
+  :hook (dart-mode . flutter-test-mode))
 
 (add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode) t)
 (autoload 'dart-mode "dart-mode")
 
-;(use-package flutter :ensure t)
+					;(use-package flutter :ensure t)
 
 
 (use-package command-log-mode :ensure t) 
 
 
-;(use-package rainbow-delimiters :ensure t
-;  :hook (prog-mode . rainbow-delimiters-mode))
+					;(use-package rainbow-delimiters :ensure t
+					;  :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package which-key :ensure t
-             :init (which-key-mode)
-             :diminish which-key-mode
-             :config
-             (setq which-key-idle-delay 1))
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
 
 
 (use-package ivy-rich :ensure t
-             :init (ivy-rich-mode 1))
+  :init (ivy-rich-mode 1))
 
 
 (defun org-font-setup ()
@@ -192,27 +212,27 @@
 
 
 (use-package org-bullets
-             :ensure t
-             :after org
-             :hook (org-mode . org-bullets-mode)
-             :custom
-             (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  :ensure t
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 
 (use-package edn :ensure t)
 
 (use-package company
-             :hook (prog-mode . company-mode)
-             :ensure t
-             :config
-             (add-hook 'eglot-managed-mode-hook (lambda ()
-                                                  (add-to-list 'company-backends
-                                                               '(company-capf :with company-yasnippet))))
-             (setq company-dabbrev-downcase 0)
-             (setq company-idle-delay 0))
+  :hook (prog-mode . company-mode)
+  :ensure t
+  :config
+  (add-hook 'eglot-managed-mode-hook (lambda ()
+                                       (add-to-list 'company-backends
+                                                    '(company-capf :with company-yasnippet))))
+  (setq company-dabbrev-downcase 0)
+  (setq company-idle-delay 0))
 
 (use-package cider
-             :ensure t)
+  :ensure t)
 
 (use-package racket-mode :ensure t)
 
@@ -250,9 +270,41 @@
   :config
   (evil-terminal-cursor-changer-activate)
   (setq evil-motion-state-cursor 'box)
-  (setq evil-visual-state-cursor 'box)  ; █
-  (setq evil-normal-state-cursor 'box)  ; █
-  (setq evil-insert-state-cursor 'bar)  ; ⎸
-  (setq evil-replace-state-cursor 'hbar) ; _
-  )
+  (setq evil-visual-state-cursor 'box)
+  (setq evil-normal-state-cursor 'box) 
+  (setq evil-insert-state-cursor 'bar)  
+  (setq evil-replace-state-cursor 'hbar))
 
+
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :hook (lsp-mode . lsp-ui-mode))
+
+(use-package racket-mode
+  :ensure t
+  :hook (racket-mode . lsp)
+  :config
+  (add-hook 'racket-mode-hook #'flycheck-mode))
+
+(use-package 
+  lsp-mode
+  :ensure t
+  :hook ((racket-mode . lsp)
+         (racket-mode . flycheck-mode))
+  :config
+
+  (define-key evil-normal-state-map (kbd "]e") 'flycheck-next-error)
+  (define-key evil-normal-state-map (kbd "[e") 'flycheck-previous-error)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  :commands lsp)
+
+(use-package eziam-themes
+  :ensure t
+  :config
+  (load-theme 'eziam-light t)
+  (set-face-background 'default "undefined")
+  (custom-set-faces
+   '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
+   '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold))))))

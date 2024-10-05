@@ -1,5 +1,10 @@
 (load "~/.emacs.d/ui.el")
+
 (load "~/.emacs.d/packages.el")
+
+
+(set-face-background 'default "#f9f9f9")
+
 
 (put 'dired-find-alternate-file 'disabled nil)
 
