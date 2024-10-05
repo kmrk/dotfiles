@@ -8,6 +8,7 @@ return {
       vim.cmd.colorscheme("monochrome")
       vim.cmd([[highlight Normal guibg=#f9f9f9]])
       vim.cmd([[ highlight MatchParen cterm=bold ctermbg=cyan ctermfg=black guibg=cyan guifg=black]])
+      vim.opt.termguicolors = false
     end,
   },
   { "projekt0n/github-nvim-theme" },
