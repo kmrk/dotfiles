@@ -4,3 +4,4 @@ vi .gitignore
 ls
 git status
 git commit -a
+racket rterm.rkt

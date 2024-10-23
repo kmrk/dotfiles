@@ -85,35 +85,22 @@
 
 (use-package diminish :ensure t)
 
+(use-package paredit
+  :ensure t
+  :hook ((emacs-lisp-mode . enable-paredit-mode)
+ 	 (eval-expression-minibuffer-setup . enable-paredit-mode)
+ 	 (ielm-mode . enable-paredit-mode)
+ 	 (lisp-mode . enable-paredit-mode) 
+ 	 (lisp-interaction-mode . enable-paredit-mode)
+ 	 (scheme-mode . enable-paredit-mode)
+         (racket-mode . enable-paredit-mode)
+ 	 (slime-repl-mode . enable-paredit-mode) 
+ 	 (clojure-mode . enable-paredit-mode)
+ 	 (clojurescript-mode . enable-paredit-mode)
+ 	 (cider-repl-mode . enable-paredit-mode)
+ 	 (cider-mode . enable-paredit-mode)
+ 	 (clojure-mode . enable-paredit-mode)))
 
-					; (use-package paredit
-					;   :ensure t
-					;   :hook ((emacs-lisp-mode . enable-paredit-mode)
-					; 	 (eval-expression-minibuffer-setup . enable-paredit-mode)
-					; 	 (ielm-mode . enable-paredit-mode)
-					; 	 (lisp-mode . enable-paredit-mode) 
-					; 	 (lisp-interaction-mode . enable-paredit-mode)
-					; 	 (scheme-mode . enable-paredit-mode)
-					; 	 (slime-repl-mode . enable-paredit-mode) 
-					; 	 (clojure-mode . enable-paredit-mode)
-					; 	 (clojurescript-mode . enable-paredit-mode)
-					; 	 (cider-repl-mode . enable-paredit-mode)
-					; 	 (cider-mode . enable-paredit-mode)
-					; 	 (clojure-mode . enable-paredit-mode))
-					;   :config
-					;   (show-paren-mode t)
-					;   ;; paredit makes evil column editing error.
-					;   ;; do comment by select "va(" and M-;
-					;   ;; the key binds to (paredit-comment-dwin)
-					;   ;; it toggles the comment/uncomment
-					;   :bind (("C->" . paredit-forward-slurp-sexp)
-					; 	 ("C-<" . paredit-forward-barf-sexp)
-					; 	 ("C-M-<" . paredit-backward-slurp-sexp)
-					; 	 ("C-M->" . paredit-backward-barf-sexp)
-					; 	 ("<C-right>" .  nil)
-					; 	 ("<C-left>" .  nil)
-					; 	 ("M-[" . paredit-wrap-square)
-					; 	 ("M-{" . paredit-wrap-curly)))
 
 (defun dired-create-empty-file (filename)
   "Create an empty file named FILENAME in the current directory."
@@ -144,7 +131,6 @@
        (kbd "r") 'dired-do-rename
        (kbd "R") 'revert-buffer
        (kbd ".") 'dired-omit-mode))))
-
 
 (setq delete-by-moving-to-trash t)
 
@@ -234,7 +220,11 @@
 (use-package cider
   :ensure t)
 
-(use-package racket-mode :ensure t)
+(use-package 
+  racket-mode 
+  :ensure t
+  :config
+  (set-face-attribute 'racket-keyword-argument-face nil :foreground "#808080")) 
 
 
 (defun evil-keyboard-quit ()
@@ -304,7 +294,30 @@
   :ensure t
   :config
   (load-theme 'eziam-light t)
-  (set-face-background 'default "undefined")
   (custom-set-faces
+   '(default ((t (:background "unspecified-bg"))))
    '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
    '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold))))))
+
+;(use-package haskell-mode :ensure t)
+;(use-package company-ghci :ensure t)
+(use-package eglot
+  :ensure t
+  :config
+  (add-hook 'haskell-mode-hook 'eglot-ensure)
+  :config
+  (setq-default eglot-workspace-configuration
+                '((haskell
+                   (plugin
+                    (stan
+                     (globalOn . :json-false))))))  ;; disable stan
+  :custom
+  (eglot-autoshutdown t)  ;; shutdown language server after closing last file
+  (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
+  )
+
+
+
+(with-eval-after-load 'flymake
+  (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error))
+  (define-key evil-normal-state-map (kbd "]e") 'flymake-goto-next-error))

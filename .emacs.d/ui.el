@@ -7,7 +7,6 @@
 (setq tree-widget-image-enable nil)
 (menu-bar-mode 0)
 (column-number-mode 1)
-
 (setq speedbar-show-unknown-files t)
 
 
@@ -20,8 +19,6 @@
 (electric-pair-mode t)
 
 (setq electric-pair-pairs '((?\' . ?\')))
-
-(add-to-list 'default-frame-alist '(background-color . "#ffffff"))
 
 (custom-set-faces
  '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
@@ -38,13 +35,14 @@
 
 ;; add total lines to default line position mode
 ;; (current_line/total_linecount,current_column)
-(setq-default mode-line-position
-              '((line-number-mode
-                 ("(%l/"
-                  (:eval
-                   (number-to-string
-                    (count-lines (point-min) (point-max))))))
-                (column-number-mode ":%c)")))
+(setq-default
+ mode-line-position
+ '((line-number-mode
+    ("(%l/"
+     (:eval
+      (number-to-string
+       (count-lines (point-min) (point-max))))))
+   (column-number-mode ":%c)")))
 
 (setq tooltip-mode nil)
 ;(set-fringe-mode 50)
@@ -80,3 +78,8 @@
 ;(add-hook 'org-mode-hook (lambda () (set-font-face "Iosevka Aile" (round (* scale 120)))))
 ;(add-hook 'prog-mode-hook (lambda () (set-font-face "Monaco" (round (* scale 100)))))
 ;(add-hook 'shell-mode-hook (lambda () (set-font-face "Fira Code Regular" (round (* scale 100)))))
+
+(xterm-mouse-mode 1); if open paste txt with visual p
+
+
+(set-face-attribute 'font-lock-function-name-face nil :background "#f5f5f5")
