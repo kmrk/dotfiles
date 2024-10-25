@@ -299,13 +299,12 @@
    '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
    '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold))))))
 
-;(use-package haskell-mode :ensure t)
-;(use-package company-ghci :ensure t)
 (use-package eglot
   :ensure t
   :config
   (add-hook 'haskell-mode-hook 'eglot-ensure)
   :config
+  (set-face-attribute 'haskell-operator-face nil :background nil)
   (setq-default eglot-workspace-configuration
                 '((haskell
                    (plugin
@@ -316,8 +315,11 @@
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
   )
 
+(defun my-haskell-face-setup ()
+  (set-face-attribute 'haskell-operator-face nil :background nil))
 
+(add-hook 'haskell-mode-hook 'my-haskell-face-setup)
 
 (with-eval-after-load 'flymake
-  (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error))
+  (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error)
   (define-key evil-normal-state-map (kbd "]e") 'flymake-goto-next-error))
