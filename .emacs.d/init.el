@@ -27,6 +27,8 @@
 (define-key input-decode-map "\e[1;6C" [C-S-right])
 (define-key input-decode-map "\e[1;6D" [C-S-left])
 
+(setq package-check-signature nil)
+
 
 
 
@@ -51,6 +53,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("f0f5201c7dd9a5d9f84e3f98099230ebb27f2c9db4fc5395b994451242dcbd8f" "f5f070872db3e4d8b82dbb2f3b1c60beca86fc93327a38ebddd22070458a14bc" default))
+ '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
  '(package-selected-packages
    '(eziam-themes f yasnippet-snippets which-key racket-mode projectile org-bullets magit ivy-rich ivy-prescient expand-region evil-terminal-cursor-changer evil edn diminish dart-mode counsel company command-log-mode cider ag)))
 (custom-set-faces

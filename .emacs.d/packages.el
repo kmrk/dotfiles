@@ -1,8 +1,17 @@
 (require 'package)
 
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("gnu" . "https://elpa.gnu.org/packages/")
-                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+
+
+ (setq package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                                                                 ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                                                                 ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                                        
+  ))
+
+;(setq package-archives '(
+;			 ("melpa" . "https://melpa.org/packages/")
+;                         ("gnu" . "https://elpa.gnu.org/packages/")
+;                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -281,12 +290,14 @@
 (use-package 
   lsp-mode
   :ensure t
-  :hook ((racket-mode . lsp)
+  :hook (
+         (haskell-mode . lsp)
+         (python-mode . lsp)
+         (racket-mode . lsp)
          (racket-mode . flycheck-mode))
   :config
-
-  (define-key evil-normal-state-map (kbd "]e") 'flycheck-next-error)
-  (define-key evil-normal-state-map (kbd "[e") 'flycheck-previous-error)
+  (define-key evil-normal-state-map (kbd "]e") 'flymake-goto-next-error)
+  (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error)
   (setq lsp-headerline-breadcrumb-enable nil)
   :commands lsp)
 
@@ -299,27 +310,32 @@
    '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
    '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold))))))
 
-(use-package eglot
+(use-package haskell-mode
   :ensure t
   :config
-  (add-hook 'haskell-mode-hook 'eglot-ensure)
-  :config
-  (set-face-attribute 'haskell-operator-face nil :background nil)
-  (setq-default eglot-workspace-configuration
-                '((haskell
-                   (plugin
-                    (stan
-                     (globalOn . :json-false))))))  ;; disable stan
-  :custom
-  (eglot-autoshutdown t)  ;; shutdown language server after closing last file
-  (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
-  )
+  ;; Enable interactive-haskell-mode by default in Haskell files
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  ;; Optional: Customize haskell-mode settings
+  (setq haskell-stylish-on-save t) ;; Format code on save
+  (setq haskell-indentation-layout-offset 4) ;; Customize indentation
+  (setq haskell-indentation-starter-offset 4))
 
-(defun my-haskell-face-setup ()
-  (set-face-attribute 'haskell-operator-face nil :background nil))
+
+
+ (defun my-haskell-face-setup ()
+  (set-face-attribute 'haskell-operator-face nil :background nil)
+)
 
 (add-hook 'haskell-mode-hook 'my-haskell-face-setup)
 
-(with-eval-after-load 'flymake
-  (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error)
-  (define-key evil-normal-state-map (kbd "]e") 'flymake-goto-next-error))
+
+
+
+(use-package lsp-pyright
+  :ensure t
+  :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp))))  ; or lsp-deferred
+
+(use-package lsp-haskell :ensure t)
