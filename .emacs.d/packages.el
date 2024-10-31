@@ -204,13 +204,24 @@
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 
 
+
 (use-package org-bullets
   :ensure t
   :after org
   :hook (org-mode . org-bullets-mode)
   :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (org-bullets-bullet-list '("✱" "◉" "✲" "✧" "⊙" "✦" "⊚" "⊛" "○")))
 
+(use-package org :ensure t
+  :config
+  (set-face-attribute 'org-level-1 nil :background "color-255" :foreground "black" :italic nil :underline nil)
+  (set-face-attribute 'org-level-2 nil :background "color-255" :foreground "black" :italic nil :underline nil)
+  (set-face-attribute 'org-level-3 nil :background "color-255" :foreground "black" :italic nil :underline nil)
+  (set-face-attribute 'org-level-4 nil :background "color-255" :foreground "black" :italic nil :underline nil)
+  (set-face-attribute 'org-level-5 nil :background "color-255" :foreground "black" :italic nil :underline nil)
+  (set-face-attribute 'org-level-6 nil :background "color-255" :foreground "black" :italic nil :underline nil)
+  (set-face-attribute 'org-level-7 nil :background "color-255" :foreground "black" :italic nil :underline nil)
+  (set-face-attribute 'org-level-8 nil :background "color-255" :foreground "black" :italic nil :underline nil))
 
 (use-package edn :ensure t)
 

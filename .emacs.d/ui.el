@@ -67,10 +67,12 @@
 (setq speedbar-directory-unshown-regexp "^$")
 (setq visible-bell t)
 
-
+(set-frame-font "Monaspace Neon-10" nil t)
 ; scale & gui fonts
 ;(setq scale (if (and (equal ":0" (getenv "DISPLAY")) (eq 'gnu/linux system-type)) 1.5 1))
-;(set-face-attribute 'default nil :font "JetBrains Mono" :height (round ( * scale 100)))
+;(set-face-attribute 'default nil :font "JetBrains Mono" :height 90)
+                    ;(round ( * scale 100))
+                    ;)
 
 ;(defun set-font-face (family height)
 ;  (face-remap-add-relative 'default `(:family ,family :height ,height)))
@@ -80,6 +82,3 @@
 ;(add-hook 'shell-mode-hook (lambda () (set-font-face "Fira Code Regular" (round (* scale 100)))))
 
 (xterm-mouse-mode 1); if open paste txt with visual p
-
-
-(set-face-attribute 'font-lock-function-name-face nil :background "#f5f5f5")
