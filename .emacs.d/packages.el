@@ -1,17 +1,15 @@
 (require 'package)
 
+(setq package-archives
+      '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
+                                        ;(setq package-archives '(
+                                        ;			 ("melpa" . "https://melpa.org/packages/")
+                                        ;                         ("gnu" . "https://elpa.gnu.org/packages/")
+                                        ;                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
- (setq package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                                                                 ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-                                                                 ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                                        
-  ))
-
-;(setq package-archives '(
-;			 ("melpa" . "https://melpa.org/packages/")
-;                         ("gnu" . "https://elpa.gnu.org/packages/")
-;                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -20,7 +18,7 @@
 
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t) 
-
+(setq package-check-signature nil)
 
 ;;
 ;; ivy mode
@@ -220,9 +218,6 @@
   :hook (prog-mode . company-mode)
   :ensure t
   :config
-  (add-hook 'eglot-managed-mode-hook (lambda ()
-                                       (add-to-list 'company-backends
-                                                    '(company-capf :with company-yasnippet))))
   (setq company-dabbrev-downcase 0)
   (setq company-idle-delay 0))
 
@@ -310,32 +305,28 @@
    '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
    '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold))))))
 
+
+(defface haskell-normal
+ '((t (:foreground "black" :background "#f9f9f9" :underline nil)))
+  "My custom face.")
+
+
 (use-package haskell-mode
   :ensure t
   :config
-  ;; Enable interactive-haskell-mode by default in Haskell files
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-  ;; Optional: Customize haskell-mode settings
-  (setq haskell-stylish-on-save t) ;; Format code on save
-  (setq haskell-indentation-layout-offset 4) ;; Customize indentation
-  (setq haskell-indentation-starter-offset 4))
-
-
-
- (defun my-haskell-face-setup ()
-  (set-face-attribute 'haskell-operator-face nil :background nil)
-)
-
-(add-hook 'haskell-mode-hook 'my-haskell-face-setup)
-
-
+  (setq haskell-stylish-on-save t) 
+  (setq haskell-indentation-layout-offset 4) 
+  (setq haskell-indentation-starter-offset 4)
+  (set-face-attribute 'haskell-constructor-face nil :background nil :underline nil :italic nil)
+  (set-face-attribute 'haskell-definition-face nil :foreground "color-16" :background "color-255" :underline nil :italic nil)
+  (set-face-attribute 'haskell-operator-face nil :foreground "color-16" :background "color-255" :underline nil)
+  (set-face-attribute 'haskell-type-face nil :underline nil))
 
 
 (use-package lsp-pyright
   :ensure t
-  :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))  ; or lsp-deferred
+  :custom (lsp-pyright-langserver-command "pyright") 
+  :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp))))
 
 (use-package lsp-haskell :ensure t)

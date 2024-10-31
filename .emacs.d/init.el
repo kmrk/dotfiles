@@ -27,7 +27,6 @@
 (define-key input-decode-map "\e[1;6C" [C-S-right])
 (define-key input-decode-map "\e[1;6D" [C-S-left])
 
-(setq package-check-signature nil)
 
 
 
