@@ -119,14 +119,6 @@
       (dired-add-file full-path)
       (revert-buffer)
       (message "文件 %s 创建成功" filename))))
-(defun my-dired-clear-marks-and-refresh (&rest _args)
-  "Clear marks and refresh Dired buffers after moving files."
-  (dired-unmark-all-marks) ; 清除所有标记
-  (dired-do-redisplay))    ; 刷新当前目录的显示
-
-(with-eval-after-load 'dired
-  (advice-add 'dired-do-rename :after #'my-dired-clear-marks-and-refresh))
-
 
 (use-package dired :ensure nil 
   :commands (dired dired-jump)
@@ -145,7 +137,6 @@
        (kbd "D") 'dired-do-delete
        (kbd "r") 'dired-do-rename
        (kbd "R") 'revert-buffer
-       (kbd "m") 'dired-mark
        (kbd ".") 'dired-omit-mode))))
 
 (setq delete-by-moving-to-trash t)
@@ -267,11 +258,6 @@
   (evil-ex-define-cmd "quit" 'evil-quit)
   (evil-ex-define-cmd "wq"  (lambda () (interactive) (save-buffer)(kill-this-buffer)))
   (evil-ex-define-cmd "x"  (lambda ()  (interactive) (save-buffer)(kill-this-buffer)))
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)   ;; 向左切换窗口
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)   ;; 向下切换窗口
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)     ;; 向上切换窗口
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)  ;; 向右切换窗口
-
   (define-key evil-normal-state-map (kbd "gt") 'next-buffer)
   (define-key evil-normal-state-map (kbd "gT") 'previous-buffer)
   (define-key evil-normal-state-map   (kbd "C-g") #'evil-keyboard-quit)
@@ -297,21 +283,17 @@
   :ensure t
   :commands lsp-ui-mode
   :hook (lsp-mode . lsp-ui-mode))
-
+(add-to-list 'company-backends 'company-capf)
 (defun my-racket-mode-hook () 
   (set (make-local-variable 'company-backends)
-       '((company-capf company-dabbrev-code))))
+       '((company-capf company-dabbrev-code)))
+  (company-quickhelp-mode 0))
 
 (use-package racket-mode
   :ensure t
   :hook
   (racket-mode . lsp)
   :config
-  (add-hook 'racket-xp-mode-hook
-            (lambda ()
-              (remove-hook 'pre-redisplay-functions
-                           #'racket-xp-pre-redisplay
-                           t)))
   (set-face-attribute 'racket-keyword-argument-face nil :foreground "#808080")
   (set-face-attribute 'font-lock-function-name-face nil :background "color-255" :italic nil :foreground "black" :weight 'bold :underline nil))
 
@@ -319,8 +301,6 @@
 (add-hook 'racket-repl-mode-hook 'company-mode)
 
 
-(add-hook 'my-racket-mode-hook 'company-mode)
-(add-hook 'my-racket-repl-mode-hook 'company-mode)
 
 (use-package 
   lsp-mode
@@ -368,5 +348,3 @@
   :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp))))
 
 (use-package lsp-haskell :ensure t)
-
-

@@ -9,7 +9,7 @@
 (column-number-mode 1)
 (setq speedbar-show-unknown-files t)
 
-
+(global-display-line-numbers-mode t)
 (defconst emacs-tmp-dir (format "%s%s%s/" temporary-file-directory "emacs" (user-uid)))
 (setq backup-directory-alist `((".*" . ,emacs-tmp-dir)))
 (setq auto-save-file-name-transforms `((".*" ,emacs-tmp-dir t)))
@@ -82,3 +82,10 @@
 ;(add-hook 'shell-mode-hook (lambda () (set-font-face "Fira Code Regular" (round (* scale 100)))))
 
 (xterm-mouse-mode 1); if open paste txt with visual p
+(set-face-attribute 'line-number nil :background "color-255" :weight 'light)
+(set-face-attribute 'mode-line-buffer-id nil :foreground "black" :weight 'light)
+(add-to-list 'display-buffer-alist
+             '("\\*Racket REPL </>\\*"
+               (display-buffer-reuse-window display-buffer-in-side-window)
+               (side . right)
+               (window-width . 0.3)))

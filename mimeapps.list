@@ -1,0 +1,31 @@
+[Default Applications]
+x-scheme-handler/http=userapp-Pale Moon-56MJW2.desktop
+x-scheme-handler/https=userapp-Pale Moon-56MJW2.desktop
+x-scheme-handler/ftp=userapp-Pale Moon-56MJW2.desktop
+x-scheme-handler/chrome=userapp-Pale Moon-56MJW2.desktop
+x-scheme-handler/mailto=userapp-SeaMonkey-UCGXW2.desktop
+text/html=userapp-Pale Moon-56MJW2.desktop
+application/x-extension-htm=userapp-Pale Moon-56MJW2.desktop
+application/x-extension-html=userapp-Pale Moon-56MJW2.desktop
+application/x-extension-shtml=userapp-Pale Moon-56MJW2.desktop
+application/xhtml+xml=userapp-Pale Moon-56MJW2.desktop
+application/x-extension-xhtml=userapp-Pale Moon-56MJW2.desktop
+application/x-extension-xht=userapp-Pale Moon-56MJW2.desktop
+message/rfc822=userapp-SeaMonkey-UCGXW2.desktop
+application/x-extension-eml=userapp-SeaMonkey-UCGXW2.desktop
+
+[Added Associations]
+x-scheme-handler/http=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+x-scheme-handler/https=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+x-scheme-handler/ftp=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+x-scheme-handler/chrome=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+x-scheme-handler/mailto=userapp-SeaMonkey-UCGXW2.desktop;
+text/html=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+application/x-extension-htm=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+application/x-extension-html=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+application/x-extension-shtml=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+application/xhtml+xml=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+application/x-extension-xhtml=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+application/x-extension-xht=userapp-SeaMonkey-UCGXW2.desktop;userapp-Pale Moon-56MJW2.desktop;
+message/rfc822=userapp-SeaMonkey-UCGXW2.desktop;
+application/x-extension-eml=userapp-SeaMonkey-UCGXW2.desktop;
