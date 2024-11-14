@@ -18,6 +18,5 @@ end
 vim.opt_local.spell = false
 
 vim.keymap.set("i", "<C-x>", "<Nop>", { noremap = true, silent = true })
-
 map({ "n", "i", "v" }, "<C-x><C-s>", "<cmd>update<cr><esc>", { desc = "Emacs style save" })
 map({ "n" }, "<leader>_", "<cmd>10split<cr>", { desc = "Splite H keep same keyseq with Vertical" })

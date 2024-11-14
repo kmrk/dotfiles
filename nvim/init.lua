@@ -1,5 +1,5 @@
 -- if startup by vscode-neovim, disable all scripts
-if 1==1 or vim.g.vscode then
+if vim.g.vscode then
   return
 else
   require("config.lazy")
