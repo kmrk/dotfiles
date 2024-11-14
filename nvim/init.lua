@@ -1,11 +1,9 @@
 -- if startup by vscode-neovim, disable all scripts
-if vim.g.vscode then
+if 1==1 or vim.g.vscode then
   return
 else
   require("config.lazy")
 
-  vim.g.FVimCursorSmoothMove = true
-  vim.g.FVimCursorSmoothBlink = true
   vim.g.cursor_movement_animation = false
   vim.o.spell = false
   vim.filetype.add({ extension = { purs = "purescript" } })

@@ -84,8 +84,19 @@
 (xterm-mouse-mode 1); if open paste txt with visual p
 (set-face-attribute 'line-number nil :background "color-255" :weight 'light)
 (set-face-attribute 'mode-line-buffer-id nil :foreground "black" :weight 'light)
-(add-to-list 'display-buffer-alist
-             '("\\*Racket REPL </>\\*"
-               (display-buffer-reuse-window display-buffer-in-side-window)
-               (side . right)
-               (window-width . 0.3)))
+
+(add-to-list
+ 'display-buffer-alist
+ '("\\*Racket Repl \\(.*\\)\\*"
+   (display-buffer-reuse-window display-buffer-in-side-window)
+   (side . right)
+   (window-width . 0.3))
+
+ '("\\*haskell\\*" 
+   (display-buffer-reuse-window display-buffer-in-side-window)
+   (side . right)
+   (window-width . 0.3))
+)
+
+;(setq browse-url-browser-function 'eww-browse-url)
+(setq racket-mode-help-on-errors nil)
