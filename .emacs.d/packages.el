@@ -370,3 +370,11 @@
 (use-package lsp-haskell :ensure t)
 
 
+(use-package windmove
+  :ensure t
+  :config
+  (windmove-default-keybindings)
+  (global-set-key (kbd "C-h") 'windmove-left)
+  (global-set-key (kbd "C-j") 'windmove-down)
+  (global-set-key (kbd "C-k") 'windmove-up)
+  (global-set-key (kbd "C-l") 'windmove-right));; 默认的 Alt + hjkl 移动窗口
