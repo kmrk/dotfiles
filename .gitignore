@@ -21,4 +21,5 @@ fcitx
 guix/*
 nvm
 nvm/*
-
+zellij/*
+zellij
