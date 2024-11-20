@@ -1,5 +1,26 @@
-return {
+-- since this is just an example spec, don't actually load anything here and return an empty spec
+-- stylua: ignore
+if true then return {} end
 
+-- every spec file under the "plugins" directory will be loaded automatically by lazy.nvim
+--
+-- In your plugin files, you can:
+-- * add extra plugins
+-- * disable/enabled LazyVim plugins
+-- * override the configuration of LazyVim plugins
+return {
+  -- add gruvbox
+  { "ellisonleao/gruvbox.nvim" },
+
+  -- Configure LazyVim to load gruvbox
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "gruvbox",
+    },
+  },
+
+  -- change trouble config
   {
     "folke/trouble.nvim",
     -- opts will be merged with the parent spec
@@ -7,15 +28,7 @@ return {
   },
 
   -- disable trouble
-  -- { "folke/trouble.nvim", enabled = false },
-
-  -- add symbols-outline
-  {
-    "simrat39/symbols-outline.nvim",
-    cmd = "SymbolsOutline",
-    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
-    config = true,
-  },
+  { "folke/trouble.nvim", enabled = false },
 
   -- override nvim-cmp and add cmp-emoji
   {
@@ -23,8 +36,7 @@ return {
     dependencies = { "hrsh7th/cmp-emoji" },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
-      local cmp = require("cmp")
-      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "emoji" } }))
+      table.insert(opts.sources, { name = "emoji" })
     end,
   },
 
@@ -44,42 +56,10 @@ return {
     opts = {
       defaults = {
         layout_strategy = "horizontal",
-        layout_config = { prompt_position = "bottom" },
-        -- sorting_strategy = "ascending",
+        layout_config = { prompt_position = "top" },
+        sorting_strategy = "ascending",
         winblend = 0,
-        vimgrep_arguments = {
-          "rg",
-          "--follow", -- Follow symbolic links
-          "--hidden", -- Search for hidden files
-          "--no-heading", -- Don't group matches by each file
-          "--with-filename", -- Print the file path with the matched lines
-          "--line-number", -- Show line numbers
-          "--column", -- Show column numbers
-          "--smart-case", -- Smart case search
-
-          -- Exclude some patterns from search
-          "--glob=!**/.git/*",
-          "--glob=!**/.idea/*",
-          "--glob=!**/.vscode/*",
-          "--glob=!**/.next/*",
-          "--glob=!**/build/*",
-          "--glob=!**/dist/*",
-          "--glob=!**/yarn.lock",
-          "--glob=!**/package-lock.json",
-        },
       },
-    },
-  },
-
-  -- add telescope-fzf-native
-  {
-    "telescope.nvim",
-    dependencies = {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        require("telescope").load_extension("fzf")
-      end,
     },
   },
 
@@ -133,6 +113,7 @@ return {
 
   -- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
   -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
+  { import = "lazyvim.plugins.extras.lang.typescript" },
 
   -- add more treesitter parsers
   {
@@ -176,7 +157,11 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function(_, opts)
-      table.insert(opts.sections.lualine_x, "😄")
+      table.insert(opts.sections.lualine_x, {
+        function()
+          return "😄"
+        end,
+      })
     end,
   },
 
@@ -194,7 +179,7 @@ return {
   -- use mini.starter instead of alpha
   { import = "lazyvim.plugins.extras.ui.mini-starter" },
 
-  -- add jsonls and schemastore ans setup treesitter for json, json5 and jsonc
+  -- add jsonls and schemastore packages, and setup treesitter for json, json5 and jsonc
   { import = "lazyvim.plugins.extras.lang.json" },
 
   -- add any tools you want to have installed below
@@ -208,57 +193,5 @@ return {
         "flake8",
       },
     },
-  },
-
-  -- Use <tab> for completion and snippets (supertab)
-  -- first: disable default <tab> and <s-tab> behavior in LuaSnip
-  {
-    "L3MON4D3/LuaSnip",
-    keys = function()
-      return {}
-    end,
-  },
-  -- then: setup supertab in cmp
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-emoji",
-    },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local has_words_before = function()
-        unpack = unpack or table.unpack
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-      end
-
-      local luasnip = require("luasnip")
-      local cmp = require("cmp")
-
-      opts.mapping = vim.tbl_extend("force", opts.mapping, {
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-            -- they way you will only jump inside the snippet region
-          elseif luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
-          elseif has_words_before() then
-            cmp.complete()
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_prev_item()
-          elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-      })
-    end,
   },
 }
