@@ -314,7 +314,7 @@
                            t)))
   (set-face-attribute 'racket-keyword-argument-face nil :foreground "#808080")
   (set-face-attribute 'font-lock-function-name-face nil :background "color-255" :italic nil :foreground "black" :weight 'bold :underline nil))
-
+(add-to-list 'auto-mode-alist '("\\.scrbl\\'" . racket-mode))
 (add-hook 'racket-mode-hook 'company-mode)
 (add-hook 'racket-repl-mode-hook 'company-mode)
 
@@ -378,3 +378,60 @@
   (global-set-key (kbd "C-j") 'windmove-down)
   (global-set-key (kbd "C-k") 'windmove-up)
   (global-set-key (kbd "C-l") 'windmove-right));; 默认的 Alt + hjkl 移动窗口
+
+
+(use-package scribble-mode
+  :ensure t
+  :mode "\\.scrbl\\'"
+  :config
+  ;; 基础设置
+  (setq scribble-indent-width 2)
+  
+  ;; 添加自动补全支持
+  (add-hook 'scribble-mode-hook #'company-mode)
+  
+  ;; 启用括号匹配
+  (add-hook 'scribble-mode-hook #'show-paren-mode)
+  
+  ;; 启用 rainbow delimiters
+ ; (add-hook 'scribble-mode-hook #'rainbow-delimiters-mode)
+  
+  ;; 设置快捷键
+  (define-key scribble-mode-map (kbd "C-c C-c") 'racket-run)
+  (define-key scribble-mode-map (kbd "C-c C-k") 'racket-check-syntax-mode)
+  
+  ;; 语法高亮设置
+  (font-lock-add-keywords
+   'scribble-mode
+   '(("@section\\|@subsection\\|@subsubsection" . font-lock-keyword-face)
+     ("@define\\|@require" . font-lock-function-name-face)
+     ("@\\w+" . font-lock-preprocessor-face))))
+
+;; 配置 racket-mode 支持
+(add-hook 'racket-mode-hook
+          (lambda ()
+            (define-key racket-mode-map (kbd "C-c C-d") 'racket-doc)
+            (define-key racket-mode-map (kbd "C-c C-r") 'racket-run)))
+
+;; 配置 flycheck 支持（可选）
+(use-package flycheck
+  :ensure t
+  :config
+  (add-hook 'scribble-mode-hook 'flycheck-mode))
+
+(defun my-scribble-build ()
+  "Compile the current Scribble file."
+  (interactive)
+  (when (buffer-file-name)
+    (let ((output (shell-command-to-string
+                   (format "scribble %s" (shell-quote-argument (buffer-file-name))))))
+      (message "%s" output))))
+
+(add-hook 'racket-mode-hook
+          (lambda ()
+            (when (string-match "\\.scrbl\\'" (or (buffer-file-name) ""))
+              (local-set-key (kbd "C-c C-c") 'my-scribble-build))))
+
+(font-lock-add-keywords
+ 'racket-mode
+ '(("@\\w+{" . font-lock-keyword-face)))

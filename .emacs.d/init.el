@@ -30,8 +30,14 @@
 
 
 
+(defun my-close-emacs-client ()
+  "Close the current Emacs client without killing the daemon."
+  (interactive)
+  (if (y-or-n-p "Do you want to close this Emacs client? ")
+      (server-edit)
+    (message "Cancelled closing client")))
 
-
+(global-set-key (kbd "C-x C-c") 'my-close-emacs-client)
 
 
 (load "~/.emacs.d/ui.el")
@@ -59,3 +65,9 @@
  '(mode-line-inactive ((t (:background "color-254" :foreground "black"))))
  '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
  '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold)))))
+
+
+
+(setq safe-local-variable-values
+      '((coding . utf-8)
+        (py-indent-offset . 4))) 
