@@ -1,0 +1,14 @@
+patch:
+  ascii_mode: false
+  "menu/page_size": 5
+  schema: luna_pinyin
+  schema_list:
+    - {schema: luna_pinyin}
+  "switcher/hotkeys":
+    - F4
+var:
+  last_build_time: 1772002522
+  previously_selected_schema: luna_pinyin_simp
+  schema_access_time:
+    luna_pinyin: 1762425491
+    luna_pinyin_simp: 1762425509

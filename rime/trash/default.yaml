@@ -1,0 +1,13 @@
+patch:
+  # 默认方案设置
+  schema: luna_pinyin
+  schema_list:
+    - schema: luna_pinyin
+  
+  # 切换设置
+  switcher/hotkeys:
+    - "F4"
+  ascii_mode: false
+  
+  # 候选词设置
+  menu/page_size: 5
