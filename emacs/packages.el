@@ -65,13 +65,6 @@
   (yas-global-mode)
   (use-package yasnippet-snippets :ensure t))
 
-;;
-;; magit
-;;
-(use-package magit
-  :ensure t
-  :after evil
-  :bind ("\C-x g" . magit-status))
 
 
 ;;;
@@ -314,9 +307,7 @@
             (lambda ()
               (remove-hook 'pre-redisplay-functions
                            #'racket-xp-pre-redisplay
-                           t)))
-  (set-face-attribute 'racket-keyword-argument-face nil :foreground "#808080")
-  (set-face-attribute 'font-lock-function-name-face nil :background "color-255" :italic nil :foreground "black" :weight 'bold :underline nil))
+                           t))))
 (add-to-list 'auto-mode-alist '("\\.scrbl\\'" . racket-mode))
 (add-hook 'racket-mode-hook 'company-mode)
 (add-hook 'racket-repl-mode-hook 'company-mode)
@@ -337,14 +328,21 @@
   (setq lsp-headerline-breadcrumb-enable nil)
   :commands lsp)
 
-(use-package eziam-themes
-  :ensure t
-  :config
-  (load-theme 'eziam-light t)
-  (custom-set-faces
-   '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
-   '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold))))))
-
+;(use-package eziam-themes
+;  :ensure t
+;  :config
+;  (with-eval-after-load 'eziam-themes
+;  (set-face-attribute 'font-lock-function-name-face nil
+;                      :background 'unspecified
+;                      :overline 'unspecified
+;                      :underline 'unspecified
+;                      :slant 'normal
+;                      :weight 'bold))
+;  (custom-set-faces
+;   '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
+;   '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold)))))
+;
+;  (load-theme 'eziam-light t))
 
 (defface haskell-normal
   '((t (:foreground "black" :background "#f9f9f9" :underline nil)))
@@ -395,21 +393,10 @@
   ;; 启用括号匹配
   (add-hook 'scribble-mode-hook #'show-paren-mode)
   
-  ;; 启用 rainbow delimiters
-                                        ; (add-hook 'scribble-mode-hook #'rainbow-delimiters-mode)
-  
-  ;; 设置快捷键
   (define-key scribble-mode-map (kbd "C-c C-c") 'racket-run)
   (define-key scribble-mode-map (kbd "C-c C-k") 'racket-check-syntax-mode)
-  
-  ;; 语法高亮设置
-  (font-lock-add-keywords
-   'scribble-mode
-   '(("@section\\|@subsection\\|@subsubsection" . font-lock-keyword-face)
-     ("@define\\|@require" . font-lock-function-name-face)
-     ("@\\w+" . font-lock-preprocessor-face))))
+  )
 
-;; 配置 racket-mode 支持
 (add-hook 'racket-mode-hook
           (lambda ()
             (define-key racket-mode-map (kbd "C-c C-d") 'racket-doc)
@@ -419,7 +406,12 @@
 (use-package flycheck
   :ensure t
   :config
-  (add-hook 'scribble-mode-hook 'flycheck-mode))
+  (add-hook 'scribble-mode-hook 'flycheck-mode)
+  :init (global-flycheck-mode))
+
+
+(use-package flycheck-clj-kondo :ensure t  :after (flycheck cider))
+
 
 (defun my-scribble-build ()
   "Compile the current Scribble file."
@@ -448,3 +440,32 @@
   :config
   (setq rime-show-candidate 'minibuffer)
   (setq rime-inline-ascii-trigger 'shift-l))
+
+
+
+
+(use-package rust-mode
+  :ensure t
+  :mode "\\.rs\\'"
+  :init
+  :config
+  (setq rust-format-on-save t))
+
+(use-package eglot
+  :ensure nil
+  :hook ((rust-mode . eglot-ensure)
+         (rust-ts-mode . eglot-ensure))
+  :config
+  (setq eglot-events-buffer-size 0)
+  (add-to-list 'eglot-server-programs
+               '((rust-mode rust-ts-mode) . ("rust-analyzer")))
+  (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+  (define-key eglot-mode-map (kbd "C-c f") 'eglot-code-actions))
+
+(use-package company
+  :ensure t
+  :init (global-company-mode)
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.1)
+  (add-to-list 'company-backends 'company-capf))

@@ -3,4 +3,6 @@ eln-cache
 elpa
 snippets
 transient
-*~
+tree-sitter
+
+.lsp-session-v1

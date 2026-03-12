@@ -20,10 +20,6 @@
 
 (setq electric-pair-pairs '((?\' . ?\')))
 
-(custom-set-faces
- '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
- '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold)))))
-
 
 (setq-default indent-tabs-mode nil)
 
@@ -112,3 +108,19 @@
 
 ;(setq browse-url-browser-function 'eww-browse-url)
 (setq racket-mode-help-on-errors nil)
+
+
+
+(mapc #'disable-theme custom-enabled-themes)
+(load-theme 'leuven t)
+(set-face-attribute 'font-lock-function-name-face nil :background 'unspecified :box nil :underline nil :overline nil :slant 'normal)
+
+(defun my/theme-switcher ()
+  (interactive)
+  (let ((hour (string-to-number (format-time-string "%H"))))
+    (mapc #'disable-theme custom-enabled-themes)
+    (if (and (>= hour 7) (< hour 18))
+        (load-theme 'leuven t)
+      (load-theme 'atom-one-dark t))
+    (set-face-attribute 'font-lock-function-name-face nil :background 'unspecified :box nil :underline nil :overline nil :slant 'normal)))
+
