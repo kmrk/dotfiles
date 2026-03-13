@@ -1,3 +1,11 @@
+(setenv "COLORTERM" "truecolor")
+(add-to-list 'term-file-aliases '("tmux-256color" . "xterm"))
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (when (eq (framep frame) t)
+              (set-terminal-parameter (frame-terminal frame) 'colors 16777216))))
+
 (setq inhibit-startup-message t)
 
 (setq-default line-spacing 0)
@@ -90,8 +98,6 @@
 ;(add-hook 'shell-mode-hook (lambda () (set-font-face "Fira Code Regular" (round (* scale 100)))))
 
 (xterm-mouse-mode 1); if open paste txt with visual p
-(set-face-attribute 'line-number nil :background "color-255" :weight 'light)
-(set-face-attribute 'mode-line-buffer-id nil :foreground "black" :weight 'light)
 
 (add-to-list
  'display-buffer-alist
@@ -113,6 +119,8 @@
 
 (mapc #'disable-theme custom-enabled-themes)
 (load-theme 'leuven t)
+(set-face-attribute 'line-number nil :background "color-255" :weight 'light)
+(set-face-attribute 'mode-line-buffer-id nil :foreground "black" :weight 'light)
 (set-face-attribute 'font-lock-function-name-face nil :background 'unspecified :box nil :underline nil :overline nil :slant 'normal)
 
 (defun my/theme-switcher ()
@@ -120,7 +128,20 @@
   (let ((hour (string-to-number (format-time-string "%H"))))
     (mapc #'disable-theme custom-enabled-themes)
     (if (and (>= hour 7) (< hour 18))
-        (load-theme 'leuven t)
-      (load-theme 'atom-one-dark t))
+        (progn
+          (load-theme 'leuven t)
+          (set-face-attribute 'line-number nil :background "color-255" :weight 'light)
+          (set-face-attribute 'mode-line-buffer-id nil :foreground "black" :weight 'light))
+      (progn
+        (load-theme 'atom-one-dark t)
+        (set-face-attribute 'line-number nil :background 'unspecified :weight 'light)
+        (set-face-attribute 'mode-line-buffer-id nil :foreground 'unspecified :weight 'light)))
     (set-face-attribute 'font-lock-function-name-face nil :background 'unspecified :box nil :underline nil :overline nil :slant 'normal)))
 
+
+(defun my-make-emacs-transparent ()
+  (unless (display-graphic-p)
+    (set-face-background 'default "unspecified-bg")
+    (set-face-background 'fringe "unspecified-bg")))
+
+(add-hook 'window-setup-hook 'my-make-emacs-transparent)

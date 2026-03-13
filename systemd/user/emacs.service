@@ -3,6 +3,8 @@ Description=Emacs Daemon (Guix)
 
 [Service]
 Environment="LD_LIBRARY_PATH=%h/.guix-profile/lib"
+Environment="COLORTERM=truecolor"
+Environment="TERM=xterm-256color"
 Type=simple
 ExecStart=%h/.guix-profile/bin/emacs --fg-daemon
 Restart=on-failure
