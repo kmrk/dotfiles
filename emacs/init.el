@@ -1,20 +1,31 @@
+;;; init.el --- Emacs 主配置文件 -*- lexical-binding: t; -*-
+
+;;; ============================================================================
+;;; 基础环境设置
+;;; ============================================================================
+
+;; Guix 库路径
 (setenv "LD_LIBRARY_PATH"
         (concat (expand-file-name "~/.guix-profile/lib") ":"
                 (or (getenv "LD_LIBRARY_PATH") "")))
 
-
-
+;; 编码设置
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
-(setq term-buffer-maximum-size 0) ;; 允许终端缓冲区大小无限
-(setq vterm-max-scrollback 10000) ;; 增加 vterm 的历史记录
-
+;; 终端设置
+(setq term-buffer-maximum-size 0)
+(setq vterm-max-scroll-back 10000)
 (setenv "TERM" "xterm-256color")
 
+;; Shell 设置
+(setq shell-file-name "/bin/bash")
+(setq explicit-shell-file-name "/bin/bash")
+(setq shell-command-switch "-ic")
 
+;; 终端功能键映射
 (define-key input-decode-map "\e[1;2A" [S-up])
 (define-key input-decode-map "\e[1;2B" [S-down])
 (define-key input-decode-map "\e[1;2C" [S-right])
@@ -28,9 +39,15 @@
 (define-key input-decode-map "\e[1;6C" [C-S-right])
 (define-key input-decode-map "\e[1;6D" [C-S-left])
 
+;; 本地变量安全设置
+(setq safe-local-variable-values
+      '((coding . utf-8)
+        (py-indent-offset . 4)))
 
+;; 执行路径
+(add-to-list 'exec-path "~/.cargo/bin")
 
-
+;; 关闭 Emacs client
 (defun my-close-emacs-client ()
   "Close the current Emacs client without killing the daemon."
   (interactive)
@@ -38,19 +55,26 @@
       (server-edit)
     (message "Cancelled closing client")))
 
+;; 关闭其他缓冲区
+(defun kkk ()
+  (interactive)
+  (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
 
+;; Rust analyzer
+(executable-find "rust-analyzer")
+
+;;; ============================================================================
+;;; 加载模块
+;;; ============================================================================
 
 (load "~/.emacs.d/ui.el")
-
 (load "~/.emacs.d/packages.el")
 
-(put 'dired-find-alternate-file 'disabled nil)
+;;; ============================================================================
+;;; Custom 设置
+;;; ============================================================================
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("4f1e4cadfd4f998cc23338246bae383a0d3a99a5edea9bcf26922ef054671299"
      "a5c590aeb7dc5c2b8d36601a4c94a1145e46bd2291571af02807dd7a8552630c"
@@ -67,50 +91,8 @@
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
  '(package-selected-packages nil))
 
-
-(setq safe-local-variable-values
-      '((coding . utf-8)
-        (py-indent-offset . 4))) 
-
-
-(setq shell-file-name "/bin/bash")
-(setq explicit-shell-file-name "/bin/bash")
-
-(setq shell-command-switch "-ic") 
-
-
-(use-package eat :ensure t)
-
-
-(defun my/setup-frame-size (frame)
-  (with-selected-frame frame
-    (when (display-graphic-p)
-      ;; 你想要的默认大小
-      (set-frame-size frame 120 40))))
-
-;; 对 emacsclient -c 生效
-(add-hook 'after-make-frame-functions #'my/setup-frame-size)
-
-;; 对直接 emacs 启动也生效
-(when (display-graphic-p)
-  (my/setup-frame-size (selected-frame)))
-
-
-(use-package rg
-  :ensure t
-  :config
-  (rg-enable-default-bindings)
-  (setq rg-group-result t rg-show-columns t))
-
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
  '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold)))))
 
-
-(add-to-list 'exec-path "~/.cargo/bin")
-(executable-find "rust-analyzer")
-
+;;; init.el ends here
