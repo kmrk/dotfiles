@@ -120,27 +120,14 @@
 ;;; 主题
 ;;; ============================================================================
 
-(mapc #'disable-theme custom-enabled-themes)
-(load-theme 'leuven t)
-(set-face-attribute 'line-number nil :background "color-255" :weight 'light)
-(set-face-attribute 'mode-line-buffer-id nil :foreground "black" :weight 'light)
-(set-face-attribute 'font-lock-function-name-face nil :background 'unspecified :box nil :underline nil :overline nil :slant 'normal)
-
 ;; 根据时间切换主题
 (defun my/theme-switcher ()
   (interactive)
   (let ((hour (string-to-number (format-time-string "%H"))))
     (mapc #'disable-theme custom-enabled-themes)
     (if (and (>= hour 7) (< hour 18))
-        (progn
-          (load-theme 'leuven t)
-          (set-face-attribute 'line-number nil :background "color-255" :weight 'light)
-          (set-face-attribute 'mode-line-buffer-id nil :foreground "black" :weight 'light))
-      (progn
-        (load-theme 'atom-one-dark t)
-        (set-face-attribute 'line-number nil :background 'unspecified :weight 'light)
-        (set-face-attribute 'mode-line-buffer-id nil :foreground 'unspecified :weight 'light)))
-    (set-face-attribute 'font-lock-function-name-face nil :background 'unspecified :box nil :underline nil :overline nil :slant 'normal)))
+        (load-theme 'leuven t)
+      (load-theme 'atom-one-dark t))))
 
 ;;; ============================================================================
 ;;; 特殊缓冲区显示位置

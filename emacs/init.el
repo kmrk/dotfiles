@@ -70,11 +70,18 @@
 (load "~/.emacs.d/ui.el")
 (load "~/.emacs.d/packages.el")
 
+;; 启动时根据时间切换主题
+(my/theme-switcher)
+
 ;;; ============================================================================
 ;;; Custom 设置
 ;;; ============================================================================
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("4f1e4cadfd4f998cc23338246bae383a0d3a99a5edea9bcf26922ef054671299"
      "a5c590aeb7dc5c2b8d36601a4c94a1145e46bd2291571af02807dd7a8552630c"
@@ -92,6 +99,10 @@
  '(package-selected-packages nil))
 
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
  '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold)))))
 
