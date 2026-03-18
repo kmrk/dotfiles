@@ -256,32 +256,37 @@
   (setq evil-replace-state-cursor 'hbar))
 
 ;;; ============================================================================
-;;; LSP
-;;; ============================================================================
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :hook (lsp-mode . lsp-ui-mode))
-
-(use-package lsp-mode
-  :ensure t
-  :hook ((python-mode . lsp)
-         (racket-mode . lsp))
-  :config
-  (define-key evil-normal-state-map (kbd "]e") 'flymake-goto-next-error)
-  (define-key evil-normal-state-map (kbd "[e") 'flymake-goto-prev-error)
-  (setq lsp-headerline-breadcrumb-enable nil)
-  :commands lsp)
-
-;;; ============================================================================
 ;;; 编程语言 - Racket
 ;;; ============================================================================
+
+(defvar my-racket-langserver-checked nil)
+(defvar my-racket-langserver-available nil)
+
+(defun my-racket-langserver-installed-p ()
+  "Return non-nil when racket-langserver is installed."
+  (unless my-racket-langserver-checked
+    (setq my-racket-langserver-checked t)
+    (setq my-racket-langserver-available
+          (and (executable-find "raco")
+               (eq 0 (call-process "raco" nil nil nil "pkg" "show" "racket-langserver")))))
+  my-racket-langserver-available)
+
+(defun my-eglot-racket-server ()
+  "Return the preferred Racket LSP server command."
+  (if (executable-find "xvfb-run")
+      '("xvfb-run" "-a" "racket" "-l" "racket-langserver")
+    '("racket" "-l" "racket-langserver")))
+
+(defun my-racket-eglot-ensure ()
+  "Start Eglot for Racket when racket-langserver is available."
+  (if (my-racket-langserver-installed-p)
+      (eglot-ensure)
+    (message "Racket Eglot requires: raco pkg install racket-langserver")))
 
 (use-package racket-mode
   :ensure t
   :mode "\\.scrbl\\'"
-  :hook ((racket-mode . lsp)
+  :hook ((racket-mode . my-racket-eglot-ensure)
          (racket-mode . company-mode)
          (racket-repl-mode . company-mode))
   :config
@@ -327,15 +332,6 @@
   (set-face-attribute 'haskell-type-face nil :underline nil))
 
 ;;; ============================================================================
-;;; 编程语言 - Python
-;;; ============================================================================
-
-(use-package lsp-pyright
-  :ensure t
-  :custom (lsp-pyright-langserver-command "pyright")
-  :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp))))
-
-;;; ============================================================================
 ;;; 编程语言 - Rust
 ;;; ============================================================================
 
@@ -347,13 +343,26 @@
 
 (use-package eglot
   :ensure nil
-  :hook ((haskell-mode . eglot-ensure)
+  :hook ((python-mode . eglot-ensure)
+         (python-ts-mode . eglot-ensure)
+         (js-mode . eglot-ensure)
+         (js-ts-mode . eglot-ensure)
+         (typescript-mode . eglot-ensure)
+         (typescript-ts-mode . eglot-ensure)
+         (tsx-ts-mode . eglot-ensure)
+         (clojure-mode . eglot-ensure)
+         (clojurescript-mode . eglot-ensure)
+         (clojurec-mode . eglot-ensure)
+         (haskell-mode . eglot-ensure)
          (rust-mode . eglot-ensure)
-         (rust-ts-mode . eglot-ensure))
+         (rust-ts-mode . eglot-ensure)
+         (dart-mode . eglot-ensure)
+         (eglot-managed-mode . (lambda ()
+                                 (flymake-mode 1))))
   :bind (:map eglot-mode-map
               ("C-c C-e r" . eglot-rename)
               ("C-c C-e l" . flymake-show-buffer-diagnostics)
-              ("C-c C-e p" . flymake-show-project-diagnostics)
+              ("C-c C-e p" . flymake-show-buffer-diagnostics)
               ("C-c C-e C" . eglot-show-workspace-configuration)
               ("C-c C-e R" . eglot-reconnect)
               ("C-c C-e S" . eglot-shutdown)
@@ -363,11 +372,39 @@
               ("C-c r" . eglot-rename)
               ("C-c f" . eglot-code-actions))
   :config
+  (defun my-eglot-python-server ()
+    "Return the preferred Python LSP server command."
+    (cond
+     ((executable-find "basedpyright-langserver")
+      '("basedpyright-langserver" "--stdio"))
+     ((executable-find "pyright-langserver")
+      '("pyright-langserver" "--stdio"))
+     (t
+      '("npx" "--yes" "pyright" "--stdio"))))
+
+  (defun my-eglot-ts-server ()
+    "Return the preferred TypeScript/JavaScript LSP server command."
+    (if (executable-find "typescript-language-server")
+        '("typescript-language-server" "--stdio")
+      '("npx" "--yes" "typescript-language-server" "--stdio")))
+
   (setq eglot-events-buffer-size 0)
+  (add-to-list 'eglot-server-programs
+               `(racket-mode . ,(my-eglot-racket-server)))
+  (add-to-list 'eglot-server-programs
+               `((python-mode python-ts-mode) . ,(my-eglot-python-server)))
+  (add-to-list 'eglot-server-programs
+               `((js-mode js-ts-mode typescript-mode typescript-ts-mode tsx-ts-mode)
+                 . ,(my-eglot-ts-server)))
   (add-to-list 'eglot-server-programs
                '((rust-mode rust-ts-mode) . ("rust-analyzer")))
   (add-to-list 'eglot-server-programs
-               '(haskell-mode . ("haskell-language-server-wrapper" "--lsp"))))
+               '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
+  (add-to-list 'eglot-server-programs
+               '(dart-mode . ("dart" "language-server" "--protocol=lsp")))
+  (add-to-list 'eglot-server-programs
+               '((clojure-mode clojurescript-mode clojurec-mode)
+                 . ("clojure-lsp"))))
 
 ;;; ============================================================================
 ;;; 编程语言 - Clojure
@@ -375,15 +412,40 @@
 
 (use-package cider :ensure t)
 (use-package edn :ensure t)
-(use-package flycheck-clj-kondo :ensure t :after (flycheck cider))
 
 ;;; ============================================================================
 ;;; 编程语言 - Dart
 ;;; ============================================================================
 
-(use-package dart-mode :ensure t
+(use-package dart-mode
+  :ensure t
   :mode "\\.dart\\'"
-  :hook (dart-mode . flutter-test-mode))
+  :custom
+  (dart-format-on-save t)
+  :hook ((dart-mode . subword-mode)
+         (dart-mode . electric-pair-local-mode))
+  :bind (:map dart-mode-map
+              ("C-c C-c" . eglot-format)))
+
+(use-package flutter
+  :ensure t
+  :after dart-mode
+  :config
+  (let ((flutter-sdk (expand-file-name "~/.local/lib/flutter")))
+    (when (file-directory-p flutter-sdk)
+      (setq flutter-sdk-path flutter-sdk))))
+
+;;; ============================================================================
+;;; 编程语言 - JavaScript / TypeScript
+;;; ============================================================================
+
+(use-package typescript-mode
+  :ensure t
+  :mode ("\\.ts\\'" "\\.tsx\\'"))
+
+(use-package js
+  :ensure nil
+  :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
 
 ;;; ============================================================================
 ;;; 编程语言 - Scribble
@@ -401,14 +463,13 @@
               ("C-c C-k" . racket-check-syntax-mode)))
 
 ;;; ============================================================================
-;;; Flycheck
+;;; Flymake
 ;;; ============================================================================
 
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode)
-  :config
-  (add-hook 'scribble-mode-hook 'flycheck-mode))
+(define-key evil-normal-state-map (kbd "]e") #'flymake-goto-next-error)
+(define-key evil-normal-state-map (kbd "[e") #'flymake-goto-prev-error)
+(global-set-key (kbd "M-n") #'flymake-goto-next-error)
+(global-set-key (kbd "M-p") #'flymake-goto-prev-error)
 
 ;;; ============================================================================
 ;;; Org 模式

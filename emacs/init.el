@@ -47,6 +47,28 @@
 ;; 执行路径
 (add-to-list 'exec-path "~/.cargo/bin")
 
+;; Make Nix-installed tools visible even for GUI/daemon Emacs sessions.
+(dolist (path '("~/.local/bin"
+                "~/.nix-profile/bin"
+                "/nix/var/nix/profiles/default/bin"
+                "~/.local/lib/flutter/bin"))
+  (let ((expanded (expand-file-name path)))
+    (when (file-directory-p expanded)
+      (add-to-list 'exec-path expanded)
+      (setenv "PATH" (concat expanded path-separator (or (getenv "PATH") ""))))))
+
+;; Make Node/NPM tools from NVM visible to GUI/daemon Emacs sessions.
+(let* ((nvm-root (expand-file-name "~/.nvm/versions/node"))
+       (node-bin-dirs
+        (when (file-directory-p nvm-root)
+          (sort (directory-files nvm-root t "^v[0-9]")
+                #'string>))))
+  (dolist (dir node-bin-dirs)
+    (let ((bin-dir (expand-file-name "bin" dir)))
+      (when (file-directory-p bin-dir)
+        (add-to-list 'exec-path bin-dir)
+        (setenv "PATH" (concat bin-dir path-separator (or (getenv "PATH") "")))))))
+
 ;; Completion defaults
 (setq tab-always-indent 'complete
       completions-max-height 20
