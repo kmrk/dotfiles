@@ -83,7 +83,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("4f1e4cadfd4f998cc23338246bae383a0d3a99a5edea9bcf26922ef054671299"
+   '("e3a1b1fb50e3908e80514de38acbac74be2eb2777fc896e44b54ce44308e5330"
+     "fb83a50c80de36f23aea5919e50e1bccd565ca5bb646af95729dc8c5f926cbf3"
+     "4f1e4cadfd4f998cc23338246bae383a0d3a99a5edea9bcf26922ef054671299"
      "a5c590aeb7dc5c2b8d36601a4c94a1145e46bd2291571af02807dd7a8552630c"
      "28b9703810da2df6fb8667b681cea47d6fbfa5df6a7f23d5dee41d25acca38ba"
      "bb8587d7e8ba2a39fcd293498140598188c7bd0c8be0360cca36f08c2b7bf5d9"
@@ -103,7 +105,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(show-paren-match ((t (:background "cyan" :foreground "black" :weight bold))))
- '(show-paren-mismatch ((t (:background "red" :foreground "white" :weight bold)))))
+ )
 
 ;;; init.el ends here

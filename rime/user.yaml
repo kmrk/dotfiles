@@ -7,7 +7,7 @@ patch:
   "switcher/hotkeys":
     - F4
 var:
-  last_build_time: 1772002522
+  last_build_time: 1773711392
   previously_selected_schema: luna_pinyin_simp
   schema_access_time:
     luna_pinyin: 1762425491

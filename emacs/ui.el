@@ -22,7 +22,6 @@
 (scroll-bar-mode 0)
 (menu-bar-mode 0)
 (column-number-mode 1)
-(global-display-line-numbers-mode t)
 (global-tab-line-mode t)
 (winner-mode t)
 (show-paren-mode t)
