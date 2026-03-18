@@ -47,6 +47,11 @@
 ;; 执行路径
 (add-to-list 'exec-path "~/.cargo/bin")
 
+;; Completion defaults
+(setq tab-always-indent 'complete
+      completions-max-height 20
+      completion-auto-select 'second-tab)
+
 ;; 关闭 Emacs client
 (defun my-close-emacs-client ()
   "Close the current Emacs client without killing the daemon."
@@ -62,6 +67,11 @@
 
 ;; Rust analyzer
 (executable-find "rust-analyzer")
+
+;; For emacsclient / quick startup
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 ;;; ============================================================================
 ;;; 加载模块

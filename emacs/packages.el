@@ -23,6 +23,11 @@
 
 (use-package diminish :ensure t)
 
+(use-package envrc
+  :ensure t
+  :config
+  (envrc-global-mode +1))
+
 ;;; ============================================================================
 ;;; 补全系统
 ;;; ============================================================================
@@ -261,8 +266,7 @@
 
 (use-package lsp-mode
   :ensure t
-  :hook ((haskell-mode . lsp)
-         (python-mode . lsp)
+  :hook ((python-mode . lsp)
          (racket-mode . lsp))
   :config
   (define-key evil-normal-state-map (kbd "]e") 'flymake-goto-next-error)
@@ -322,8 +326,6 @@
   (set-face-attribute 'haskell-operator-face nil :foreground "color-16" :background "color-255" :underline nil)
   (set-face-attribute 'haskell-type-face nil :underline nil))
 
-(use-package lsp-haskell :ensure t)
-
 ;;; ============================================================================
 ;;; 编程语言 - Python
 ;;; ============================================================================
@@ -345,14 +347,27 @@
 
 (use-package eglot
   :ensure nil
-  :hook ((rust-mode . eglot-ensure)
+  :hook ((haskell-mode . eglot-ensure)
+         (rust-mode . eglot-ensure)
          (rust-ts-mode . eglot-ensure))
+  :bind (:map eglot-mode-map
+              ("C-c C-e r" . eglot-rename)
+              ("C-c C-e l" . flymake-show-buffer-diagnostics)
+              ("C-c C-e p" . flymake-show-project-diagnostics)
+              ("C-c C-e C" . eglot-show-workspace-configuration)
+              ("C-c C-e R" . eglot-reconnect)
+              ("C-c C-e S" . eglot-shutdown)
+              ("C-c C-e A" . eglot-shutdown-all)
+              ("C-c C-e a" . eglot-code-actions)
+              ("C-c C-e f" . eglot-format)
+              ("C-c r" . eglot-rename)
+              ("C-c f" . eglot-code-actions))
   :config
   (setq eglot-events-buffer-size 0)
   (add-to-list 'eglot-server-programs
                '((rust-mode rust-ts-mode) . ("rust-analyzer")))
-  (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
-  (define-key eglot-mode-map (kbd "C-c f") 'eglot-code-actions))
+  (add-to-list 'eglot-server-programs
+               '(haskell-mode . ("haskell-language-server-wrapper" "--lsp"))))
 
 ;;; ============================================================================
 ;;; 编程语言 - Clojure
