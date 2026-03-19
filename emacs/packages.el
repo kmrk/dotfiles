@@ -176,7 +176,7 @@
 (add-hook 'after-change-major-mode-hook #'my-enable-cn-en-space)
 
 ;;; ============================================================================
-;;; Dired
+;;; Dired & Wdired
 ;;; ============================================================================
 
 (put 'dired-find-alternate-file 'disabled nil)
@@ -209,6 +209,16 @@
        (kbd "R") 'revert-buffer
        (kbd "m") 'dired-mark
        (kbd ".") 'dired-omit-mode))))
+
+(use-package wdired
+  :ensure nil
+  :after dired
+  :config
+  ;; 允许修改文件权限
+  (setq wdired-allow-to-change-permissions t)
+  ;; 在 Evil 下，进入 wdired 后自动进入 insert 模式（可选，方便直接修改）
+  ;; (add-hook 'wdired-mode-hook 'evil-insert-state)
+  )
 
 ;;; ============================================================================
 ;;; Evil
@@ -538,5 +548,12 @@
 
 ;; 命令日志
 (use-package command-log-mode :ensure t)
+
+;; 状态栏精简（解决终端下显示不全的问题）
+(use-package minions
+  :ensure t
+  :config
+  (setq minions-mode-line-lighter " [+]") ; 在终端下显示为 [+] 比较整齐
+  (minions-mode 1))
 
 ;;; packages.el ends here
