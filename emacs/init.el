@@ -115,7 +115,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("e3a1b1fb50e3908e80514de38acbac74be2eb2777fc896e44b54ce44308e5330"
+   '("03239f8106a402b9d965757a0cdeab5e70961cb39fa11f1e803e9caf4250786d"
+     "65057902bcd51d84e0e28036f4759295e08f57b1ba94b9ae10a8d5ffde5f154f"
+     "e3a1b1fb50e3908e80514de38acbac74be2eb2777fc896e44b54ce44308e5330"
      "fb83a50c80de36f23aea5919e50e1bccd565ca5bb646af95729dc8c5f926cbf3"
      "4f1e4cadfd4f998cc23338246bae383a0d3a99a5edea9bcf26922ef054671299"
      "a5c590aeb7dc5c2b8d36601a4c94a1145e46bd2291571af02807dd7a8552630c"
@@ -130,13 +132,28 @@
      "f5f070872db3e4d8b82dbb2f3b1c60beca86fc93327a38ebddd22070458a14bc"
      default))
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
- '(package-selected-packages nil))
+ '(package-selected-packages
+   '(ag atom-one-dark-theme cider circadian command-log-mode company
+        corfu counsel-projectile dart-mode diminish eat edn
+        embark-consult envrc evil evil-terminal-cursor-changer
+        expand-region eziam-themes flutter flycheck-clj-kondo
+        haskell-mode ivy-prescient ivy-rich liberime llama lsp-haskell
+        lsp-pyright lsp-ui marginalia material-theme minions
+        monokai-pro-theme monokai-theme orderless org-bullets paredit
+        racket-mode rg rime rust-mode scribble-mode typescript-mode
+        vertico vterm with-editor yasnippet-snippets)))
 
+
+(defun wsl-copy-to-clipboard (text &optional push)
+  (with-temp-buffer
+    (insert text)
+    (call-process-region (point-min) (point-max) 
+                         "/mnt/c/Windows/System32/clip.exe")))
+
+(setq interprogram-cut-function 'wsl-copy-to-clipboard)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-;;; init.el ends here

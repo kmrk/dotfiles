@@ -120,23 +120,77 @@
 ;;; ============================================================================
 
 ;; 根据时间切换主题
+(defun my/remove-tty-face-boxes ()
+  "Drop face box attributes that use GUI-style colors in terminal Emacs.
+
+Some themes set `:box' colors like \"#64645E\", which can trigger
+`Invalid face box color' on TTY frames.  In that case, keep the theme
+but remove box styling after it is enabled."
+  (unless (display-graphic-p)
+    (dolist (face (face-list))
+      (when (facep face)
+        (let ((box (face-attribute face :box nil 'default)))
+          (when (or (stringp box)
+                    (and (listp box) (plist-get box :color)))
+            (set-face-attribute face nil :box nil)))))))
+
 (defun my/theme-switcher ()
   (interactive)
   (let ((hour (string-to-number (format-time-string "%H"))))
     (mapc #'disable-theme custom-enabled-themes)
     (if (and (>= hour 7) (< hour 18))
         (load-theme 'leuven t)
-      (load-theme 'atom-one-dark t))))
+      (load-theme 'atom-one-dark t))
+    (my/remove-tty-face-boxes)))
 
 ;;; ============================================================================
 ;;; 特殊缓冲区显示位置
 ;;; ============================================================================
+
+;; Keep source buffers in the main editing area and reserve side windows for
+;; transient result/help buffers.
+(setq even-window-sizes nil)
+(setq display-buffer-base-action
+      '((display-buffer-reuse-window display-buffer-use-some-window)))
+
+(add-to-list
+ 'display-buffer-alist
+ '("\\*Help\\*"
+   (display-buffer-reuse-window display-buffer-in-side-window)
+   (side . right)
+   (slot . 0)
+   (window-width . 0.3)))
+
+(add-to-list
+ 'display-buffer-alist
+ '("\\*xref\\*"
+   (display-buffer-reuse-window display-buffer-in-side-window)
+   (side . bottom)
+   (slot . 0)
+   (window-height . 0.25)))
+
+(add-to-list
+ 'display-buffer-alist
+ '("\\*grep\\*"
+   (display-buffer-reuse-window display-buffer-in-side-window)
+   (side . bottom)
+   (slot . 1)
+   (window-height . 0.25)))
+
+(add-to-list
+ 'display-buffer-alist
+ '("\\*compilation\\*"
+   (display-buffer-reuse-window display-buffer-in-side-window)
+   (side . bottom)
+   (slot . 2)
+   (window-height . 0.25)))
 
 (add-to-list
  'display-buffer-alist
  '("\\*Racket Repl \\(.*\\)\\*"
    (display-buffer-reuse-window display-buffer-in-side-window)
    (side . right)
+   (slot . 1)
    (window-width . 0.3)))
 
 (add-to-list
@@ -144,6 +198,7 @@
  '("\\*haskell\\*"
    (display-buffer-reuse-window display-buffer-in-side-window)
    (side . right)
+   (slot . 2)
    (window-width . 0.3)))
 
 ;;; ui.el ends here

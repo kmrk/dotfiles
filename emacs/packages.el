@@ -32,39 +32,137 @@
 ;;; 补全系统
 ;;; ============================================================================
 
-;; ---- Ivy ----
-(use-package ivy
-  :ensure t
-  :diminish (ivy-mode . "")
-  :config
-  (ivy-mode 1)
-  (use-package ivy-prescient :ensure t
-    :config (ivy-prescient-mode 1))
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-height 15)
-  (setq ivy-initial-inputs-alist nil)
-  (setq ivy-count-format "%d/%d")
-  (setq ivy-re-builders-alist
-        `((t . ivy--regex-ignore-order))))
+;; ---- Legacy Ivy / Counsel / Swiper (disabled after Vertico migration) ----
+;; (use-package ivy
+;;   :ensure t
+;;   :diminish (ivy-mode . "")
+;;   :config
+;;   (ivy-mode 1)
+;;   (use-package ivy-prescient :ensure t
+;;     :config (ivy-prescient-mode 1))
+;;   (setq ivy-use-virtual-buffers t)
+;;   (setq enable-recursive-minibuffers t)
+;;   (setq ivy-height 15)
+;;   (setq ivy-initial-inputs-alist nil)
+;;   (setq ivy-count-format "%d/%d")
+;;   (setq ivy-re-builders-alist
+;;         `((t . ivy--regex-ignore-order))))
+;;
+;; (use-package counsel
+;;   :ensure t
+;;   :config
+;;   (ivy-configure 'counsel-M-x :initial-input "")
+;;   :bind (("M-x" . counsel-M-x)
+;;          ("C-;" . counsel-M-x)
+;;          ("\C-x \C-f" . counsel-find-file)))
+;;
+;; (use-package swiper
+;;   :ensure t
+;;   :bind (("\C-s" . swiper)))
+;;
+;; (use-package ivy-rich :ensure t
+;;   :init (ivy-rich-mode 1))
 
-;; ---- Counsel ----
-(use-package counsel
-  :ensure t
-  :config
-  (ivy-configure 'counsel-M-x :initial-input "")
-  :bind (("M-x" . counsel-M-x)
-         ("C-;" . counsel-M-x)
-         ("\C-x \C-f" . counsel-find-file)))
+;; ---- Savehist ----
+(use-package savehist
+  :ensure nil
+  :init
+  (savehist-mode 1))
 
-;; ---- Swiper ----
-(use-package swiper
+;; ---- Vertico ----
+(use-package vertico
   :ensure t
-  :bind (("\C-s" . swiper)))
+  :init
+  (vertico-mode 1)
+  :custom
+  (vertico-count 15)
+  (vertico-cycle t))
 
-;; ---- Ivy-rich ----
-(use-package ivy-rich :ensure t
-  :init (ivy-rich-mode 1))
+;; ---- Orderless ----
+(use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides
+        '((file (styles basic partial-completion)))))
+
+;; ---- Marginalia ----
+(use-package marginalia
+  :ensure t
+  :init
+  (marginalia-mode 1))
+
+;; ---- Consult ----
+(use-package consult
+  :ensure t
+  :bind (("M-x" . execute-extended-command)
+         ("C-;" . execute-extended-command)
+         ("M-;" . execute-extended-command)
+         ("C-c ;" . execute-extended-command)
+         ("\C-x \C-f" . find-file)
+         ("\C-s" . consult-line)
+         ("C-x b" . consult-buffer)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-ripgrep)
+         ("C-c m" . consult-imenu)))
+
+(defun my/search-target-window ()
+  "Return the main editing window used for search result jumps."
+  (or
+   (car
+    (sort
+     (seq-filter
+      (lambda (window)
+        (and (not (window-minibuffer-p window))
+             (not (window-dedicated-p window))
+             (null (window-parameter window 'window-side))
+             (not (eq window (selected-window)))))
+      (window-list nil 'no-minibuf))
+     (lambda (a b)
+       (> (* (window-total-width a) (window-total-height a))
+          (* (window-total-width b) (window-total-height b))))))
+   (selected-window)))
+
+(defun my/visit-search-result-in-window (visit-fn)
+  "Run VISIT-FN while forcing the target to reuse the main editing window."
+  (let ((target-window (my/search-target-window))
+        (result-buffer (current-buffer))
+        (result-point (point)))
+    (if (window-live-p target-window)
+        (with-selected-window target-window
+          (with-current-buffer result-buffer
+            (goto-char result-point)
+            (funcall visit-fn)))
+      (funcall visit-fn))))
+
+(defun my/compile-goto-error-same-window ()
+  "Visit the current compilation-style result in the main editing window."
+  (interactive)
+  (my/visit-search-result-in-window #'compile-goto-error))
+
+(defun my/xref-goto-same-window ()
+  "Visit the current xref in the main editing window."
+  (interactive)
+  (my/visit-search-result-in-window #'xref-goto-xref))
+
+(defun my/occur-goto-same-window ()
+  "Visit the current occur result in the main editing window."
+  (interactive)
+  (my/visit-search-result-in-window #'occur-mode-goto-occurrence))
+
+;; ---- Embark ----
+(use-package embark
+  :ensure t
+  :bind (("C-." . embark-act)
+         ("C-h B" . embark-bindings))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command))
+
+;; ---- Embark Consult ----
+(use-package embark-consult
+  :ensure t
+  :after (embark consult))
 
 ;; ---- Company ----
 (use-package company
@@ -88,17 +186,31 @@
   ("\C-c p" . projectile-command-map)
   :config
   (projectile-mode t)
-  (setq projectile-completion-system 'ivy)
-  (use-package counsel-projectile :ensure t))
+  (setq projectile-completion-system 'default))
 
 ;; ---- 搜索工具 ----
-(use-package ag :ensure t)
+(use-package ag
+  :ensure t
+  :config
+  (define-key ag-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
 
 (use-package rg
   :ensure t
   :config
   (rg-enable-default-bindings)
-  (setq rg-group-result t rg-show-columns t))
+  (setq rg-group-result t
+        rg-show-columns t)
+  (define-key rg-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+
+(with-eval-after-load 'compile
+  (define-key compilation-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+
+(with-eval-after-load 'xref
+  (define-key xref--xref-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window)
+  (define-key xref--transient-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window))
+
+(with-eval-after-load 'replace
+  (define-key occur-mode-map (kbd "RET") #'my/occur-goto-same-window))
 
 ;; ---- Which-key ----
 (use-package which-key :ensure t
