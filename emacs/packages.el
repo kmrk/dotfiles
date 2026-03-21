@@ -570,6 +570,79 @@
   :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
 
 ;;; ============================================================================
+;;; 编程语言 - Markdown
+;;; ============================================================================
+
+(defun my-markdown-preview-output-file (input-file)
+  "Return the HTML preview path for INPUT-FILE."
+  (expand-file-name
+   (format "emacs-markdown-preview-%s.html"
+           (md5 (expand-file-name input-file)))
+   temporary-file-directory))
+
+(defun my-markdown-preview ()
+  "Render the current Markdown buffer with pandoc and open it in a browser."
+  (interactive)
+  (unless (buffer-file-name)
+    (user-error "Current buffer is not visiting a file"))
+  (unless (executable-find "pandoc")
+    (user-error "pandoc not found in PATH"))
+  (when (buffer-modified-p)
+    (save-buffer))
+  (let* ((input-file (buffer-file-name))
+         (output-file (my-markdown-preview-output-file input-file))
+         (command (list "pandoc"
+                        input-file
+                        "--standalone"
+                        "--from=gfm"
+                        "--to=html5"
+                        "--metadata" "title=Markdown Preview"
+                        "--output" output-file))
+         (exit-code (apply #'call-process (car command) nil "*pandoc-preview*" t (cdr command))))
+    (if (eq exit-code 0)
+        (progn
+          (if (display-graphic-p)
+              (browse-url-of-file output-file)
+            (eww-open-file output-file))
+          (message "Markdown preview: %s" output-file))
+      (with-current-buffer (get-buffer-create "*pandoc-preview*")
+        (goto-char (point-max))
+        (error "Pandoc preview failed; see *pandoc-preview*")))))
+
+(defun my-markdown-mode-setup ()
+  "Local setup shared by Markdown buffers."
+  (visual-line-mode 1)
+  (local-set-key (kbd "C-c C-p") #'my-markdown-preview))
+
+(use-package markdown-mode
+  :ensure t
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init
+  (setq markdown-command "pandoc")
+  :hook ((markdown-mode . my-markdown-mode-setup)
+         (markdown-mode . pandoc-mode)
+         (gfm-mode . my-markdown-mode-setup)
+         (gfm-mode . pandoc-mode))
+  :bind ((:map markdown-mode-map
+         ("C-c C-p" . my-markdown-preview))
+         (:map gfm-mode-map
+         ("C-c C-p" . my-markdown-preview)))
+  :config
+  (setq markdown-fontify-code-blocks-natively t
+        markdown-enable-math t
+        markdown-asymmetric-header t))
+
+(use-package pandoc-mode
+  :ensure t
+  :after markdown-mode
+  :hook ((markdown-mode . pandoc-mode)
+         (gfm-mode . pandoc-mode))
+  :config
+  (setq pandoc-data-dir (expand-file-name "pandoc/" user-emacs-directory)))
+
+;;; ============================================================================
 ;;; 编程语言 - Scribble
 ;;; ============================================================================
 
