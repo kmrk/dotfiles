@@ -58,6 +58,8 @@
                  ("(%l/" (:eval (number-to-string (count-lines (point-min) (point-max))))))
                 (column-number-mode ":%c)")))
 
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
 ;;; ============================================================================
 ;;; 窗口和帧
 ;;; ============================================================================

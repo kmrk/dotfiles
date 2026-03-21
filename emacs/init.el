@@ -14,7 +14,7 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-
+;;; 
 ;; 终端设置
 (setq term-buffer-maximum-size 0)
 (setq vterm-max-scroll-back 10000)
@@ -74,6 +74,11 @@
       completions-max-height 20
       completion-auto-select 'second-tab)
 
+;; 设置相对行号
+(global-display-line-numbers-mode t)
+(setq display-line-numbers-type 'relative)
+
+
 ;; 关闭 Emacs client
 (defun my-close-emacs-client ()
   "Close the current Emacs client without killing the daemon."
@@ -113,7 +118,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("03239f8106a402b9d965757a0cdeab5e70961cb39fa11f1e803e9caf4250786d"
+   '("ca1b398ceb1b61709197478dc7f705b8337a0a9631e399948e643520c5557382"
+     "b6269b0356ed8d9ed55b0dcea10b4e13227b89fd2af4452eee19ac88297b0f99"
+     "03239f8106a402b9d965757a0cdeab5e70961cb39fa11f1e803e9caf4250786d"
      "65057902bcd51d84e0e28036f4759295e08f57b1ba94b9ae10a8d5ffde5f154f"
      "e3a1b1fb50e3908e80514de38acbac74be2eb2777fc896e44b54ce44308e5330"
      "fb83a50c80de36f23aea5919e50e1bccd565ca5bb646af95729dc8c5f926cbf3"
