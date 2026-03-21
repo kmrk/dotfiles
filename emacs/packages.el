@@ -645,11 +645,6 @@
   (setq rime-show-candidate 'minibuffer)
   (setq rime-inline-ascii-trigger 'shift-l))
 
-;;; ============================================================================
-;;; 主题
-;;; ============================================================================
-
-(use-package atom-one-dark-theme :ensure t)
 
 ;;; ============================================================================
 ;;; 其他工具
@@ -667,5 +662,11 @@
   :config
   (setq minions-mode-line-lighter " [+]") ; 在终端下显示为 [+] 比较整齐
   (minions-mode 1))
+
+
+(use-package atom-one-dark-theme
+  :ensure t
+  :init (load-theme 'atom-one-dark t))
+
 
 ;;; packages.el ends here

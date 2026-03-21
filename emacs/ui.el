@@ -100,12 +100,12 @@
 (xterm-mouse-mode 1)
 
 ;; 透明背景（终端）
-(defun my-make-emacs-transparent ()
-  (unless (display-graphic-p)
-    (set-face-background 'default "unspecified-bg")
-    (set-face-background 'fringe "unspecified-bg")))
+;(defun my-make-emacs-transparent ()
+;  (unless (display-graphic-p)
+;    (set-face-background 'default "unspecified-bg")
+;    (set-face-background 'fringe "unspecified-bg")))
 
-(add-hook 'window-setup-hook 'my-make-emacs-transparent)
+;(add-hook 'window-setup-hook 'my-make-emacs-transparent)
 
 ;;; ============================================================================
 ;;; Speedbar
@@ -120,28 +120,30 @@
 ;;; ============================================================================
 
 ;; 根据时间切换主题
-(defun my/remove-tty-face-boxes ()
-  "Drop face box attributes that use GUI-style colors in terminal Emacs.
+;(defun my/remove-tty-face-boxes ()
+;  "Drop face box attributes that use GUI-style colors in terminal Emacs.
+;
+;Some themes set `:box' colors like \"#64645E\", which can trigger
+;`Invalid face box color' on TTY frames.  In that case, keep the theme
+;but remove box styling after it is enabled."
+;  (unless (display-graphic-p)
+;    (dolist (face (face-list))
+;      (when (facep face)
+;        (let ((box (face-attribute face :box nil 'default)))
+;          (when (or (stringp box)
+;                    (and (listp box) (plist-get box :color)))
+;            (set-face-attribute face nil :box nil)))))))
 
-Some themes set `:box' colors like \"#64645E\", which can trigger
-`Invalid face box color' on TTY frames.  In that case, keep the theme
-but remove box styling after it is enabled."
-  (unless (display-graphic-p)
-    (dolist (face (face-list))
-      (when (facep face)
-        (let ((box (face-attribute face :box nil 'default)))
-          (when (or (stringp box)
-                    (and (listp box) (plist-get box :color)))
-            (set-face-attribute face nil :box nil)))))))
+;(defun my/theme-switcher ()
+;  (interactive)
+;  (let ((hour (string-to-number (format-time-string "%H"))))
+;    (mapc #'disable-theme custom-enabled-themes)
+;    (if (and (>= hour 7) (< hour 18))
+;        (load-theme 'leuven t)
+;      (load-theme 'atom-one-dark t))
+;    (my/remove-tty-face-boxes)))
 
-(defun my/theme-switcher ()
-  (interactive)
-  (let ((hour (string-to-number (format-time-string "%H"))))
-    (mapc #'disable-theme custom-enabled-themes)
-    (if (and (>= hour 7) (< hour 18))
-        (load-theme 'leuven t)
-      (load-theme 'atom-one-dark t))
-    (my/remove-tty-face-boxes)))
+
 
 ;;; ============================================================================
 ;;; 特殊缓冲区显示位置

@@ -102,8 +102,6 @@
 (load "~/.emacs.d/ui.el")
 (load "~/.emacs.d/packages.el")
 
-;; 启动时根据时间切换主题
-(my/theme-switcher)
 
 ;;; ============================================================================
 ;;; Custom 设置
@@ -132,16 +130,7 @@
      "f5f070872db3e4d8b82dbb2f3b1c60beca86fc93327a38ebddd22070458a14bc"
      default))
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
- '(package-selected-packages
-   '(ag atom-one-dark-theme cider circadian command-log-mode company
-        corfu counsel-projectile dart-mode diminish eat edn
-        embark-consult envrc evil evil-terminal-cursor-changer
-        expand-region eziam-themes flutter flycheck-clj-kondo
-        haskell-mode ivy-prescient ivy-rich liberime llama lsp-haskell
-        lsp-pyright lsp-ui marginalia material-theme minions
-        monokai-pro-theme monokai-theme orderless org-bullets paredit
-        racket-mode rg rime rust-mode scribble-mode typescript-mode
-        vertico vterm with-editor yasnippet-snippets)))
+ '(package-selected-packages nil))
 
 
 (defun wsl-copy-to-clipboard (text &optional push)
