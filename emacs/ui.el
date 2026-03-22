@@ -22,7 +22,7 @@
 (scroll-bar-mode 0)
 (menu-bar-mode 0)
 (column-number-mode 1)
-(global-tab-line-mode t)
+(tab-bar-mode 1)
 (winner-mode t)
 (show-paren-mode t)
 (electric-pair-mode t)
@@ -33,11 +33,34 @@
 (global-eldoc-mode nil)
 (setq eldoc-echo-area-use-multiline-p nil)
 
+
+
 ;; 行间距
 (setq-default line-spacing 0)
 
 ;; 缩进
 (setq-default indent-tabs-mode nil)
+
+;;; ============================================================================
+;;; Tab Bar
+;;; ============================================================================
+
+(setq tab-bar-close-button-show nil
+      tab-bar-auto-width t
+      tab-bar-auto-width-max nil
+      tab-bar-new-button-show t
+      tab-bar-tab-name-truncated-max 100)
+
+(defun my/tab-bar-tab-name-full ()
+  "Use the selected window's buffer name as the full tab label."
+  (buffer-name (window-buffer (minibuffer-selected-window))))
+
+(setq tab-bar-tab-name-function #'my/tab-bar-tab-name-full)
+
+(setq tab-bar-format
+      '(tab-bar-format-tabs
+        tab-bar-format-align-right
+        tab-bar-format-global))
 
 ;;; ============================================================================
 ;;; 备份文件
