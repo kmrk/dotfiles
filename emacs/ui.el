@@ -51,11 +51,107 @@
       tab-bar-new-button-show t
       tab-bar-tab-name-truncated-max 100)
 
+(defface my/tab-bar-vc-modified-face
+  '((t (:inherit tab-bar-tab :foreground "#ff9e64" :weight bold)))
+  "Face for modified VC state markers shown in the tab bar.")
+
+(defface my/tab-bar-modified-face
+  '((t (:inherit tab-bar-tab :foreground "#7dcfff" :weight bold)))
+  "Face for unsaved buffer markers shown in the tab bar.")
+
+(defface my/tab-bar-vc-added-face
+  '((t (:inherit tab-bar-tab :foreground "#9ece6a" :weight bold)))
+  "Face for added VC state markers shown in the tab bar.")
+
+(defface my/tab-bar-vc-untracked-face
+  '((t (:inherit tab-bar-tab :foreground "#c0a36e" :weight bold)))
+  "Face for untracked VC state markers shown in the tab bar.")
+
+(defface my/tab-bar-vc-conflict-face
+  '((t (:inherit tab-bar-tab :foreground "#f7768e" :weight bold)))
+  "Face for conflicting VC state markers shown in the tab bar.")
+
+(defface my/tab-bar-vc-generic-face
+  '((t (:inherit tab-bar-tab :foreground "#7aa2f7" :weight bold)))
+  "Face for generic VC state markers shown in the tab bar.")
+
+(defun my/tab-bar-git-root (file)
+  "Return the Git root for FILE, or nil when unavailable."
+  (when file
+    (ignore-errors
+      (locate-dominating-file (file-name-directory file) ".git"))))
+
+(defun my/tab-bar-git-porcelain-status (file)
+  "Return Git porcelain XY status for FILE, or nil."
+  (when-let ((root (my/tab-bar-git-root file)))
+    (let ((default-directory root))
+      (with-temp-buffer
+        (when (eq 0 (process-file "git" nil t nil
+                                  "status" "--porcelain" "--ignored=no" "--"
+                                  (file-relative-name file root)))
+          (string-trim (buffer-string)))))))
+
+(defun my/tab-bar-git-status-token (code)
+  "Return a propertized token for a porcelain status CODE."
+  (pcase code
+    (?M (propertize "[M]" 'face 'my/tab-bar-vc-modified-face))
+    (?A (propertize "[A]" 'face 'my/tab-bar-vc-added-face))
+    (?? (propertize "[?]" 'face 'my/tab-bar-vc-untracked-face))
+    (?U (propertize "[U]" 'face 'my/tab-bar-vc-conflict-face))
+    (?D (propertize "[D]" 'face 'my/tab-bar-vc-generic-face))
+    (?R (propertize "[R]" 'face 'my/tab-bar-vc-generic-face))
+    (?C (propertize "[C]" 'face 'my/tab-bar-vc-generic-face))
+    (?! (propertize "[!]" 'face 'my/tab-bar-vc-generic-face))
+    (_ nil)))
+
+(defun my/tab-bar-refresh-vc-state ()
+  "Refresh VC state for the current file buffer and redraw the tab bar."
+  (when (buffer-file-name)
+    (ignore-errors (vc-refresh-state))
+    (force-mode-line-update t)))
+
+(defun my/tab-bar-git-state-label ()
+  "Return propertized Git status markers for the current buffer, or nil."
+  (when-let ((file (buffer-file-name)))
+    (let* ((root (my/tab-bar-git-root file))
+           (status (and root (my/tab-bar-git-porcelain-status file))))
+      (if (and status (>= (length status) 2))
+          (let* ((x (aref status 0))
+                 (y (aref status 1))
+                 (tokens (delq nil (list (my/tab-bar-git-status-token x)
+                                         (my/tab-bar-git-status-token y)))))
+            (when tokens
+              (string-join tokens "")))
+        (or
+         (pcase (ignore-errors (vc-state file))
+           ('edited (propertize "[M]" 'face 'my/tab-bar-vc-modified-face))
+           ('added (propertize "[A]" 'face 'my/tab-bar-vc-added-face))
+           ('removed (propertize "[D]" 'face 'my/tab-bar-vc-generic-face))
+           ('missing (propertize "[!]" 'face 'my/tab-bar-vc-generic-face))
+           ('conflict (propertize "[U]" 'face 'my/tab-bar-vc-conflict-face))
+           ('needs-update (propertize "[O]" 'face 'my/tab-bar-vc-generic-face))
+           ('ignored (propertize "[I]" 'face 'my/tab-bar-vc-generic-face))
+           ('unregistered (propertize "[?]" 'face 'my/tab-bar-vc-untracked-face))
+           (_ nil)))))))
+
 (defun my/tab-bar-tab-name-full ()
-  "Use the selected window's buffer name as the full tab label."
-  (buffer-name (window-buffer (minibuffer-selected-window))))
+  "Use the selected window's buffer name with save and VC status."
+  (with-current-buffer (window-buffer (frame-selected-window))
+    (let ((name (buffer-name))
+          (modified (when (buffer-modified-p)
+                      (propertize "*" 'face 'my/tab-bar-modified-face)))
+          (vc-label (my/tab-bar-git-state-label)))
+      (concat
+       name
+       (if modified (concat " " modified) "")
+       (if vc-label (concat " " vc-label) "")))))
 
 (setq tab-bar-tab-name-function #'my/tab-bar-tab-name-full)
+
+(add-hook 'find-file-hook #'my/tab-bar-refresh-vc-state)
+(add-hook 'after-save-hook #'my/tab-bar-refresh-vc-state)
+(add-hook 'after-revert-hook #'my/tab-bar-refresh-vc-state)
+(add-hook 'focus-in-hook #'my/tab-bar-refresh-vc-state)
 
 (setq tab-bar-format
       '(tab-bar-format-tabs
