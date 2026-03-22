@@ -8,8 +8,8 @@
 
 (setq package-archives
       '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-        ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-        ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+	("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+	("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 (package-initialize)
 
@@ -24,9 +24,9 @@
 (use-package diminish :ensure t)
 
 (use-package envrc
-  :ensure t
-  :config
-  (envrc-global-mode +1))
+	     :ensure t
+	     :config
+	     (envrc-global-mode +1))
 
 ;;; ============================================================================
 ;;; 补全系统
@@ -65,75 +65,75 @@
 
 ;; ---- Savehist ----
 (use-package savehist
-  :ensure nil
-  :init
-  (savehist-mode 1))
+	     :ensure nil
+	     :init
+	     (savehist-mode 1))
 
 ;; ---- Vertico ----
 (use-package vertico
-  :ensure t
-  :init
-  (vertico-mode 1)
-  :custom
-  (vertico-count 15)
-  (vertico-cycle t))
+	     :ensure t
+	     :init
+	     (vertico-mode 1)
+	     :custom
+	     (vertico-count 15)
+	     (vertico-cycle t))
 
 ;; ---- Orderless ----
 (use-package orderless
-  :ensure t
-  :init
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides
-        '((file (styles basic partial-completion)))))
+	     :ensure t
+	     :init
+	     (setq completion-styles '(orderless basic)
+		   completion-category-defaults nil
+		   completion-category-overrides
+		   '((file (styles basic partial-completion)))))
 
 ;; ---- Marginalia ----
 (use-package marginalia
-  :ensure t
-  :init
-  (marginalia-mode 1))
+	     :ensure t
+	     :init
+	     (marginalia-mode 1))
 
 ;; ---- Consult ----
 (use-package consult
-  :ensure t
-  :bind (("M-x" . execute-extended-command)
-         ("C-;" . execute-extended-command)
-         ("M-;" . execute-extended-command)
-         ("C-c ;" . execute-extended-command)
-         ("\C-x \C-f" . find-file)
-         ("\C-s" . consult-line)
-         ("C-x b" . consult-buffer)
-         ("C-c h" . consult-history)
-         ("C-c k" . consult-ripgrep)
-         ("C-c m" . consult-imenu)))
+	     :ensure t
+	     :bind (("M-x" . execute-extended-command)
+		    ("C-;" . execute-extended-command)
+		    ("M-;" . execute-extended-command)
+		    ("C-c ;" . execute-extended-command)
+		    ("\C-x \C-f" . find-file)
+		    ("\C-s" . consult-line)
+		    ("C-x b" . consult-buffer)
+		    ("C-c h" . consult-history)
+		    ("C-c k" . consult-ripgrep)
+		    ("C-c m" . consult-imenu)))
 
 (defun my/search-target-window ()
   "Return the main editing window used for search result jumps."
   (or
-   (car
-    (sort
-     (seq-filter
-      (lambda (window)
-        (and (not (window-minibuffer-p window))
-             (not (window-dedicated-p window))
-             (null (window-parameter window 'window-side))
-             (not (eq window (selected-window)))))
-      (window-list nil 'no-minibuf))
-     (lambda (a b)
-       (> (* (window-total-width a) (window-total-height a))
-          (* (window-total-width b) (window-total-height b))))))
-   (selected-window)))
+    (car
+      (sort
+	(seq-filter
+	  (lambda (window)
+	    (and (not (window-minibuffer-p window))
+		 (not (window-dedicated-p window))
+		 (null (window-parameter window 'window-side))
+		 (not (eq window (selected-window)))))
+	  (window-list nil 'no-minibuf))
+	(lambda (a b)
+	  (> (* (window-total-width a) (window-total-height a))
+	     (* (window-total-width b) (window-total-height b))))))
+    (selected-window)))
 
 (defun my/visit-search-result-in-window (visit-fn)
   "Run VISIT-FN while forcing the target to reuse the main editing window."
   (let ((target-window (my/search-target-window))
-        (result-buffer (current-buffer))
-        (result-point (point)))
+	(result-buffer (current-buffer))
+	(result-point (point)))
     (if (window-live-p target-window)
-        (with-selected-window target-window
-          (with-current-buffer result-buffer
-            (goto-char result-point)
-            (funcall visit-fn)))
+      (with-selected-window target-window
+			    (with-current-buffer result-buffer
+						 (goto-char result-point)
+						 (funcall visit-fn)))
       (funcall visit-fn))))
 
 (defun my/compile-goto-error-same-window ()
@@ -153,27 +153,27 @@
 
 ;; ---- Embark ----
 (use-package embark
-  :ensure t
-  :bind (("C-." . embark-act)
-         ("C-h B" . embark-bindings))
-  :init
-  (setq prefix-help-command #'embark-prefix-help-command))
+	     :ensure t
+	     :bind (("C-." . embark-act)
+		    ("C-h B" . embark-bindings))
+	     :init
+	     (setq prefix-help-command #'embark-prefix-help-command))
 
 ;; ---- Embark Consult ----
 (use-package embark-consult
-  :ensure t
-  :after (embark consult))
+	     :ensure t
+	     :after (embark consult))
 
 ;; ---- Company ----
 (use-package company
-  :ensure t
-  :hook (prog-mode . company-mode)
-  :init (global-company-mode)
-  :config
-  (setq company-minimum-prefix-length 1)
-  (setq company-dabbrev-downcase 0)
-  (setq company-idle-delay 0.1)
-  (add-to-list 'company-backends 'company-capf))
+	     :ensure t
+	     :hook (prog-mode . company-mode)
+	     :init (global-company-mode)
+	     :config
+	     (setq company-minimum-prefix-length 1)
+	     (setq company-dabbrev-downcase 0)
+	     (setq company-idle-delay 0.1)
+	     (add-to-list 'company-backends 'company-capf))
 
 ;;; ============================================================================
 ;;; 导航和搜索
@@ -181,53 +181,53 @@
 
 ;; ---- Projectile ----
 (use-package projectile
-  :ensure t
-  :bind-keymap
-  ("\C-c p" . projectile-command-map)
-  :config
-  (projectile-mode t)
-  (setq projectile-completion-system 'default))
+	     :ensure t
+	     :bind-keymap
+	     ("\C-c p" . projectile-command-map)
+	     :config
+	     (projectile-mode t)
+	     (setq projectile-completion-system 'default))
 
 ;; ---- 搜索工具 ----
 (use-package ag
-  :ensure t
-  :config
-  (define-key ag-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+	     :ensure t
+	     :config
+	     (define-key ag-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
 
 (use-package rg
-  :ensure t
-  :config
-  (rg-enable-default-bindings)
-  (setq rg-group-result t
-        rg-show-columns t)
-  (define-key rg-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+	     :ensure t
+	     :config
+	     (rg-enable-default-bindings)
+	     (setq rg-group-result t
+		   rg-show-columns t)
+	     (define-key rg-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
 
 (with-eval-after-load 'compile
-  (define-key compilation-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+		      (define-key compilation-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
 
 (with-eval-after-load 'xref
-  (define-key xref--xref-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window)
-  (define-key xref--transient-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window))
+		      (define-key xref--xref-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window)
+		      (define-key xref--transient-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window))
 
 (with-eval-after-load 'replace
-  (define-key occur-mode-map (kbd "RET") #'my/occur-goto-same-window))
+		      (define-key occur-mode-map (kbd "RET") #'my/occur-goto-same-window))
 
 ;; ---- Which-key ----
 (use-package which-key :ensure t
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 1))
+	     :init (which-key-mode)
+	     :diminish which-key-mode
+	     :config
+	     (setq which-key-idle-delay 1))
 
 ;; ---- Windmove ----
 (use-package windmove
-  :ensure t
-  :config
-  (windmove-default-keybindings)
-  (global-set-key (kbd "C-h") 'windmove-left)
-  (global-set-key (kbd "C-j") 'windmove-down)
-  (global-set-key (kbd "C-k") 'windmove-up)
-  (global-set-key (kbd "C-l") 'windmove-right))
+	     :ensure t
+	     :config
+	     (windmove-default-keybindings)
+	     (global-set-key (kbd "C-h") 'windmove-left)
+	     (global-set-key (kbd "C-j") 'windmove-down)
+	     (global-set-key (kbd "C-k") 'windmove-up)
+	     (global-set-key (kbd "C-l") 'windmove-right))
 
 ;;; ============================================================================
 ;;; 编辑增强
@@ -235,41 +235,41 @@
 
 ;; ---- Yasnippet ----
 (use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode)
-  (use-package yasnippet-snippets :ensure t))
+	     :ensure t
+	     :config
+	     (yas-global-mode)
+	     (use-package yasnippet-snippets :ensure t))
 
 ;; ---- Expand-region ----
 (use-package expand-region
-  :ensure t
-  :bind (("<C-S-right>" . er/expand-region)
-         ("<C-S-left>" . er/contract-region)))
+	     :ensure t
+	     :bind (("<C-S-right>" . er/expand-region)
+		    ("<C-S-left>" . er/contract-region)))
 
 ;; ---- Paredit ----
 (use-package paredit
-  :ensure t
-  :hook ((emacs-lisp-mode . enable-paredit-mode)
-         (eval-expression-minibuffer-setup . enable-paredit-mode)
-         (ielm-mode . enable-paredit-mode)
-         (lisp-mode . enable-paredit-mode)
-         (lisp-interaction-mode . enable-paredit-mode)
-         (scheme-mode . enable-paredit-mode)
-         (racket-mode . enable-paredit-mode)
-         (slime-repl-mode . enable-paredit-mode)
-         (clojure-mode . enable-paredit-mode)
-         (clojurescript-mode . enable-paredit-mode)
-         (cider-repl-mode . enable-paredit-mode)
-         (cider-mode . enable-paredit-mode)))
+	     :ensure t
+	     :hook ((emacs-lisp-mode . enable-paredit-mode)
+		    (eval-expression-minibuffer-setup . enable-paredit-mode)
+		    (ielm-mode . enable-paredit-mode)
+		    (lisp-mode . enable-paredit-mode)
+		    (lisp-interaction-mode . enable-paredit-mode)
+		    (scheme-mode . enable-paredit-mode)
+		    (racket-mode . enable-paredit-mode)
+		    (slime-repl-mode . enable-paredit-mode)
+		    (clojure-mode . enable-paredit-mode)
+		    (clojurescript-mode . enable-paredit-mode)
+		    (cider-repl-mode . enable-paredit-mode)
+		    (cider-mode . enable-paredit-mode)))
 
 ;; ---- 中英文自动空格 ----
 (defun my-insert-space-between-cn-and-en (char)
   "在中英文之间自动插入空格。"
   (let* ((prev (char-before))
-         (next (char-after))
-         (is-en (and (>= char ?!) (<= char ?~)))
-         (is-cn-prev (and prev (>= prev #x4e00)))
-         (is-cn-next (and next (>= next #x4e00))))
+	 (next (char-after))
+	 (is-en (and (>= char ?!) (<= char ?~)))
+	 (is-cn-prev (and prev (>= prev #x4e00)))
+	 (is-cn-next (and next (>= next #x4e00))))
     (when (and is-en is-cn-prev (not (eq prev ?\s)))
       (insert " "))
     (when (and is-en is-cn-next)
@@ -277,7 +277,7 @@
 
 (defun my-self-insert-hook ()
   (when (and (characterp last-command-event)
-             (>= last-command-event 32))
+	     (>= last-command-event 32))
     (my-insert-space-between-cn-and-en last-command-event)))
 
 (defun my-enable-cn-en-space ()
@@ -300,37 +300,37 @@
   (dired-do-redisplay))
 
 (with-eval-after-load 'dired
-  (advice-add 'dired-do-rename :after #'my-dired-clear-marks-and-refresh))
+		      (advice-add 'dired-do-rename :after #'my-dired-clear-marks-and-refresh))
 
 (use-package dired :ensure nil
-  :commands (dired dired-jump)
-  :after evil
-  :bind (("C-x C-j" . dired-jump))
-  :custom ((dired-listing-switches "-agho --group-directories-first"))
-  :hook
-  (dired-mode
-   .
-   (lambda ()
-     (evil-define-key 'normal dired-mode-map
-       (kbd "h") 'dired-up-directory
-       (kbd "l") 'dired-find-file
-       (kbd "a") 'dired-create-empty-file
-       (kbd "A") 'dired-create-directory
-       (kbd "D") 'dired-do-delete
-       (kbd "r") 'dired-do-rename
-       (kbd "R") 'revert-buffer
-       (kbd "m") 'dired-mark
-       (kbd ".") 'dired-omit-mode))))
+	     :commands (dired dired-jump)
+	     :after evil
+	     :bind (("C-x C-j" . dired-jump))
+	     :custom ((dired-listing-switches "-agho --group-directories-first"))
+	     :hook
+	     (dired-mode
+	       .
+	       (lambda ()
+		 (evil-define-key 'normal dired-mode-map
+				  (kbd "h") 'dired-up-directory
+				  (kbd "l") 'dired-find-file
+				  (kbd "a") 'dired-create-empty-file
+				  (kbd "A") 'dired-create-directory
+				  (kbd "D") 'dired-do-delete
+				  (kbd "r") 'dired-do-rename
+				  (kbd "R") 'revert-buffer
+				  (kbd "m") 'dired-mark
+				  (kbd ".") 'dired-omit-mode))))
 
 (use-package wdired
-  :ensure nil
-  :after dired
-  :config
-  ;; 允许修改文件权限
-  (setq wdired-allow-to-change-permissions t)
-  ;; 在 Evil 下，进入 wdired 后自动进入 insert 模式（可选，方便直接修改）
-  ;; (add-hook 'wdired-mode-hook 'evil-insert-state)
-  )
+	     :ensure nil
+	     :after dired
+	     :config
+	     ;; 允许修改文件权限
+	     (setq wdired-allow-to-change-permissions t)
+	     ;; 在 Evil 下，进入 wdired 后自动进入 insert 模式（可选，方便直接修改）
+	     ;; (add-hook 'wdired-mode-hook 'evil-insert-state)
+	     )
 
 ;;; ============================================================================
 ;;; Evil
@@ -343,39 +343,39 @@
   (keyboard-quit))
 
 (use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (fset 'evil-visual-update-x-selection 'ignore)
-  :config
-  (evil-mode 1)
-  (define-key evil-motion-state-map (kbd "C-z") 'suspend-frame)
-  (evil-ex-define-cmd "q" 'kill-this-buffer)
-  (evil-ex-define-cmd "quit" 'evil-quit)
-  (evil-ex-define-cmd "wq" (lambda () (interactive) (save-buffer) (kill-this-buffer)))
-  (evil-ex-define-cmd "x" (lambda () (interactive) (save-buffer) (kill-this-buffer)))
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "gt") 'next-buffer)
-  (define-key evil-normal-state-map (kbd "gT") 'previous-buffer)
-  (define-key evil-normal-state-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-motion-state-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-insert-state-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-window-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-operator-state-map (kbd "C-g") #'evil-keyboard-quit))
+	     :ensure t
+	     :init
+	     (setq evil-want-integration t)
+	     (setq evil-want-keybinding nil)
+	     (fset 'evil-visual-update-x-selection 'ignore)
+	     :config
+	     (evil-mode 1)
+	     (define-key evil-motion-state-map (kbd "C-z") 'suspend-frame)
+	     (evil-ex-define-cmd "q" 'kill-this-buffer)
+	     (evil-ex-define-cmd "quit" 'evil-quit)
+	     (evil-ex-define-cmd "wq" (lambda () (interactive) (save-buffer) (kill-this-buffer)))
+	     (evil-ex-define-cmd "x" (lambda () (interactive) (save-buffer) (kill-this-buffer)))
+	     (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+	     (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+	     (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+	     (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+	     (define-key evil-normal-state-map (kbd "gt") 'next-buffer)
+	     (define-key evil-normal-state-map (kbd "gT") 'previous-buffer)
+	     (define-key evil-normal-state-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-motion-state-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-insert-state-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-window-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-operator-state-map (kbd "C-g") #'evil-keyboard-quit))
 
 (use-package evil-terminal-cursor-changer
-  :ensure t
-  :config
-  (evil-terminal-cursor-changer-activate)
-  (setq evil-motion-state-cursor 'box)
-  (setq evil-visual-state-cursor 'box)
-  (setq evil-normal-state-cursor 'box)
-  (setq evil-insert-state-cursor 'bar)
-  (setq evil-replace-state-cursor 'hbar))
+	     :ensure t
+	     :config
+	     (evil-terminal-cursor-changer-activate)
+	     (setq evil-motion-state-cursor 'box)
+	     (setq evil-visual-state-cursor 'box)
+	     (setq evil-normal-state-cursor 'box)
+	     (setq evil-insert-state-cursor 'bar)
+	     (setq evil-replace-state-cursor 'hbar))
 
 ;;; ============================================================================
 ;;; 编程语言 - Racket
@@ -389,51 +389,51 @@
   (unless my-racket-langserver-checked
     (setq my-racket-langserver-checked t)
     (setq my-racket-langserver-available
-          (and (executable-find "raco")
-               (eq 0 (call-process "raco" nil nil nil "pkg" "show" "racket-langserver")))))
+	  (and (executable-find "raco")
+	       (eq 0 (call-process "raco" nil nil nil "pkg" "show" "racket-langserver")))))
   my-racket-langserver-available)
 
 (defun my-eglot-racket-server ()
   "Return the preferred Racket LSP server command."
   (if (executable-find "xvfb-run")
-      '("xvfb-run" "-a" "racket" "-l" "racket-langserver")
+    '("xvfb-run" "-a" "racket" "-l" "racket-langserver")
     '("racket" "-l" "racket-langserver")))
 
 (defun my-racket-eglot-ensure ()
   "Start Eglot for Racket when racket-langserver is available."
   (if (my-racket-langserver-installed-p)
-      (eglot-ensure)
+    (eglot-ensure)
     (message "Racket Eglot requires: raco pkg install racket-langserver")))
 
 (use-package racket-mode
-  :ensure t
-  :mode "\\.scrbl\\'"
-  :hook ((racket-mode . my-racket-eglot-ensure)
-         (racket-mode . company-mode)
-         (racket-repl-mode . company-mode))
-  :config
-  (add-hook 'racket-xp-mode-hook
-            (lambda ()
-              (remove-hook 'pre-redisplay-functions
-                           #'racket-xp-pre-redisplay
-                           t)))
-  (setq racket-mode-help-on-errors nil)
-  :bind (:map racket-mode-map
-              ("C-c C-d" . racket-doc)
-              ("C-c C-r" . racket-run)))
+	     :ensure t
+	     :mode "\\.scrbl\\'"
+	     :hook ((racket-mode . my-racket-eglot-ensure)
+		    (racket-mode . company-mode)
+		    (racket-repl-mode . company-mode))
+	     :config
+	     (add-hook 'racket-xp-mode-hook
+		       (lambda ()
+			 (remove-hook 'pre-redisplay-functions
+				      #'racket-xp-pre-redisplay
+				      t)))
+	     (setq racket-mode-help-on-errors nil)
+	     :bind (:map racket-mode-map
+			 ("C-c C-d" . racket-doc)
+			 ("C-c C-r" . racket-run)))
 
 (defun my-scribble-build ()
   "Compile the current Scribble file."
   (interactive)
   (when (buffer-file-name)
     (let ((output (shell-command-to-string
-                   (format "scribble %s" (shell-quote-argument (buffer-file-name))))))
+		    (format "scribble %s" (shell-quote-argument (buffer-file-name))))))
       (message "%s" output))))
 
 (add-hook 'racket-mode-hook
-          (lambda ()
-            (when (string-match "\\.scrbl\\'" (or (buffer-file-name) ""))
-              (local-set-key (kbd "C-c C-c") 'my-scribble-build))))
+	  (lambda ()
+	    (when (string-match "\\.scrbl\\'" (or (buffer-file-name) ""))
+	      (local-set-key (kbd "C-c C-c") 'my-scribble-build))))
 
 (font-lock-add-keywords 'racket-mode '(("@\\w+{" . font-lock-keyword-face)))
 
@@ -442,91 +442,91 @@
 ;;; ============================================================================
 
 (use-package haskell-mode
-  :ensure t
-  :config
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-  (setq haskell-stylish-on-save t)
-  (setq haskell-indentation-layout-offset 4)
-  (setq haskell-indentation-starter-offset 4)
-  (set-face-attribute 'haskell-constructor-face nil :background nil :underline nil :italic nil)
-  (set-face-attribute 'haskell-definition-face nil :foreground "color-16" :background "color-255" :underline nil :italic nil)
-  (set-face-attribute 'haskell-operator-face nil :foreground "color-16" :background "color-255" :underline nil)
-  (set-face-attribute 'haskell-type-face nil :underline nil))
+	     :ensure t
+	     :config
+	     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+	     (setq haskell-stylish-on-save t)
+	     (setq haskell-indentation-layout-offset 4)
+	     (setq haskell-indentation-starter-offset 4)
+	     (set-face-attribute 'haskell-constructor-face nil :background nil :underline nil :italic nil)
+	     (set-face-attribute 'haskell-definition-face nil :foreground "color-16" :background "color-255" :underline nil :italic nil)
+	     (set-face-attribute 'haskell-operator-face nil :foreground "color-16" :background "color-255" :underline nil)
+	     (set-face-attribute 'haskell-type-face nil :underline nil))
 
 ;;; ============================================================================
 ;;; 编程语言 - Rust
 ;;; ============================================================================
 
 (use-package rust-mode
-  :ensure t
-  :mode "\\.rs\\'"
-  :config
-  (setq rust-format-on-save t))
+	     :ensure t
+	     :mode "\\.rs\\'"
+	     :config
+	     (setq rust-format-on-save t))
 
 (use-package eglot
-  :ensure nil
-  :hook ((python-mode . eglot-ensure)
-         (python-ts-mode . eglot-ensure)
-         (js-mode . eglot-ensure)
-         (js-ts-mode . eglot-ensure)
-         (typescript-mode . eglot-ensure)
-         (typescript-ts-mode . eglot-ensure)
-         (tsx-ts-mode . eglot-ensure)
-         (clojure-mode . eglot-ensure)
-         (clojurescript-mode . eglot-ensure)
-         (clojurec-mode . eglot-ensure)
-         (haskell-mode . eglot-ensure)
-         (rust-mode . eglot-ensure)
-         (rust-ts-mode . eglot-ensure)
-         (dart-mode . eglot-ensure)
-         (eglot-managed-mode . (lambda ()
-                                 (flymake-mode 1))))
-  :bind (:map eglot-mode-map
-              ("C-c C-e r" . eglot-rename)
-              ("C-c C-e l" . flymake-show-buffer-diagnostics)
-              ("C-c C-e p" . flymake-show-buffer-diagnostics)
-              ("C-c C-e C" . eglot-show-workspace-configuration)
-              ("C-c C-e R" . eglot-reconnect)
-              ("C-c C-e S" . eglot-shutdown)
-              ("C-c C-e A" . eglot-shutdown-all)
-              ("C-c C-e a" . eglot-code-actions)
-              ("C-c C-e f" . eglot-format)
-              ("C-c r" . eglot-rename)
-              ("C-c f" . eglot-code-actions))
-  :config
-  (defun my-eglot-python-server ()
-    "Return the preferred Python LSP server command."
-    (cond
-     ((executable-find "basedpyright-langserver")
-      '("basedpyright-langserver" "--stdio"))
-     ((executable-find "pyright-langserver")
-      '("pyright-langserver" "--stdio"))
-     (t
-      '("npx" "--yes" "pyright" "--stdio"))))
+	     :ensure nil
+	     :hook ((python-mode . eglot-ensure)
+		    (python-ts-mode . eglot-ensure)
+		    (js-mode . eglot-ensure)
+		    (js-ts-mode . eglot-ensure)
+		    (typescript-mode . eglot-ensure)
+		    (typescript-ts-mode . eglot-ensure)
+		    (tsx-ts-mode . eglot-ensure)
+		    (clojure-mode . eglot-ensure)
+		    (clojurescript-mode . eglot-ensure)
+		    (clojurec-mode . eglot-ensure)
+		    (haskell-mode . eglot-ensure)
+		    (rust-mode . eglot-ensure)
+		    (rust-ts-mode . eglot-ensure)
+		    (dart-mode . eglot-ensure)
+		    (eglot-managed-mode . (lambda ()
+					    (flymake-mode 1))))
+	     :bind (:map eglot-mode-map
+			 ("C-c C-e r" . eglot-rename)
+			 ("C-c C-e l" . flymake-show-buffer-diagnostics)
+			 ("C-c C-e p" . flymake-show-buffer-diagnostics)
+			 ("C-c C-e C" . eglot-show-workspace-configuration)
+			 ("C-c C-e R" . eglot-reconnect)
+			 ("C-c C-e S" . eglot-shutdown)
+			 ("C-c C-e A" . eglot-shutdown-all)
+			 ("C-c C-e a" . eglot-code-actions)
+			 ("C-c C-e f" . eglot-format)
+			 ("C-c r" . eglot-rename)
+			 ("C-c f" . eglot-code-actions))
+	     :config
+	     (defun my-eglot-python-server ()
+	       "Return the preferred Python LSP server command."
+	       (cond
+		 ((executable-find "basedpyright-langserver")
+		  '("basedpyright-langserver" "--stdio"))
+		 ((executable-find "pyright-langserver")
+		  '("pyright-langserver" "--stdio"))
+		 (t
+		   '("npx" "--yes" "pyright" "--stdio"))))
 
-  (defun my-eglot-ts-server ()
-    "Return the preferred TypeScript/JavaScript LSP server command."
-    (if (executable-find "typescript-language-server")
-        '("typescript-language-server" "--stdio")
-      '("npx" "--yes" "typescript-language-server" "--stdio")))
+	     (defun my-eglot-ts-server ()
+	       "Return the preferred TypeScript/JavaScript LSP server command."
+	       (if (executable-find "typescript-language-server")
+		 '("typescript-language-server" "--stdio")
+		 '("npx" "--yes" "typescript-language-server" "--stdio")))
 
-  (setq eglot-events-buffer-size 0)
-  (add-to-list 'eglot-server-programs
-               `(racket-mode . ,(my-eglot-racket-server)))
-  (add-to-list 'eglot-server-programs
-               `((python-mode python-ts-mode) . ,(my-eglot-python-server)))
-  (add-to-list 'eglot-server-programs
-               `((js-mode js-ts-mode typescript-mode typescript-ts-mode tsx-ts-mode)
-                 . ,(my-eglot-ts-server)))
-  (add-to-list 'eglot-server-programs
-               '((rust-mode rust-ts-mode) . ("rust-analyzer")))
-  (add-to-list 'eglot-server-programs
-               '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
-  (add-to-list 'eglot-server-programs
-               '(dart-mode . ("dart" "language-server" "--protocol=lsp")))
-  (add-to-list 'eglot-server-programs
-               '((clojure-mode clojurescript-mode clojurec-mode)
-                 . ("clojure-lsp"))))
+	     (setq eglot-events-buffer-size 0)
+	     (add-to-list 'eglot-server-programs
+			  `(racket-mode . ,(my-eglot-racket-server)))
+	     (add-to-list 'eglot-server-programs
+			  `((python-mode python-ts-mode) . ,(my-eglot-python-server)))
+	     (add-to-list 'eglot-server-programs
+			  `((js-mode js-ts-mode typescript-mode typescript-ts-mode tsx-ts-mode)
+			    . ,(my-eglot-ts-server)))
+	     (add-to-list 'eglot-server-programs
+			  '((rust-mode rust-ts-mode) . ("rust-analyzer")))
+	     (add-to-list 'eglot-server-programs
+			  '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
+	     (add-to-list 'eglot-server-programs
+			  '(dart-mode . ("dart" "language-server" "--protocol=lsp")))
+	     (add-to-list 'eglot-server-programs
+			  '((clojure-mode clojurescript-mode clojurec-mode)
+			    . ("clojure-lsp"))))
 
 ;;; ============================================================================
 ;;; 编程语言 - Clojure
@@ -540,34 +540,34 @@
 ;;; ============================================================================
 
 (use-package dart-mode
-  :ensure t
-  :mode "\\.dart\\'"
-  :custom
-  (dart-format-on-save t)
-  :hook ((dart-mode . subword-mode)
-         (dart-mode . electric-pair-local-mode))
-  :bind (:map dart-mode-map
-              ("C-c C-c" . eglot-format)))
+	     :ensure t
+	     :mode "\\.dart\\'"
+	     :custom
+	     (dart-format-on-save t)
+	     :hook ((dart-mode . subword-mode)
+		    (dart-mode . electric-pair-local-mode))
+	     :bind (:map dart-mode-map
+			 ("C-c C-c" . eglot-format)))
 
 (use-package flutter
-  :ensure t
-  :after dart-mode
-  :config
-  (let ((flutter-sdk (expand-file-name "~/.local/lib/flutter")))
-    (when (file-directory-p flutter-sdk)
-      (setq flutter-sdk-path flutter-sdk))))
+	     :ensure t
+	     :after dart-mode
+	     :config
+	     (let ((flutter-sdk (expand-file-name "~/.local/lib/flutter")))
+	       (when (file-directory-p flutter-sdk)
+		 (setq flutter-sdk-path flutter-sdk))))
 
 ;;; ============================================================================
 ;;; 编程语言 - JavaScript / TypeScript
 ;;; ============================================================================
 
 (use-package typescript-mode
-  :ensure t
-  :mode ("\\.ts\\'" "\\.tsx\\'"))
+	     :ensure t
+	     :mode ("\\.ts\\'" "\\.tsx\\'"))
 
 (use-package js
-  :ensure nil
-  :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
+	     :ensure nil
+	     :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
 
 ;;; ============================================================================
 ;;; 编程语言 - Markdown
@@ -576,9 +576,9 @@
 (defun my-markdown-preview-output-file (input-file)
   "Return the HTML preview path for INPUT-FILE."
   (expand-file-name
-   (format "emacs-markdown-preview-%s.html"
-           (md5 (expand-file-name input-file)))
-   temporary-file-directory))
+    (format "emacs-markdown-preview-%s.html"
+	    (md5 (expand-file-name input-file)))
+    temporary-file-directory))
 
 (defun my-markdown-preview ()
   "Render the current Markdown buffer with pandoc and open it in a browser."
@@ -590,72 +590,78 @@
   (when (buffer-modified-p)
     (save-buffer))
   (let* ((input-file (buffer-file-name))
-         (output-file (my-markdown-preview-output-file input-file))
-         (command (list "pandoc"
-                        input-file
-                        "--standalone"
-                        "--from=gfm"
-                        "--to=html5"
-                        "--metadata" "title=Markdown Preview"
-                        "--output" output-file))
-         (exit-code (apply #'call-process (car command) nil "*pandoc-preview*" t (cdr command))))
+	 (output-file (my-markdown-preview-output-file input-file))
+	 (command (list "pandoc"
+			input-file
+			"--standalone"
+			"--from=gfm"
+			"--to=html5"
+			"--metadata" "title=Markdown Preview"
+			"--output" output-file))
+	 (exit-code (apply #'call-process (car command) nil "*pandoc-preview*" t (cdr command))))
     (if (eq exit-code 0)
-        (progn
-          (if (display-graphic-p)
-              (browse-url-of-file output-file)
-            (eww-open-file output-file))
-          (message "Markdown preview: %s" output-file))
+      (progn
+	(if (display-graphic-p)
+	  (browse-url-of-file output-file)
+	  (eww-open-file output-file))
+	(message "Markdown preview: %s" output-file))
       (with-current-buffer (get-buffer-create "*pandoc-preview*")
-        (goto-char (point-max))
-        (error "Pandoc preview failed; see *pandoc-preview*")))))
+			   (goto-char (point-max))
+			   (error "Pandoc preview failed; see *pandoc-preview*")))))
 
 (defun my-markdown-mode-setup ()
   "Local setup shared by Markdown buffers."
   (visual-line-mode 1)
+  ;; `markdown-mode' in `atom-one-dark' can render prose with overly dim
+  ;; comment-like faces. Remap them locally to a brighter body color.
+  (face-remap-add-relative 'default '(:foreground "#ffffff"))
+  (face-remap-add-relative 'font-lock-comment-face '(:foreground "#ffffff"))
+  (face-remap-add-relative 'font-lock-comment-delimiter-face '(:foreground "#d0d7e2"))
+  (face-remap-add-relative 'markdown-markup-face '(:foreground "#d0d7e2"))
   (local-set-key (kbd "C-c C-p") #'my-markdown-preview))
 
 (use-package markdown-mode
-  :ensure t
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init
-  (setq markdown-command "pandoc")
-  :hook ((markdown-mode . my-markdown-mode-setup)
-         (markdown-mode . pandoc-mode)
-         (gfm-mode . my-markdown-mode-setup)
-         (gfm-mode . pandoc-mode))
-  :bind ((:map markdown-mode-map
-         ("C-c C-p" . my-markdown-preview))
-         (:map gfm-mode-map
-         ("C-c C-p" . my-markdown-preview)))
-  :config
-  (setq markdown-fontify-code-blocks-natively t
-        markdown-enable-math t
-        markdown-asymmetric-header t))
+	     :ensure t
+	     :mode (("README\\.md\\'" . gfm-mode)
+		    ("\\.md\\'" . markdown-mode)
+		    ("\\.markdown\\'" . markdown-mode))
+	     :init
+	     (setq markdown-command "pandoc")
+	     :hook ((markdown-mode . my-markdown-mode-setup)
+		    (markdown-mode . pandoc-mode)
+		    (gfm-mode . my-markdown-mode-setup)
+		    (gfm-mode . pandoc-mode))
+	     :bind ((:map markdown-mode-map
+			  ("C-c C-p" . my-markdown-preview))
+		    (:map gfm-mode-map
+			  ("C-c C-p" . my-markdown-preview)))
+	     :config
+	     (setq markdown-fontify-code-blocks-natively t
+		   markdown-enable-math t
+		   markdown-asymmetric-header t))
 
 (use-package pandoc-mode
-  :ensure t
-  :after markdown-mode
-  :hook ((markdown-mode . pandoc-mode)
-         (gfm-mode . pandoc-mode))
-  :config
-  (setq pandoc-data-dir (expand-file-name "pandoc/" user-emacs-directory)))
+	     :ensure t
+	     :after markdown-mode
+	     :hook ((markdown-mode . pandoc-mode)
+		    (gfm-mode . pandoc-mode))
+	     :config
+	     (setq pandoc-data-dir (expand-file-name "pandoc/" user-emacs-directory)))
 
 ;;; ============================================================================
 ;;; 编程语言 - Scribble
 ;;; ============================================================================
 
 (use-package scribble-mode
-  :ensure t
-  :mode "\\.scrbl\\'"
-  :config
-  (setq scribble-indent-width 2)
-  (add-hook 'scribble-mode-hook #'company-mode)
-  (add-hook 'scribble-mode-hook #'show-paren-mode)
-  :bind (:map scribble-mode-map
-              ("C-c C-c" . racket-run)
-              ("C-c C-k" . racket-check-syntax-mode)))
+	     :ensure t
+	     :mode "\\.scrbl\\'"
+	     :config
+	     (setq scribble-indent-width 2)
+	     (add-hook 'scribble-mode-hook #'company-mode)
+	     (add-hook 'scribble-mode-hook #'show-paren-mode)
+	     :bind (:map scribble-mode-map
+			 ("C-c C-c" . racket-run)
+			 ("C-c C-k" . racket-check-syntax-mode)))
 
 ;;; ============================================================================
 ;;; Flymake
@@ -673,34 +679,34 @@
 (defun org-font-setup ()
   (when (display-graphic-p)
     (font-lock-add-keywords
-     'org-mode
-     '(("^ *\\([-]\\) "
-        (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+      'org-mode
+      '(("^ *\\([-]\\) "
+	 (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
     (dolist (pair '((org-level-1 . 1.2)
-                    (org-level-2 . 1.15)
-                    (org-level-3 . 1.10)
-                    (org-level-4 . 1.09)
-                    (org-level-5 . 1.08)
-                    (org-level-6 . 1.07)
-                    (org-level-7 . 1.06)
-                    (org-level-8 . 1.05)))
+		    (org-level-2 . 1.15)
+		    (org-level-3 . 1.10)
+		    (org-level-4 . 1.09)
+		    (org-level-5 . 1.08)
+		    (org-level-6 . 1.07)
+		    (org-level-7 . 1.06)
+		    (org-level-8 . 1.05)))
       (let* ((face (car pair))
-             (val (cdr pair))
-             (height (if (and (numberp val) (< val 3))
-                         (truncate (* val 100))
-                       (truncate val))))
-        (set-face-attribute face nil
-                            :font "Ubuntu"
-                            :weight 'regular
-                            :height height)))))
+	     (val (cdr pair))
+	     (height (if (and (numberp val) (< val 3))
+		       (truncate (* val 100))
+		       (truncate val))))
+	(set-face-attribute face nil
+			    :font "Ubuntu"
+			    :weight 'regular
+			    :height height)))))
 
 (use-package org-bullets
-  :ensure t
-  :after org
-  :hook ((org-mode . org-font-setup)
-         (org-mode . org-bullets-mode))
-  :custom
-  (org-bullets-bullet-list '("✱" "◉" "◆" "◇" "◈" "✲" "✧" "⊙" "✦" "⊚" "⊛" "○")))
+	     :ensure t
+	     :after org
+	     :hook ((org-mode . org-font-setup)
+		    (org-mode . org-bullets-mode))
+	     :custom
+	     (org-bullets-bullet-list '("✱" "◉" "◆" "◇" "◈" "✲" "✧" "⊙" "✦" "⊚" "⊛" "○")))
 
 (use-package org :ensure t)
 
@@ -709,14 +715,14 @@
 ;;; ============================================================================
 
 (use-package rime
-  :ensure t
-  :custom
-  (default-input-method "rime")
-  (rime-title " 中 ")
-  (rime-user-data-dir "~/.config/rime")
-  :config
-  (setq rime-show-candidate 'minibuffer)
-  (setq rime-inline-ascii-trigger 'shift-l))
+	     :ensure t
+	     :custom
+	     (default-input-method "rime")
+	     (rime-title " 中 ")
+	     (rime-user-data-dir "~/.config/rime")
+	     :config
+	     (setq rime-show-candidate 'minibuffer)
+	     (setq rime-inline-ascii-trigger 'shift-l))
 
 
 ;;; ============================================================================
@@ -731,15 +737,27 @@
 
 ;; 状态栏精简（解决终端下显示不全的问题）
 (use-package minions
-  :ensure t
-  :config
-  (setq minions-mode-line-lighter " [+]") ; 在终端下显示为 [+] 比较整齐
-  (minions-mode 1))
+	     :ensure t
+	     :config
+	     (setq minions-mode-line-lighter " [+]") ; 在终端下显示为 [+] 比较整齐
+	     (minions-mode 1))
 
 
-(use-package atom-one-dark-theme
-  :ensure t
-  :init (load-theme 'atom-one-dark t))
 
+(use-package doom-themes
+	     :ensure t
+	     :init
+	     (load-theme 'doom-one t)
+	     :config
+	     (doom-themes-org-config))
+
+
+(use-package keycast
+             :ensure t
+             :custom
+             (keycast-tab-bar-format "[%k]%c%R")
+             (keycast-tab-bar-minimal-width 30)
+             :config
+             (keycast-tab-bar-mode 1))
 
 ;;; packages.el ends here
