@@ -166,3 +166,11 @@ alias cc="claude"
 alias open="explorer.exe"
 alias f="flutter run -d linux"
 alias cls="clear"
+
+export PATH=$PATH:~/.local/share/zig
+
+alias winfix='[ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && sudo sh -c "echo \":WSLInterop:M::MZ::/init:PF\" > /proc/sys/fs/binfmt_misc/register"'
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
