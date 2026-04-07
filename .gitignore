@@ -1,3 +1,6 @@
 emacs/elpa/
 env_template
-btop/btop.logg
+btop/btop.log
+cmus/
+mps-youtube/
+pulse/

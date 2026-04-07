@@ -149,7 +149,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-export DISPLAY=127.0.0.1:0.0
+#export DISPLAY=127.0.0.1:0.0
 
 export EDITOR=vi
 export COLORTERM=truecolor

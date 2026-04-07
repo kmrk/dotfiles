@@ -118,7 +118,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("b5fd9c7429d52190235f2383e47d340d7ff769f141cd8f9e7a4629a81abc6b19"
+   '("70c88c01b0b5fde9ecf3bb23d542acba45bb4c5ae0c1330b965def2b6ce6fac3"
+     "088cd6f894494ac3d4ff67b794467c2aa1e3713453805b93a8bcb2d72a0d1b53"
+     "be0d9f0e72a4ebc4a59c382168921b082b4dc15844bdaf1353c08157806b3321"
+     "b5fd9c7429d52190235f2383e47d340d7ff769f141cd8f9e7a4629a81abc6b19"
      "0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1"
      "1b7e575c6681e66d8d83634c2c160b40af12f3756360a4dd81b8032f4495cb5e"
      "ca1b398ceb1b61709197478dc7f705b8337a0a9631e399948e643520c5557382"
@@ -151,13 +154,30 @@
         vertico vterm with-editor yasnippet-snippets)))
 
 
-(defun wsl-copy-to-clipboard (text &optional push)
-  (with-temp-buffer
-    (insert text)
-    (call-process-region (point-min) (point-max) 
-                         "/mnt/c/Windows/System32/clip.exe")))
+(defconst wsl-win32yank-path
+  (or (executable-find "win32yank.exe")
+      "/mnt/c/Program Files/Neovim/bin/win32yank.exe"))
 
-(setq interprogram-cut-function 'wsl-copy-to-clipboard)
+(defun wsl-copy-to-clipboard (text &optional push)
+  (when (and (not push) text)
+    (with-temp-buffer
+      (insert text)
+      (call-process-region
+       (point-min)
+       (point-max)
+       wsl-win32yank-path
+       nil 0 nil
+       "-i" "--crlf"))))
+
+(defun wsl-paste-from-clipboard ()
+  (when (file-executable-p wsl-win32yank-path)
+    (string-trim-right
+     (with-output-to-string
+       (with-current-buffer standard-output
+         (call-process wsl-win32yank-path nil t nil "-o" "--lf"))))))
+
+(setq interprogram-cut-function #'wsl-copy-to-clipboard)
+(setq interprogram-paste-function #'wsl-paste-from-clipboard)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
