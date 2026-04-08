@@ -118,7 +118,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("70c88c01b0b5fde9ecf3bb23d542acba45bb4c5ae0c1330b965def2b6ce6fac3"
+   '("a9eeab09d61fef94084a95f82557e147d9630fbbb82a837f971f83e66e21e5ad"
+     "5244ba0273a952a536e07abaad1fdf7c90d7ebb3647f36269c23bfd1cf20b0b8"
+     "e4a702e262c3e3501dfe25091621fe12cd63c7845221687e36a79e17cf3a67e0"
+     "70c88c01b0b5fde9ecf3bb23d542acba45bb4c5ae0c1330b965def2b6ce6fac3"
      "088cd6f894494ac3d4ff67b794467c2aa1e3713453805b93a8bcb2d72a0d1b53"
      "be0d9f0e72a4ebc4a59c382168921b082b4dc15844bdaf1353c08157806b3321"
      "b5fd9c7429d52190235f2383e47d340d7ff769f141cd8f9e7a4629a81abc6b19"
@@ -143,15 +146,7 @@
      "f5f070872db3e4d8b82dbb2f3b1c60beca86fc93327a38ebddd22070458a14bc"
      default))
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
- '(package-selected-packages
-   '(ag cider circadian command-log-mode company corfu counsel-projectile
-        dart-mode diminish doom-themes eat edn embark-consult envrc
-        evil evil-terminal-cursor-changer expand-region eziam-themes
-        flutter flycheck-clj-kondo haskell-mode ivy-prescient ivy-rich
-        keycast liberime llama lsp-haskell lsp-pyright lsp-ui
-        marginalia minions orderless org-bullets pandoc-mode paredit
-        racket-mode rg rime rust-mode scribble-mode typescript-mode
-        vertico vterm with-editor yasnippet-snippets)))
+ '(package-selected-packages nil))
 
 
 (defconst wsl-win32yank-path

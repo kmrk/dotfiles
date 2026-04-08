@@ -447,11 +447,7 @@
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (setq haskell-stylish-on-save t)
   (setq haskell-indentation-layout-offset 4)
-  (setq haskell-indentation-starter-offset 4)
-  (set-face-attribute 'haskell-constructor-face nil :background nil :underline nil :italic nil)
-  (set-face-attribute 'haskell-definition-face nil :foreground "color-16" :background "color-255" :underline nil :italic nil)
-  (set-face-attribute 'haskell-operator-face nil :foreground "color-16" :background "color-255" :underline nil)
-  (set-face-attribute 'haskell-type-face nil :underline nil))
+  (setq haskell-indentation-starter-offset 4))
 
 ;;; ============================================================================
 ;;; 编程语言 - Rust
@@ -756,5 +752,11 @@
   (keycast-tab-bar-minimal-width 30)
   :config
   (keycast-tab-bar-mode 1))
+
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup))
 
 ;;; packages.el ends here

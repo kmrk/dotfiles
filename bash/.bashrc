@@ -131,7 +131,12 @@ fi
 GUIX_PROFILE="/home/ysong/.guix-profile"
 . "$GUIX_PROFILE/etc/profile"
 
-export LD_LIBRARY_PATH="$HOME/.guix-profile/lib:$LD_LIBRARY_PATH"
+#export LD_LIBRARY_PATH="$HOME/.guix-profile/lib:$LD_LIBRARY_PATH"
+
+#export LD_LIBRARY_PATH="/usr/lib/wsl/lib:$HOME/.guix-profile/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+#export GALLIUM_DRIVER=d3d12
+#export MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
+
 
 . "$HOME/.local/share/../bin/env"
 
