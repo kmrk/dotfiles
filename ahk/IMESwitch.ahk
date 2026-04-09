@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
+; 设置工作目录（v2 中 A_ScriptDir 建议显式调用）
 SetWorkingDir(A_ScriptDir)
 
 ; 使用 $ 强制使用物理钩子
@@ -12,8 +13,7 @@ $*^[::
     ; v2 中 Send 是函数，字符串需加双引号
     ; {Blind} 模式在 v2 中依然有效，能更稳定地处理修饰键状态
     Send("{Blind}^+9")
-    Sleep(20)
-    Send("{Esc}")
+    SetNumLockState "On" ; Fix wsl 强制 Windows 刷新输入管线
 }
 
 ; 快捷键：Ctrl + \
