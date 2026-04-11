@@ -163,7 +163,6 @@ export COLORTERM=truecolor
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/mnt/d/VSCodium/bin/:$PATH"
 eval "$(direnv hook bash)"
-export PS1="\[\e[1;36m\]\W\[\e[m\] \[\e[1;33m\]❯\[\e[m\] "
 
 
 alias lll='echo -e "\033[1;34m$(pwd)\033[0m";ls -lh --color=always | awk '\''NR>1 {printf "%-7s %-3s %2s %-5s ", $5, $6, $7, $8; for(i=9; i<=NF; i++) printf $i (i==NF ? "" : " "); print ""}'\'''
@@ -181,3 +180,7 @@ alias winfix='[ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && sudo sh -c "echo \
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+
+
+export PS1="\[\e[1;36m\]\W\[\e[m\] \[\e[1;33m\]❯\[\e[m\] "

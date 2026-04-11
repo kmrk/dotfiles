@@ -104,6 +104,7 @@
 ;;; 加载模块
 ;;; ============================================================================
 
+(load "~/.emacs.d/perf.el"); some performance setting
 (load "~/.emacs.d/ui.el")
 (load "~/.emacs.d/packages.el")
 

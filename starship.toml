@@ -1,0 +1,5 @@
+[character]
+vimcmd_symbol = "[N]❯"
+vimcmd_replace_one_symbol = "[R]❯"
+vimcmd_replace_symbol = "[R]❯"
+vimcmd_visual_symbol = "[V]❯"
