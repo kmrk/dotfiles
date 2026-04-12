@@ -173,6 +173,9 @@ alias open="explorer.exe"
 alias f="flutter run -d linux"
 alias cls="clear"
 
+alias rcc="ccr code"
+
+
 export PATH=$PATH:~/.local/share/zig
 
 alias winfix='[ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && sudo sh -c "echo \":WSLInterop:M::MZ::/init:PF\" > /proc/sys/fs/binfmt_misc/register"'

@@ -294,14 +294,6 @@
 (put 'dired-find-alternate-file 'disabled nil)
 (setq delete-by-moving-to-trash t)
 
-(defun my-dired-clear-marks-and-refresh (&rest _args)
-  "Clear marks and refresh Dired buffers after moving files."
-  (dired-unmark-all-marks)
-  (dired-do-redisplay))
-
-(with-eval-after-load 'dired
-  (advice-add 'dired-do-rename :after #'my-dired-clear-marks-and-refresh))
-
 (use-package dired :ensure nil
   :commands (dired dired-jump)
   :after evil
