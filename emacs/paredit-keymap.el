@@ -1,31 +1,29 @@
 ;;; paredit-keymap.el --- Custom paredit / evil-paredit bindings -*- lexical-binding: t; -*-
-
 ;;; Commentary:
 ;;
-;; This file is the source of truth for the custom paredit editing model.
 ;;
-;; Axes:
+;;                       [ M-k ]
+;;                          ^
+;;                    (WRAP CURRENT)
+;;                          |
+;;          [ M-h ] <-------+-------> [ M-l ]
+;;          (SLURP)         |         (SLURP)
+;;                          |
+;;          [ M-H ] <-------+-------> [ M-L ]
+;;          ( BARF)         |         ( BARF)
+;;                          |
+;;                    (REMOVE SHELL)
+;;                          v
+;;                       [ M-j ]
 ;;
-;;                M-k
-;;                 up
-;;   wrap current sexp using the
-;;   nearest enclosing delimiter
+;;  ─────────────────────────────────────────────────
+;;     NAVIGATE:  [ M-p ]  <─── o ───>  [ M-n ]
+;;  ─────────────────────────────────────────────────
 ;;
-;;   M-h                              M-l
-;; left slurp                    right slurp
-;;
-;;   M-H                              M-L
-;; left barf                     right barf
-;;
-;;                M-j
-;;               down
-;;      remove nearest enclosing shell
-;;
-;; Movement:
-;;
-;;   M-p  structural backward move
-;;   M-n  structural forward move
-;;
+;;  [ DESIGN LOGIC ]
+;;  - Vertical (j/k): Structural Depth (In/Out)
+;;  - Horizontal (h/l): Structural Boundaries (Extend/Shrink)
+;;  - Shift Key: Reverses the Boundary action (Barf)
 ;; Concrete examples:
 ;;
 ;;   [a b c d]      -- M-k on d --> [a b c [d]]
