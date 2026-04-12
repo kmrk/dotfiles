@@ -43,6 +43,106 @@
 (setq-default indent-tabs-mode nil)
 
 ;;; ============================================================================
+;;; 配对符号高亮补充
+;;; ============================================================================
+
+(defvar my/pair-highlight-overlays nil
+  "Overlays used to extend `show-paren-mode' highlighting to string delimiters.")
+
+(defun my/pair-highlight-clear ()
+  "Clear overlays created by `my/pair-highlight-mode'."
+  (mapc #'delete-overlay my/pair-highlight-overlays)
+  (setq my/pair-highlight-overlays nil))
+
+(defun my/pair-highlight-make-overlay (beg end face)
+  "Highlight region from BEG to END with FACE."
+  (when (< beg end)
+    (let ((ov (make-overlay beg end nil t nil)))
+      (overlay-put ov 'face face)
+      (push ov my/pair-highlight-overlays))))
+
+(defun my/string-delimiter-p (pos)
+  "Return non-nil when POS points at a string delimiter in the current syntax table."
+  (and pos
+       (<= (point-min) pos)
+       (< pos (point-max))
+       (eq (char-syntax (char-after pos)) ?\")))
+
+(defun my/string-delimiter-span (pos direction)
+  "Return the delimiter span around POS following DIRECTION.
+DIRECTION should be 1 for a forward scan and -1 for a backward scan."
+  (let* ((char (and (my/string-delimiter-p pos)
+                    (char-after pos)))
+         (limit 3)
+         (beg pos)
+         (end (1+ pos)))
+    (when char
+      (if (> direction 0)
+          (while (and (< (- end beg) limit)
+                      (eq (char-after end) char))
+            (setq end (1+ end)))
+        (while (and (< (- end beg) limit)
+                    (> beg (point-min))
+                    (eq (char-before beg) char))
+          (setq beg (1- beg))))
+      (cons beg end))))
+
+(defun my/string-highlight-bounds ()
+  "Return bounds for string delimiters around point, or nil.
+Only syntax-table string delimiters are highlighted so the result stays aligned
+with what paredit/evil-paredit treat as string boundaries.
+The result is a list: (OPEN-BEGIN OPEN-END CLOSE-BEGIN CLOSE-END FACE)."
+  (let* ((ppss (syntax-ppss))
+         (in-string (nth 3 ppss))
+         (string-start (nth 8 ppss))
+         (state-pos (point))
+         string-end close-span open-span face)
+    (when (and (not in-string)
+               (> state-pos (point-min)))
+      (let* ((before-ppss (save-excursion
+                            (syntax-ppss (1- state-pos)))))
+        (when (nth 3 before-ppss)
+          (setq ppss before-ppss
+                in-string t
+                string-start (nth 8 before-ppss)))))
+    (when (and string-start
+               (my/string-delimiter-p string-start))
+      (setq open-span (my/string-delimiter-span string-start 1))
+      (setq string-end (ignore-errors (scan-sexps string-start 1)))
+      (setq face (if string-end 'show-paren-match 'show-paren-mismatch))
+      (when string-end
+        (setq close-span (my/string-delimiter-span (1- string-end) -1)))
+      (list (car open-span)
+            (cdr open-span)
+            (and close-span (car close-span))
+            (and close-span (cdr close-span))
+            face))))
+
+(defun my/pair-highlight-update ()
+  "Mirror `show-paren-mode' highlighting for string delimiters."
+  (my/pair-highlight-clear)
+  (when (and my/pair-highlight-mode
+             (not (minibufferp))
+             (not (nth 4 (syntax-ppss))))
+    (pcase-let ((`(,open-beg ,open-end ,close-beg ,close-end ,face)
+                 (my/string-highlight-bounds)))
+      (when open-beg
+        (my/pair-highlight-make-overlay open-beg open-end face)
+        (if close-beg
+            (my/pair-highlight-make-overlay close-beg close-end face)
+          (my/pair-highlight-make-overlay open-beg open-end face))))))
+
+(define-minor-mode my/pair-highlight-mode
+  "Extend `show-paren-mode' highlighting to string delimiters."
+  :global t
+  (if my/pair-highlight-mode
+      (add-hook 'post-command-hook #'my/pair-highlight-update)
+    (remove-hook 'post-command-hook #'my/pair-highlight-update)
+    (my/pair-highlight-clear)))
+
+(my/pair-highlight-mode 1)
+
+;;; ============================================================================
 ;;; Tab Bar
 ;;; ============================================================================
 

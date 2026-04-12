@@ -247,20 +247,8 @@
 	 ("<C-S-left>" . er/contract-region)))
 
 ;; ---- Paredit ----
-(use-package paredit
-  :ensure t
-  :hook ((emacs-lisp-mode . enable-paredit-mode)
-	 (eval-expression-minibuffer-setup . enable-paredit-mode)
-	 (ielm-mode . enable-paredit-mode)
-	 (lisp-mode . enable-paredit-mode)
-	 (lisp-interaction-mode . enable-paredit-mode)
-	 (scheme-mode . enable-paredit-mode)
-	 (racket-mode . enable-paredit-mode)
-	 (slime-repl-mode . enable-paredit-mode)
-	 (clojure-mode . enable-paredit-mode)
-	 (clojurescript-mode . enable-paredit-mode)
-	 (cider-repl-mode . enable-paredit-mode)
-	 (cider-mode . enable-paredit-mode)))
+(load (expand-file-name "~/.config/emacs/paredit-keymap.el"))
+
 
 ;; ---- 中英文自动空格 ----
 (defun my-insert-space-between-cn-and-en (char)
