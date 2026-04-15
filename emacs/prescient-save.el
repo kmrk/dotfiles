@@ -1,2 +1,2 @@
 ;;; -*- lexical-binding: t; -*-
-(funcall prescient-cache-callback :version '5 :history '#s(hash-table test equal) :frequency '#s(hash-table test equal) :serial-number '0)
+(funcall prescient-cache-callback :version '5 :history '#s(hash-table test equal data ("kep.properties" 0)) :frequency '#s(hash-table test equal data ("kep.properties" 0.997)) :serial-number '1)

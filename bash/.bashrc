@@ -187,3 +187,22 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 
 export PS1="\[\e[1;36m\]\W\[\e[m\] \[\e[1;33m\]❯\[\e[m\] "
+
+
+
+export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/icapp/material-resources"
+
+export MVN_INSTALL="/home/ysong/.local/share/maven"
+export PATH="$MVN_INSTALL/bin:$PATH"
+
+
+export M2_HOME="~/.m2"
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
+
+# pnpm
+export PNPM_HOME="/home/ysong/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
