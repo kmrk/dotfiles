@@ -794,7 +794,10 @@
 (use-package doom-themes
   :ensure t
   :init (load-theme 'doom-one t)
-  :config (doom-themes-org-config))
+  :config
+  (doom-themes-org-config)
+  (custom-set-faces
+   `(line-number ((t (:foreground "#54636D"))))))
 
 (use-package keycast
   :ensure t
