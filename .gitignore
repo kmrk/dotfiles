@@ -7,3 +7,8 @@ pulse/
 /.clj-kondo/.cache/v1
 /.lsp/.cache
 /emacs/prescient-save.el
+
+tool_state
+
+**/.codex
+
