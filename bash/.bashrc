@@ -206,3 +206,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# fzf 选择文件并复制到剪贴板
+alias fname="ls | fzf | xclip -selection clipboard"
+alias fpath="fdfind -t f | fzf | xclip -selection clipboard"
+
