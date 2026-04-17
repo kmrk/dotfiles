@@ -137,6 +137,8 @@
   :after (evil paredit)
   :hook (paredit-mode . evil-paredit-mode)
   :config
+  (define-key paredit-mode-map (kbd "M-;") nil)
+  (define-key evil-paredit-mode-map (kbd "M-;") nil)
   (define-key evil-paredit-mode-map (kbd "M-h") #'paredit-backward-slurp-sexp)
   (define-key evil-paredit-mode-map (kbd "M-H") #'paredit-backward-barf-sexp)
   (define-key evil-paredit-mode-map (kbd "M-l") #'paredit-forward-slurp-sexp)

@@ -811,3 +811,10 @@
   (sml/setup))
 
 ;;; packages.el ends here
+
+(use-package imenu-list
+  :ensure t
+  :commands (imenu-list-smart-toggle)
+  :config
+  (setq imenu-list-focus-after-activation t)
+  (setq imenu-list-auto-resize t))

@@ -4,3 +4,5 @@ btop/btop.log
 cmus/
 mps-youtube/
 pulse/
+/.clj-kondo/.cache/v1
+/.lsp/.cache
