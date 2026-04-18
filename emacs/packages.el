@@ -167,6 +167,8 @@
 ;; ---- Consult ----
 (use-package consult
   :ensure t
+  :custom
+  (consult-find-command "fdfind --color=never --full-path ARG OPTS")
   :bind (("M-x" . execute-extended-command)
 	 ("C-;" . execute-extended-command)
 	 ("M-;" . execute-extended-command)

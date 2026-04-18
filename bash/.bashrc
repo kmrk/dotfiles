@@ -8,6 +8,13 @@ case $- in
       *) return;;
 esac
 
+path_prepend() {
+    case ":$PATH:" in
+        *":$1:"*) ;;
+        *) PATH="$1${PATH:+:$PATH}" ;;
+    esac
+}
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -34,45 +41,6 @@ shopt -s checkwinsize
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -122,16 +90,8 @@ if ! shopt -oq posix; then
 fi
 
 
-# Automatically added by the Guix install script.
-if [ -n "$GUIX_ENVIRONMENT" ]; then
-    if [[ $PS1 =~ (.*)"\\$" ]]; then
-        PS1="${BASH_REMATCH[1]} [env]\\\$ "
-    fi
-fi
-
-
 GUIX_PROFILE="/home/ysong/.guix-profile"
-. "$GUIX_PROFILE/etc/profile"
+[ -f "$GUIX_PROFILE/etc/profile" ] && . "$GUIX_PROFILE/etc/profile"
 
 #export LD_LIBRARY_PATH="$HOME/.guix-profile/lib:$LD_LIBRARY_PATH"
 
@@ -140,28 +100,25 @@ GUIX_PROFILE="/home/ysong/.guix-profile"
 #export MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
 
 
-. "$HOME/.local/share/../bin/env"
+[ -f "$HOME/.local/share/../bin/env" ] && . "$HOME/.local/share/../bin/env"
 
 export NVM_DIR="/home/ysong/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 
-export PATH="$HOME/.local/lib/flutter/bin:$PATH"
+path_prepend "$HOME/.local/lib/flutter/bin"
 
 export HTTP_PROXY=http://127.0.0.1:8081
 export HTTPS_PROXY=http://127.0.0.1:8081
-export PATH="$HOME/.npm-global/bin:$PATH"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+path_prepend "$HOME/.npm-global/bin"
 #export DISPLAY=127.0.0.1:0.0
 
 export EDITOR=vi
 export COLORTERM=truecolor
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="/mnt/d/VSCodium/bin/:$PATH"
+path_prepend "$HOME/.local/bin"
+path_prepend "/mnt/d/VSCodium/bin"
 eval "$(direnv hook bash)"
 
 
@@ -176,38 +133,48 @@ alias cls="clear"
 alias rcc="ccr code"
 
 
-export PATH=$PATH:~/.local/share/zig
+path_prepend "$HOME/.local/share/zig"
 
 alias winfix='[ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && sudo sh -c "echo \":WSLInterop:M::MZ::/init:PF\" > /proc/sys/fs/binfmt_misc/register"'
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-
-
-export PS1="\[\e[1;36m\]\W\[\e[m\] \[\e[1;33m\]❯\[\e[m\] "
+path_prepend "$BUN_INSTALL/bin"
 
 
 
 export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/icapp/material-resources"
 
 export MVN_INSTALL="/home/ysong/.local/share/maven"
-export PATH="$MVN_INSTALL/bin:$PATH"
+path_prepend "$MVN_INSTALL/bin"
 
 
-export M2_HOME="~/.m2"
+export M2_HOME="$HOME/.m2"
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
 
 # pnpm
 export PNPM_HOME="/home/ysong/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
+path_prepend "$PNPM_HOME"
 # pnpm end
 
-# fzf 选择文件并复制到剪贴板
-alias fname="ls | fzf | xclip -selection clipboard"
-alias fpath="fdfind -t f | fzf | xclip -selection clipboard"
+prompt_prefix=
+if [ -n "$GUIX_ENVIRONMENT" ]; then
+    prompt_prefix='[env] '
+fi
 
+PS1="${debian_chroot:+($debian_chroot)}${prompt_prefix}\[\e[1;36m\]\W\[\e[m\] \[\e[1;33m\]❯\[\e[m\] "
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+esac
+unset prompt_prefix
+
+# fzf 选择文件并复制到剪贴板
+fname(){ selected=$(ls | fzf --height 40% --reverse) || return; printf %s "$selected" | xclip -selection clipboard; }
+fpath(){ selected=$(fdfind -t f | fzf --height 40% --reverse) || return; printf %s "$selected" | xclip -selection clipboard; }
+
+alias _history_fzf='READLINE_LINE=$(history | sed "s/ *[0-9]* *//" | sort -u | tac | fzf --height 40% --reverse); READLINE_POINT=${#READLINE_LINE}'
+bind -x '"\C-r": _history_fzf'
