@@ -10,9 +10,9 @@ im_state="$("$im_bin" 2>/dev/null | tr -d '\r\n')"
 
 case "$im_state" in
     1033|0409|00000409)
-        printf '#[fg=#a6e3a1,bold][EN]#[default] '
+        printf '#[fg=#000000,bg=#50fa7b] EN #[default]'
         ;;
     2052|0804|00000804)
-        printf '#[fg=#f38ba8,bold][中]#[default] '
+        printf '#[fg=#ffffff,bg=#ff0000] 中 #[default]'
         ;;
 esac
