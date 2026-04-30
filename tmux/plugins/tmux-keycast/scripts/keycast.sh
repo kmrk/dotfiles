@@ -10,11 +10,13 @@ original_table_file="$state_dir/original-table.tmux"
 history_file="$state_dir/history"
 enabled_option="@keycast_enabled"
 max_items_option="@keycast_max_items"
+block_width_option="@keycast_block_width"
 original_table="keycast-original"
 atom_bg="#282c34"
 atom_fg="#abb2bf"
 atom_key_bg="#61afef"
 atom_key_fg="#282c34"
+atom_count_fg="#5b6473"
 
 mkdir -p "$state_dir"
 
@@ -34,6 +36,52 @@ max_items() {
     fi
 }
 
+block_width() {
+    local configured
+    configured="$(tmux show-option -gqv "$block_width_option" 2>/dev/null || true)"
+    if [[ "$configured" =~ ^[0-9]+$ ]] && (( configured > 0 )); then
+        printf '%s' "$configured"
+    else
+        printf 7
+    fi
+}
+
+format_block() {
+    local width display
+    width="$(block_width)"
+    display="$1"
+    printf "%-${width}.${width}s" "$display"
+}
+
+render_history_item() {
+    local label="$1"
+    local count="$2"
+    local width prefix suffix display padding
+
+    width="$(block_width)"
+    prefix="$label"
+    suffix=''
+
+    if [[ "$count" =~ ^[0-9]+$ ]] && (( count > 1 )); then
+        suffix=" x$count"
+    fi
+
+    display="$prefix$suffix"
+    if (( ${#display} < width )); then
+        padding="$(printf '%*s' "$((width - ${#display}))" '')"
+    else
+        padding=''
+    fi
+
+    if [[ -n "$suffix" ]]; then
+        printf ' #[fg=%s,bg=%s] %s#[fg=%s]%s%s#[default]' \
+            "$atom_key_fg" "$atom_key_bg" "$prefix" "$atom_count_fg" "$suffix" "$padding"
+    else
+        printf ' #[fg=%s,bg=%s] %s%s#[default]' \
+            "$atom_key_fg" "$atom_key_bg" "$prefix" "$padding"
+    fi
+}
+
 key_rows() {
     local c
 
@@ -41,21 +89,21 @@ key_rows() {
         printf 'C-%s\tC-%s\tC-%s\n' "$c" "$c" "$c"
     done
 
-    printf '%s\t%s\t%s\n' Space Space Space
-    printf '%s\t%s\t%s\n' Enter Enter Enter
-    printf '%s\t%s\t%s\n' Tab Tab Tab
-    printf '%s\t%s\t%s\n' BSpace BSpace BSpace
-    printf '%s\t%s\t%s\n' Escape Escape Esc
-    printf '%s\t%s\t%s\n' Up Up Up
-    printf '%s\t%s\t%s\n' Down Down Down
-    printf '%s\t%s\t%s\n' Left Left Left
-    printf '%s\t%s\t%s\n' Right Right Right
-    printf '%s\t%s\t%s\n' Home Home Home
-    printf '%s\t%s\t%s\n' End End End
-    printf '%s\t%s\t%s\n' IC IC Ins
-    printf '%s\t%s\t%s\n' DC DC Del
-    printf '%s\t%s\t%s\n' PPage PPage PgUp
-    printf '%s\t%s\t%s\n' NPage NPage PgDn
+    printf '%s\t%s\t%s\n' Space Space SPC
+    printf '%s\t%s\t%s\n' Enter Enter RET
+    printf '%s\t%s\t%s\n' Tab Tab TAB
+    printf '%s\t%s\t%s\n' BSpace BSpace BS
+    printf '%s\t%s\t%s\n' Escape Escape ESC
+    printf '%s\t%s\t%s\n' Up Up UP
+    printf '%s\t%s\t%s\n' Down Down DN
+    printf '%s\t%s\t%s\n' Left Left LT
+    printf '%s\t%s\t%s\n' Right Right RT
+    printf '%s\t%s\t%s\n' Home Home HM
+    printf '%s\t%s\t%s\n' End End END
+    printf '%s\t%s\t%s\n' IC IC INS
+    printf '%s\t%s\t%s\n' DC DC DEL
+    printf '%s\t%s\t%s\n' PPage PPage PUP
+    printf '%s\t%s\t%s\n' NPage NPage PDN
 
     for c in {1..12}; do
         printf 'F%s\tF%s\tF%s\n' "$c" "$c" "$c"
@@ -194,7 +242,7 @@ press_key() {
 }
 
 status() {
-    local enabled label count display rendered=''
+    local enabled label count rendered=''
 
     enabled="$(tmux show-option -gqv "$enabled_option" 2>/dev/null || true)"
     [[ "$enabled" == 1 ]] || exit 0
@@ -205,11 +253,7 @@ status() {
             case "$label" in
                 '#') label='##' ;;
             esac
-            display="$label"
-            if [[ "$count" =~ ^[0-9]+$ ]] && (( count > 1 )); then
-                display="$display x$count"
-            fi
-            rendered=" #[fg=${atom_key_fg},bg=${atom_key_bg}] $display #[default]$rendered"
+            rendered="$(render_history_item "$label" "$count")$rendered"
         done <"$history_file"
     fi
 
