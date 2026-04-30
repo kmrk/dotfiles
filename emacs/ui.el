@@ -360,6 +360,14 @@ The result is a list: (OPEN-BEGIN OPEN-END CLOSE-BEGIN CLOSE-END FACE)."
 (setq tree-widget-image-enable nil)
 
 ;;; ============================================================================
+;;; Side Tabs
+;;; ============================================================================
+
+(add-to-list 'load-path user-emacs-directory)
+(autoload 'sidetabs-mode "sidetabs" nil t)
+(autoload 'sidetabs-focus "sidetabs" nil t)
+
+;;; ============================================================================
 ;;; 主题
 ;;; ============================================================================
 

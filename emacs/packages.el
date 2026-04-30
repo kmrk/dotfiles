@@ -290,7 +290,26 @@
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 1))
+  (defvar my/which-key-was-enabled-before-minibuffer nil
+    "Whether `which-key-mode' was enabled before entering the minibuffer.")
+
+  (defun my/which-key-disable-in-minibuffer ()
+    "Disable `which-key-mode' while the minibuffer is active."
+    (setq my/which-key-was-enabled-before-minibuffer
+          (bound-and-true-p which-key-mode))
+    (when my/which-key-was-enabled-before-minibuffer
+      (which-key-mode -1)))
+
+  (defun my/which-key-restore-after-minibuffer ()
+    "Restore `which-key-mode' after leaving the minibuffer."
+    (when my/which-key-was-enabled-before-minibuffer
+      (which-key-mode 1))
+    (setq my/which-key-was-enabled-before-minibuffer nil))
+
+  (setq which-key-idle-delay 1
+        which-key-inhibit-regexps '("C-s"))
+  (add-hook 'minibuffer-setup-hook #'my/which-key-disable-in-minibuffer)
+  (add-hook 'minibuffer-exit-hook #'my/which-key-restore-after-minibuffer))
 
 ;; ---- Windmove ----
 (use-package windmove
