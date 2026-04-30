@@ -512,6 +512,24 @@
   :config
   (setq rust-format-on-save t))
 
+;;; ============================================================================
+;;; 编程语言 - JavaScript / TypeScript
+;;; ============================================================================
+
+(use-package typescript-mode
+  :ensure t
+  :demand t
+  :mode ("\\.ts\\'" . typescript-mode)
+  :config
+  (define-derived-mode my-typescript-tsx-mode typescript-mode "TSX"
+    "Major mode for TSX files using `typescript-mode' editing rules.")
+  (put 'my-typescript-tsx-mode 'eglot-language-id "typescriptreact")
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . my-typescript-tsx-mode)))
+
+(use-package js
+  :ensure nil
+  :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
+
 (use-package eglot
   :ensure nil
   :hook ((python-mode . eglot-ensure)
@@ -521,6 +539,7 @@
 	 (typescript-mode . eglot-ensure)
 	 (typescript-ts-mode . eglot-ensure)
 	 (tsx-ts-mode . eglot-ensure)
+	 (my-typescript-tsx-mode . eglot-ensure)
 	 (clojure-mode . eglot-ensure)
 	 (clojurescript-mode . eglot-ensure)
 	 (clojurec-mode . eglot-ensure)
@@ -565,7 +584,14 @@
   (add-to-list 'eglot-server-programs
 	       `((python-mode python-ts-mode) . ,(my-eglot-python-server)))
   (add-to-list 'eglot-server-programs
-	       `((js-mode js-ts-mode typescript-mode typescript-ts-mode tsx-ts-mode)
+	       `((js-mode
+		  js-ts-mode
+		  typescript-mode
+		  typescript-ts-mode
+		  tsx-ts-mode)
+		 . ,(my-eglot-ts-server)))
+  (add-to-list 'eglot-server-programs
+	       `((my-typescript-tsx-mode :language-id "typescriptreact")
 		 . ,(my-eglot-ts-server)))
   (add-to-list 'eglot-server-programs
 	       '((rust-mode rust-ts-mode) . ("rust-analyzer")))
@@ -605,18 +631,6 @@
   (let ((flutter-sdk (expand-file-name "~/.local/lib/flutter")))
     (when (file-directory-p flutter-sdk)
       (setq flutter-sdk-path flutter-sdk))))
-
-;;; ============================================================================
-;;; 编程语言 - JavaScript / TypeScript
-;;; ============================================================================
-
-(use-package typescript-mode
-  :ensure t
-  :mode ("\\.ts\\'" "\\.tsx\\'"))
-
-(use-package js
-  :ensure nil
-  :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
 
 ;;; ============================================================================
 ;;; 编程语言 - Markdown

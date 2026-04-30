@@ -40,7 +40,29 @@
 (setq-default line-spacing 0)
 
 ;; 缩进
-(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil
+              tab-width 2
+              standard-indent 2
+              js-indent-level 2
+              js-jsx-indent-level 2
+              typescript-indent-level 2
+              css-indent-offset 2
+              sh-basic-offset 2
+              sh-indentation 2)
+
+(defun my-prog-mode-2-space-indent ()
+  "Use 2-space indentation defaults in programming buffers."
+  (setq-local indent-tabs-mode nil
+              tab-width 2
+              standard-indent 2
+              js-indent-level 2
+              js-jsx-indent-level 2
+              typescript-indent-level 2
+              css-indent-offset 2
+              sh-basic-offset 2
+              sh-indentation 2))
+
+(add-hook 'prog-mode-hook #'my-prog-mode-2-space-indent)
 
 ;;; ============================================================================
 ;;; 配对符号高亮补充
