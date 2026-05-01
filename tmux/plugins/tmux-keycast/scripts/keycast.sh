@@ -75,10 +75,10 @@ render_history_item() {
     fi
 
     if [[ -n "$suffix" ]]; then
-        printf ' #[fg=%s,bg=%s] %s#[fg=%s]%s%s#[default]' \
+        printf ' #[bold,fg=%s,bg=%s] %s#[fg=%s]%s%s#[default]' \
             "$atom_key_fg" "$atom_key_bg" "$prefix" "$atom_count_fg" "$suffix" "$padding"
     else
-        printf ' #[fg=%s,bg=%s] %s%s#[default]' \
+        printf ' #[bold,fg=%s,bg=%s] %s%s#[default]' \
             "$atom_key_fg" "$atom_key_bg" "$prefix" "$padding"
     fi
 }
@@ -261,21 +261,8 @@ status() {
     printf '%s' "$rendered"
 }
 
-enable() {
+install_keycast_bindings() {
     local key send_key label cmd binding original_binding
-
-    if [[ "$(tmux show-option -gqv "$enabled_option" 2>/dev/null || true)" == 1 ]]; then
-        disable >/dev/null 2>&1 || true
-    fi
-
-    save_keys_file
-    : >"$history_file"
-    : >"$installed_keys_file"
-    : >"$wrapped_bindings_file"
-    : >"$original_table_file"
-    tmux unbind-key -a -T "$original_table" 2>/dev/null || true
-    tmux set-option -gq "$enabled_option" 1
-    tmux set-option -gq "$paused_option" 0
 
     while IFS=$'\t' read -r key send_key label; do
         binding="$(root_binding_for_key "$key")"
@@ -296,6 +283,23 @@ enable() {
     if [[ -s "$original_table_file" ]]; then
         tmux source-file "$original_table_file"
     fi
+}
+
+enable() {
+    if [[ "$(tmux show-option -gqv "$enabled_option" 2>/dev/null || true)" == 1 ]]; then
+        disable >/dev/null 2>&1 || true
+    fi
+
+    save_keys_file
+    : >"$history_file"
+    : >"$installed_keys_file"
+    : >"$wrapped_bindings_file"
+    : >"$original_table_file"
+    tmux unbind-key -a -T "$original_table" 2>/dev/null || true
+    tmux set-option -gq "$enabled_option" 1
+    tmux set-option -gq "$paused_option" 0
+
+    install_keycast_bindings
 
     tmux display-message 'keycast: on'
     tmux refresh-client -S
@@ -370,7 +374,11 @@ resume() {
     fi
 
     tmux set-option -gq "$paused_option" 0
-    enable >/dev/null 2>&1 || true
+    : >"$installed_keys_file"
+    if [[ ! -s "$keys_file" ]]; then
+        save_keys_file
+    fi
+    install_keycast_bindings
 }
 
 case "${1:-}" in
