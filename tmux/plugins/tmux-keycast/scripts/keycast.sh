@@ -18,6 +18,7 @@ atom_fg="#abb2bf"
 atom_key_bg="#61afef"
 atom_key_fg="#282c34"
 atom_count_fg="#5b6473"
+status_bg="#444a57"
 
 mkdir -p "$state_dir"
 
@@ -75,11 +76,11 @@ render_history_item() {
     fi
 
     if [[ -n "$suffix" ]]; then
-        printf ' #[bold,fg=%s,bg=%s] %s#[fg=%s]%s%s#[default]' \
-            "$atom_key_fg" "$atom_key_bg" "$prefix" "$atom_count_fg" "$suffix" "$padding"
+        printf ' #[bold,fg=%s,bg=%s] %s#[fg=%s]%s%s#[bg=%s,fg=%s]' \
+            "$atom_key_fg" "$atom_key_bg" "$prefix" "$atom_count_fg" "$suffix" "$padding" "$status_bg" "$atom_fg"
     else
-        printf ' #[bold,fg=%s,bg=%s] %s%s#[default]' \
-            "$atom_key_fg" "$atom_key_bg" "$prefix" "$padding"
+        printf ' #[bold,fg=%s,bg=%s] %s%s#[bg=%s,fg=%s]' \
+            "$atom_key_fg" "$atom_key_bg" "$prefix" "$padding" "$status_bg" "$atom_fg"
     fi
 }
 
@@ -170,7 +171,15 @@ root_bound_keys() {
 }
 
 root_binding_for_key() {
-    tmux list-keys -T root "$1" 2>/dev/null || true
+    local wanted="$1"
+
+    tmux list-keys -T root 2>/dev/null |
+        awk -v wanted="$wanted" '
+            $1 == "bind-key" && $2 == "-T" && $3 == "root" && $4 == wanted {
+                print
+                exit
+            }
+        '
 }
 
 unbind_keycast_bindings() {
@@ -207,6 +216,11 @@ unbind_keycast_bindings() {
 add_key() {
     local label="$1"
     local limit tmp last_label last_count
+
+    if [[ "$(tmux show-option -gqv "$paused_option" 2>/dev/null || true)" == 1 ]]; then
+        return 0
+    fi
+
     limit="$(max_items)"
     tmp="$history_file.$$"
 
@@ -238,7 +252,9 @@ press_key() {
     local send_key="$2"
     local pane="$3"
 
-    add_key "$label"
+    if [[ "$(tmux show-option -gqv "$paused_option" 2>/dev/null || true)" != 1 ]]; then
+        add_key "$label"
+    fi
     tmux send-keys -t "$pane" "$send_key"
 }
 
@@ -247,6 +263,7 @@ status() {
 
     enabled="$(tmux show-option -gqv "$enabled_option" 2>/dev/null || true)"
     [[ "$enabled" == 1 ]] || exit 0
+    [[ "$(tmux show-option -gqv "$paused_option" 2>/dev/null || true)" != 1 ]] || exit 0
 
     if [[ -f "$history_file" ]]; then
         while IFS=$'\t' read -r label count; do
@@ -348,19 +365,6 @@ pause() {
         exit 0
     fi
 
-    unbind_keycast_bindings
-
-    if [[ -s "$installed_keys_file" ]]; then
-        while IFS= read -r key; do
-            tmux unbind-key -nq "$key" 2>/dev/null || true
-        done <"$installed_keys_file"
-    fi
-
-    if [[ -s "$wrapped_bindings_file" ]]; then
-        tmux source-file "$wrapped_bindings_file"
-    fi
-
-    tmux unbind-key -a -T "$original_table" 2>/dev/null || true
     tmux set-option -gq "$paused_option" 1
     tmux refresh-client -S 2>/dev/null || true
 }
@@ -374,11 +378,26 @@ resume() {
     fi
 
     tmux set-option -gq "$paused_option" 0
-    : >"$installed_keys_file"
-    if [[ ! -s "$keys_file" ]]; then
+
+    # Older paused states removed the root bindings. Restore once after upgrade,
+    # then future IM switches only flip @keycast_paused.
+    if [[ "$(root_binding_for_key Space)" != *"$script_path"* ]]; then
+        : >"$installed_keys_file"
+        if [[ -s "$wrapped_bindings_file" ]]; then
+            : >"$wrapped_bindings_file"
+        fi
+        if [[ -s "$original_table_file" ]]; then
+            : >"$original_table_file"
+        fi
+        if [[ ! -s "$keys_file" ]]; then
+            save_keys_file
+        fi
+        install_keycast_bindings
+    elif [[ ! -s "$keys_file" ]]; then
         save_keys_file
     fi
-    install_keycast_bindings
+
+    tmux refresh-client -S 2>/dev/null || true
 }
 
 case "${1:-}" in
