@@ -405,6 +405,33 @@
   )
 
 ;;; ============================================================================
+;;; Ibuffer
+;;; ============================================================================
+
+(use-package ibuffer
+  :ensure nil
+  :commands ibuffer
+  :hook (ibuffer-mode . my/ibuffer-setup)
+  :config
+  (defun my/ibuffer-setup ()
+    "Local defaults for `ibuffer-mode'."
+    (setq-local truncate-lines t)
+    (when (and (bound-and-true-p evil-mode)
+               (fboundp 'evil-normal-state))
+      (evil-normal-state)))
+
+  (with-eval-after-load 'evil
+    (evil-set-initial-state 'ibuffer-mode 'normal)
+    (evil-define-key 'normal ibuffer-mode-map
+      (kbd "j") #'ibuffer-forward-line
+      (kbd "k") #'ibuffer-backward-line
+      (kbd "RET") #'ibuffer-visit-buffer
+      (kbd "<return>") #'ibuffer-visit-buffer
+      (kbd "/") #'consult-line
+      (kbd "gr") #'ibuffer-update
+      (kbd "q") #'quit-window)))
+
+;;; ============================================================================
 ;;; Evil
 ;;; ============================================================================
 

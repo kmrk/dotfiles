@@ -9,6 +9,7 @@ wrapped_bindings_file="$state_dir/wrapped-bindings.tmux"
 original_table_file="$state_dir/original-table.tmux"
 history_file="$state_dir/history"
 enabled_option="@keycast_enabled"
+paused_option="@keycast_paused"
 max_items_option="@keycast_max_items"
 block_width_option="@keycast_block_width"
 original_table="keycast-original"
@@ -274,6 +275,7 @@ enable() {
     : >"$original_table_file"
     tmux unbind-key -a -T "$original_table" 2>/dev/null || true
     tmux set-option -gq "$enabled_option" 1
+    tmux set-option -gq "$paused_option" 0
 
     while IFS=$'\t' read -r key send_key label; do
         binding="$(root_binding_for_key "$key")"
@@ -328,9 +330,47 @@ disable() {
     unbind_keycast_bindings
 
     tmux set-option -gq "$enabled_option" 0
+    tmux set-option -gq "$paused_option" 0
     : >"$history_file"
     tmux display-message 'keycast: off'
     tmux refresh-client -S
+}
+
+pause() {
+    if [[ "$(tmux show-option -gqv "$enabled_option" 2>/dev/null || true)" != 1 ]]; then
+        exit 0
+    fi
+    if [[ "$(tmux show-option -gqv "$paused_option" 2>/dev/null || true)" == 1 ]]; then
+        exit 0
+    fi
+
+    unbind_keycast_bindings
+
+    if [[ -s "$installed_keys_file" ]]; then
+        while IFS= read -r key; do
+            tmux unbind-key -nq "$key" 2>/dev/null || true
+        done <"$installed_keys_file"
+    fi
+
+    if [[ -s "$wrapped_bindings_file" ]]; then
+        tmux source-file "$wrapped_bindings_file"
+    fi
+
+    tmux unbind-key -a -T "$original_table" 2>/dev/null || true
+    tmux set-option -gq "$paused_option" 1
+    tmux refresh-client -S 2>/dev/null || true
+}
+
+resume() {
+    if [[ "$(tmux show-option -gqv "$enabled_option" 2>/dev/null || true)" != 1 ]]; then
+        exit 0
+    fi
+    if [[ "$(tmux show-option -gqv "$paused_option" 2>/dev/null || true)" != 1 ]]; then
+        exit 0
+    fi
+
+    tmux set-option -gq "$paused_option" 0
+    enable >/dev/null 2>&1 || true
 }
 
 case "${1:-}" in
@@ -349,6 +389,12 @@ case "${1:-}" in
     disable)
         disable
         ;;
+    pause)
+        pause
+        ;;
+    resume)
+        resume
+        ;;
     toggle)
         if [[ "$(tmux show-option -gqv "$enabled_option" 2>/dev/null || true)" == 1 ]]; then
             disable
@@ -357,7 +403,7 @@ case "${1:-}" in
         fi
         ;;
     *)
-        printf 'Usage: %s {toggle|enable|disable|status|add <label>|press <label> <key> <pane>}\n' "$0" >&2
+        printf 'Usage: %s {toggle|enable|disable|pause|resume|status|add <label>|press <label> <key> <pane>}\n' "$0" >&2
         exit 2
         ;;
 esac
