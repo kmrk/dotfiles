@@ -162,7 +162,17 @@ if [ -n "$GUIX_ENVIRONMENT" ]; then
     prompt_prefix='[env] '
 fi
 
-PS1="${debian_chroot:+($debian_chroot)}${prompt_prefix}\[\e[1;36m\]\W\[\e[m\] \[\e[1;33m\]❯\[\e[m\] "
+__git_user_prompt() {
+    git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+        printf '(-)'
+        return
+    }
+    local git_user
+    git_user=$(git config user.name 2>/dev/null) || return
+    [ -n "$git_user" ] && printf '(%s)' "$git_user"
+}
+
+PS1="${debian_chroot:+($debian_chroot)}${prompt_prefix}\[\e[1;35m\]\$(__git_user_prompt)\[\e[m\] \[\e[1;36m\]\W\[\e[m\] \[\e[1;33m\]❯\[\e[m\] "
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
