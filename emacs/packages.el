@@ -24,9 +24,9 @@
 (use-package diminish :ensure t)
 
 (use-package envrc
-  :ensure t
-  :config
-  (envrc-global-mode +1))
+	     :ensure t
+	     :config
+	     (envrc-global-mode +1))
 
 ;;; ============================================================================
 ;;; 补全系统
@@ -65,137 +65,137 @@
 
 ;; ---- Savehist ----
 (use-package savehist
-  :ensure nil
-  :init
-  (savehist-mode 1))
+	     :ensure nil
+	     :init
+	     (savehist-mode 1))
 
 ;; ---- Vertico ----
 (use-package vertico
-  :ensure t
-  :init
-  (vertico-mode 1)
-  :custom
-  (vertico-count 15)
-  (vertico-cycle t))
+	     :ensure t
+	     :init
+	     (vertico-mode 1)
+	     :custom
+	     (vertico-count 15)
+	     (vertico-cycle t))
 
 ;; ---- Orderless ----
 (use-package orderless
-  :ensure t
-  :init
-  (setq completion-styles '(orderless basic)
-	completion-category-defaults nil
-	completion-category-overrides
-	'((file (styles basic partial-completion)))))
+	     :ensure t
+	     :init
+	     (setq completion-styles '(orderless basic)
+		   completion-category-defaults nil
+		   completion-category-overrides
+		   '((file (styles basic partial-completion)))))
 
 ;; ---- Prescient ----
 (use-package prescient
-  :ensure t
-  :custom
-  (prescient-save-file (expand-file-name "prescient-save.el" user-emacs-directory))
-  (prescient-history-length 200)
-  (prescient-sort-length-enable nil)
-  :config
-  (prescient-persist-mode 1))
+	     :ensure t
+	     :custom
+	     (prescient-save-file (expand-file-name "prescient-save.el" user-emacs-directory))
+	     (prescient-history-length 200)
+	     (prescient-sort-length-enable nil)
+	     :config
+	     (prescient-persist-mode 1))
 
 (use-package vertico-prescient
-  :ensure t
-  :after (vertico prescient)
-  :custom
-  (vertico-prescient-enable-filtering nil)
-  (vertico-prescient-enable-sorting t)
-  :config
-  (vertico-prescient-mode 1))
+	     :ensure t
+	     :after (vertico prescient)
+	     :custom
+	     (vertico-prescient-enable-filtering nil)
+	     (vertico-prescient-enable-sorting t)
+	     :config
+	     (vertico-prescient-mode 1))
 
 ;; ---- Marginalia ----
 (use-package marginalia
-  :ensure t
-  :init
-  (marginalia-mode 1)
-  :config
-  (defun my/command-mode-tags (command)
-    "Return mode tags relevant to COMMAND."
-    (let* ((major (and (boundp 'major-mode)
-                       (string-remove-suffix "-mode" (symbol-name major-mode))))
-           (minor
-            (delq nil
-                  (mapcar
-                   (lambda (mode)
-                     (when (and (boundp mode) (symbol-value mode))
-                       (string-remove-suffix "-mode" (symbol-name mode))))
-                   minor-mode-list)))
-           (tags nil))
-      (when (and major (string-prefix-p major command))
-        (push (format "major:%s" major) tags))
-      (dolist (mode minor)
-        (when (and mode (string-prefix-p mode command))
-          (push (format "minor:%s" mode) tags)))
-      (nreverse (delete-dups tags))))
+	     :ensure t
+	     :init
+	     (marginalia-mode 1)
+	     :config
+	     (defun my/command-mode-tags (command)
+	       "Return mode tags relevant to COMMAND."
+	       (let* ((major (and (boundp 'major-mode)
+				  (string-remove-suffix "-mode" (symbol-name major-mode))))
+		      (minor
+			(delq nil
+			      (mapcar
+				(lambda (mode)
+				  (when (and (boundp mode) (symbol-value mode))
+				    (string-remove-suffix "-mode" (symbol-name mode))))
+				minor-mode-list)))
+		      (tags nil))
+		 (when (and major (string-prefix-p major command))
+		   (push (format "major:%s" major) tags))
+		 (dolist (mode minor)
+		   (when (and mode (string-prefix-p mode command))
+		     (push (format "minor:%s" mode) tags)))
+		 (nreverse (delete-dups tags))))
 
-  (defun my/command-source-tag (sym)
-    "Return a source tag for command SYM."
-    (let ((file (symbol-file sym 'defun)))
-      (cond
-       ((or (null file)
-            (string-match-p "/share/emacs/.*/lisp/" file)
-            (string-match-p "/libexec/emacs/" file))
-        "built-in")
-       ((string-match "\\(/elpa/\\|/straight/build/\\)\\([^/]+\\)" file)
-        (let ((pkg (match-string 2 file)))
-          (replace-regexp-in-string "-[0-9].*\\'" "" pkg)))
-       ((string-match-p "/site-lisp/" file)
-        "site-lisp")
-       (t
-        (file-name-base file)))))
+	     (defun my/command-source-tag (sym)
+	       "Return a source tag for command SYM."
+	       (let ((file (symbol-file sym 'defun)))
+		 (cond
+		   ((or (null file)
+			(string-match-p "/share/emacs/.*/lisp/" file)
+			(string-match-p "/libexec/emacs/" file))
+		    "built-in")
+		   ((string-match "\\(/elpa/\\|/straight/build/\\)\\([^/]+\\)" file)
+		    (let ((pkg (match-string 2 file)))
+		      (replace-regexp-in-string "-[0-9].*\\'" "" pkg)))
+		   ((string-match-p "/site-lisp/" file)
+		    "site-lisp")
+		   (t
+		     (file-name-base file)))))
 
-  (defun my/marginalia-annotate-command (cand)
-    "Annotate command CAND with keybinding, source, mode tags and docs."
-    (when-let* ((sym (intern-soft cand)))
-      (let* ((source (my/command-source-tag sym))
-             (modes (my/command-mode-tags cand))
-             (tags (string-join (cons source modes) " "))
-             (doc (marginalia--function-doc sym)))
-        (marginalia--fields
-         (:left (marginalia-annotate-binding cand))
-         ((and tags (format "[%s]" tags))
-          :face 'marginalia-type :truncate 0.35)
-         (doc
-          :truncate 1.0 :face 'marginalia-documentation)))))
+	     (defun my/marginalia-annotate-command (cand)
+	       "Annotate command CAND with keybinding, source, mode tags and docs."
+	       (when-let* ((sym (intern-soft cand)))
+			  (let* ((source (my/command-source-tag sym))
+				 (modes (my/command-mode-tags cand))
+				 (tags (string-join (cons source modes) " "))
+				 (doc (marginalia--function-doc sym)))
+			    (marginalia--fields
+			      (:left (marginalia-annotate-binding cand))
+			      ((and tags (format "[%s]" tags))
+			       :face 'marginalia-type :truncate 0.35)
+			      (doc
+				:truncate 1.0 :face 'marginalia-documentation)))))
 
-  (setf (cadr (assq 'command marginalia-annotators))
-        #'my/marginalia-annotate-command))
+	     (setf (cadr (assq 'command marginalia-annotators))
+		   #'my/marginalia-annotate-command))
 
 ;; ---- Consult ----
 (use-package consult
-  :ensure t
-  :custom
-  (consult-find-command "fdfind --color=never --full-path ARG OPTS")
-  :bind (("M-x" . execute-extended-command)
-	 ("C-;" . execute-extended-command)
-	 ("M-;" . execute-extended-command)
-	 ("C-c ;" . execute-extended-command)
-	 ("\C-x \C-f" . find-file)
-	 ("\C-s" . consult-line)
-	 ("C-x b" . consult-buffer)
-	 ("C-c h" . consult-history)
-	 ("C-c k" . consult-ripgrep)
-	 ("C-c m" . consult-imenu)))
+	     :ensure t
+	     :custom
+	     (consult-find-command "fdfind --color=never --full-path ARG OPTS")
+	     :bind (("M-x" . execute-extended-command)
+		    ("C-;" . execute-extended-command)
+		    ("M-;" . execute-extended-command)
+		    ("C-c ;" . execute-extended-command)
+		    ("\C-x \C-f" . find-file)
+		    ("\C-s" . consult-line)
+		    ("C-x b" . consult-buffer)
+		    ("C-c h" . consult-history)
+		    ("C-c k" . consult-ripgrep)
+		    ("C-c m" . consult-imenu)))
 
 (defun my/search-target-window ()
   "Return the main editing window used for search result jumps."
   (or
-   (car
-    (sort
-     (seq-filter
-      (lambda (window)
-	(and (not (window-minibuffer-p window))
-	     (not (window-dedicated-p window))
-	     (null (window-parameter window 'window-side))
-	     (not (eq window (selected-window)))))
-      (window-list nil 'no-minibuf))
-     (lambda (a b)
-       (> (* (window-total-width a) (window-total-height a))
-	  (* (window-total-width b) (window-total-height b))))))
-   (selected-window)))
+    (car
+      (sort
+	(seq-filter
+	  (lambda (window)
+	    (and (not (window-minibuffer-p window))
+		 (not (window-dedicated-p window))
+		 (null (window-parameter window 'window-side))
+		 (not (eq window (selected-window)))))
+	  (window-list nil 'no-minibuf))
+	(lambda (a b)
+	  (> (* (window-total-width a) (window-total-height a))
+	     (* (window-total-width b) (window-total-height b))))))
+    (selected-window)))
 
 (defun my/visit-search-result-in-window (visit-fn)
   "Run VISIT-FN while forcing the target to reuse the main editing window."
@@ -203,10 +203,10 @@
 	(result-buffer (current-buffer))
 	(result-point (point)))
     (if (window-live-p target-window)
-        (with-selected-window target-window
-	  (with-current-buffer result-buffer
-	    (goto-char result-point)
-	    (funcall visit-fn)))
+      (with-selected-window target-window
+			    (with-current-buffer result-buffer
+						 (goto-char result-point)
+						 (funcall visit-fn)))
       (funcall visit-fn))))
 
 (defun my/compile-goto-error-same-window ()
@@ -226,27 +226,27 @@
 
 ;; ---- Embark ----
 (use-package embark
-  :ensure t
-  :bind (("C-." . embark-act)
-	 ("C-h B" . embark-bindings))
-  :init
-  (setq prefix-help-command #'embark-prefix-help-command))
+	     :ensure t
+	     :bind (("C-." . embark-act)
+		    ("C-h B" . embark-bindings))
+	     :init
+	     (setq prefix-help-command #'embark-prefix-help-command))
 
 ;; ---- Embark Consult ----
 (use-package embark-consult
-  :ensure t
-  :after (embark consult))
+	     :ensure t
+	     :after (embark consult))
 
 ;; ---- Company ----
 (use-package company
-  :ensure t
-  :hook (prog-mode . company-mode)
-  :init (global-company-mode)
-  :config
-  (setq company-minimum-prefix-length 1)
-  (setq company-dabbrev-downcase 0)
-  (setq company-idle-delay 0.1)
-  (add-to-list 'company-backends 'company-capf))
+	     :ensure t
+	     :hook (prog-mode . company-mode)
+	     :init (global-company-mode)
+	     :config
+	     (setq company-minimum-prefix-length 1)
+	     (setq company-dabbrev-downcase 0)
+	     (setq company-idle-delay 0.1)
+	     (add-to-list 'company-backends 'company-capf))
 
 ;;; ============================================================================
 ;;; 导航和搜索
@@ -254,72 +254,72 @@
 
 ;; ---- Projectile ----
 (use-package projectile
-  :ensure t
-  :bind-keymap
-  ("\C-c p" . projectile-command-map)
-  :config
-  (projectile-mode t)
-  (setq projectile-completion-system 'default))
+	     :ensure t
+	     :bind-keymap
+	     ("\C-c p" . projectile-command-map)
+	     :config
+	     (projectile-mode t)
+	     (setq projectile-completion-system 'default))
 
 ;; ---- 搜索工具 ----
 (use-package ag
-  :ensure t
-  :config
-  (define-key ag-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+	     :ensure t
+	     :config
+	     (define-key ag-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
 
 (use-package rg
-  :ensure t
-  :config
-  (rg-enable-default-bindings)
-  (setq rg-group-result t
-	rg-show-columns t)
-  (define-key rg-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+	     :ensure t
+	     :config
+	     (rg-enable-default-bindings)
+	     (setq rg-group-result t
+		   rg-show-columns t)
+	     (define-key rg-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
 
 (with-eval-after-load 'compile
-  (define-key compilation-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
+		      (define-key compilation-mode-map (kbd "RET") #'my/compile-goto-error-same-window))
 
 (with-eval-after-load 'xref
-  (define-key xref--xref-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window)
-  (define-key xref--transient-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window))
+		      (define-key xref--xref-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window)
+		      (define-key xref--transient-buffer-mode-map (kbd "RET") #'my/xref-goto-same-window))
 
 (with-eval-after-load 'replace
-  (define-key occur-mode-map (kbd "RET") #'my/occur-goto-same-window))
+		      (define-key occur-mode-map (kbd "RET") #'my/occur-goto-same-window))
 
 ;; ---- Which-key ----
 (use-package which-key :ensure t
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (defvar my/which-key-was-enabled-before-minibuffer nil
-    "Whether `which-key-mode' was enabled before entering the minibuffer.")
+	     :init (which-key-mode)
+	     :diminish which-key-mode
+	     :config
+	     (defvar my/which-key-was-enabled-before-minibuffer nil
+	       "Whether `which-key-mode' was enabled before entering the minibuffer.")
 
-  (defun my/which-key-disable-in-minibuffer ()
-    "Disable `which-key-mode' while the minibuffer is active."
-    (setq my/which-key-was-enabled-before-minibuffer
-          (bound-and-true-p which-key-mode))
-    (when my/which-key-was-enabled-before-minibuffer
-      (which-key-mode -1)))
+	     (defun my/which-key-disable-in-minibuffer ()
+	       "Disable `which-key-mode' while the minibuffer is active."
+	       (setq my/which-key-was-enabled-before-minibuffer
+		     (bound-and-true-p which-key-mode))
+	       (when my/which-key-was-enabled-before-minibuffer
+		 (which-key-mode -1)))
 
-  (defun my/which-key-restore-after-minibuffer ()
-    "Restore `which-key-mode' after leaving the minibuffer."
-    (when my/which-key-was-enabled-before-minibuffer
-      (which-key-mode 1))
-    (setq my/which-key-was-enabled-before-minibuffer nil))
+	     (defun my/which-key-restore-after-minibuffer ()
+	       "Restore `which-key-mode' after leaving the minibuffer."
+	       (when my/which-key-was-enabled-before-minibuffer
+		 (which-key-mode 1))
+	       (setq my/which-key-was-enabled-before-minibuffer nil))
 
-  (setq which-key-idle-delay 1
-        which-key-inhibit-regexps '("C-s"))
-  (add-hook 'minibuffer-setup-hook #'my/which-key-disable-in-minibuffer)
-  (add-hook 'minibuffer-exit-hook #'my/which-key-restore-after-minibuffer))
+	     (setq which-key-idle-delay 1
+		   which-key-inhibit-regexps '("C-s"))
+	     (add-hook 'minibuffer-setup-hook #'my/which-key-disable-in-minibuffer)
+	     (add-hook 'minibuffer-exit-hook #'my/which-key-restore-after-minibuffer))
 
 ;; ---- Windmove ----
 (use-package windmove
-  :ensure t
-  :config
-  (windmove-default-keybindings)
-  (global-set-key (kbd "C-h") 'windmove-left)
-  (global-set-key (kbd "C-j") 'windmove-down)
-  (global-set-key (kbd "C-k") 'windmove-up)
-  (global-set-key (kbd "C-l") 'windmove-right))
+	     :ensure t
+	     :config
+	     (windmove-default-keybindings)
+	     (global-set-key (kbd "C-h") 'windmove-left)
+	     (global-set-key (kbd "C-j") 'windmove-down)
+	     (global-set-key (kbd "C-k") 'windmove-up)
+	     (global-set-key (kbd "C-l") 'windmove-right))
 
 ;;; ============================================================================
 ;;; 编辑增强
@@ -327,16 +327,16 @@
 
 ;; ---- Yasnippet ----
 (use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode)
-  (use-package yasnippet-snippets :ensure t))
+	     :ensure t
+	     :config
+	     (yas-global-mode)
+	     (use-package yasnippet-snippets :ensure t))
 
 ;; ---- Expand-region ----
 (use-package expand-region
-  :ensure t
-  :bind (("<C-S-right>" . er/expand-region)
-	 ("<C-S-left>" . er/contract-region)))
+	     :ensure t
+	     :bind (("<C-S-right>" . er/expand-region)
+		    ("<C-S-left>" . er/contract-region)))
 
 ;; ---- Paredit ----
 (load (expand-file-name "~/.config/emacs/paredit-keymap.el"))
@@ -374,62 +374,78 @@
 (put 'dired-find-alternate-file 'disabled nil)
 (setq delete-by-moving-to-trash t)
 
+(defun my/revert-all-buffers ()
+  "Revert unmodified file and Dired buffers."
+  (interactive)
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (when (and (not (buffer-modified-p))
+                 (or (buffer-file-name)
+                     (derived-mode-p 'dired-mode)))
+        (revert-buffer t t t)))))
+
+(setq global-auto-revert-non-file-buffers t
+      auto-revert-verbose nil)
+(global-auto-revert-mode 1)
+(add-hook 'focus-in-hook #'my/revert-all-buffers)
+
 (use-package dired :ensure nil
-  :commands (dired dired-jump)
-  :after evil
-  :bind (("C-x C-j" . dired-jump))
-  :custom ((dired-listing-switches "-agho --group-directories-first"))
-  :hook
-  (dired-mode
-   .
-   (lambda ()
-     (evil-define-key 'normal dired-mode-map
-       (kbd "h") 'dired-up-directory
-       (kbd "l") 'dired-find-file
-       (kbd "a") 'dired-create-empty-file
-       (kbd "A") 'dired-create-directory
-       (kbd "D") 'dired-do-delete
-       (kbd "r") 'dired-do-rename
-       (kbd "R") 'revert-buffer
-       (kbd "m") 'dired-mark
-       (kbd ".") 'dired-omit-mode))))
+	     :commands (dired dired-jump)
+	     :after evil
+	     :bind (("C-x C-j" . dired-jump))
+	     :custom ((dired-listing-switches "-agho --group-directories-first"))
+	     :hook
+	     (dired-mode
+	       .
+	       (lambda ()
+		 (evil-define-key 'normal dired-mode-map
+				  (kbd "h") 'dired-up-directory
+				  (kbd "l") 'dired-find-file
+				  (kbd "a") 'dired-create-empty-file
+				  (kbd "A") 'dired-create-directory
+				  (kbd "D") 'dired-do-delete
+				  (kbd "r") 'dired-do-rename
+				  (kbd "R") 'revert-buffer
+				  (kbd "m") 'dired-mark
+				  (kbd ".") 'dired-omit-mode)
+		 )))
 
 (use-package wdired
-  :ensure nil
-  :after dired
-  :config
-  ;; 允许修改文件权限
-  (setq wdired-allow-to-change-permissions t)
-  ;; 在 Evil 下，进入 wdired 后自动进入 insert 模式（可选，方便直接修改）
-  ;; (add-hook 'wdired-mode-hook 'evil-insert-state)
-  )
+	     :ensure nil
+	     :after dired
+	     :config
+	     ;; 允许修改文件权限
+	     (setq wdired-allow-to-change-permissions t)
+	     ;; 在 Evil 下，进入 wdired 后自动进入 insert 模式（可选，方便直接修改）
+	     ;; (add-hook 'wdired-mode-hook 'evil-insert-state)
+	     )
 
 ;;; ============================================================================
 ;;; Ibuffer
 ;;; ============================================================================
 
 (use-package ibuffer
-  :ensure nil
-  :commands ibuffer
-  :hook (ibuffer-mode . my/ibuffer-setup)
-  :config
-  (defun my/ibuffer-setup ()
-    "Local defaults for `ibuffer-mode'."
-    (setq-local truncate-lines t)
-    (when (and (bound-and-true-p evil-mode)
-               (fboundp 'evil-normal-state))
-      (evil-normal-state)))
+	     :ensure nil
+	     :commands ibuffer
+	     :hook (ibuffer-mode . my/ibuffer-setup)
+	     :config
+	     (defun my/ibuffer-setup ()
+	       "Local defaults for `ibuffer-mode'."
+	       (setq-local truncate-lines t)
+	       (when (and (bound-and-true-p evil-mode)
+			  (fboundp 'evil-normal-state))
+		 (evil-normal-state)))
 
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'ibuffer-mode 'normal)
-    (evil-define-key 'normal ibuffer-mode-map
-      (kbd "j") #'ibuffer-forward-line
-      (kbd "k") #'ibuffer-backward-line
-      (kbd "RET") #'ibuffer-visit-buffer
-      (kbd "<return>") #'ibuffer-visit-buffer
-      (kbd "/") #'consult-line
-      (kbd "gr") #'ibuffer-update
-      (kbd "q") #'quit-window)))
+	     (with-eval-after-load 'evil
+				   (evil-set-initial-state 'ibuffer-mode 'normal)
+				   (evil-define-key 'normal ibuffer-mode-map
+						    (kbd "j") #'ibuffer-forward-line
+						    (kbd "k") #'ibuffer-backward-line
+						    (kbd "RET") #'ibuffer-visit-buffer
+						    (kbd "<return>") #'ibuffer-visit-buffer
+						    (kbd "/") #'consult-line
+						    (kbd "gr") #'ibuffer-update
+						    (kbd "q") #'quit-window)))
 
 ;;; ============================================================================
 ;;; Evil
@@ -442,39 +458,39 @@
   (keyboard-quit))
 
 (use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (fset 'evil-visual-update-x-selection 'ignore)
-  :config
-  (evil-mode 1)
-  (define-key evil-motion-state-map (kbd "C-z") 'suspend-frame)
-  (evil-ex-define-cmd "q" 'kill-this-buffer)
-  (evil-ex-define-cmd "quit" 'evil-quit)
-  (evil-ex-define-cmd "wq" (lambda () (interactive) (save-buffer) (kill-this-buffer)))
-  (evil-ex-define-cmd "x" (lambda () (interactive) (save-buffer) (kill-this-buffer)))
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "gt") 'next-buffer)
-  (define-key evil-normal-state-map (kbd "gT") 'previous-buffer)
-  (define-key evil-normal-state-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-motion-state-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-insert-state-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-window-map (kbd "C-g") #'evil-keyboard-quit)
-  (define-key evil-operator-state-map (kbd "C-g") #'evil-keyboard-quit))
+	     :ensure t
+	     :init
+	     (setq evil-want-integration t)
+	     (setq evil-want-keybinding nil)
+	     (fset 'evil-visual-update-x-selection 'ignore)
+	     :config
+	     (evil-mode 1)
+	     (define-key evil-motion-state-map (kbd "C-z") 'suspend-frame)
+	     (evil-ex-define-cmd "q" (lambda () (interactive) (kill-current-buffer)))
+	     (evil-ex-define-cmd "quit" 'evil-quit)
+	     (evil-ex-define-cmd "wq" (lambda () (interactive) (save-buffer) (kill-current-buffer)))
+	     (evil-ex-define-cmd "x" (lambda () (interactive) (save-buffer) (kill-current-buffer)))
+	     (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+	     (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+	     (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+	     (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+	     (define-key evil-normal-state-map (kbd "gt") 'next-buffer)
+	     (define-key evil-normal-state-map (kbd "gT") 'previous-buffer)
+	     (define-key evil-normal-state-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-motion-state-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-insert-state-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-window-map (kbd "C-g") #'evil-keyboard-quit)
+	     (define-key evil-operator-state-map (kbd "C-g") #'evil-keyboard-quit))
 
 (use-package evil-terminal-cursor-changer
-  :ensure t
-  :config
-  (evil-terminal-cursor-changer-activate)
-  (setq evil-motion-state-cursor 'box)
-  (setq evil-visual-state-cursor 'box)
-  (setq evil-normal-state-cursor 'box)
-  (setq evil-insert-state-cursor 'bar)
-  (setq evil-replace-state-cursor 'hbar))
+	     :ensure t
+	     :config
+	     (evil-terminal-cursor-changer-activate)
+	     (setq evil-motion-state-cursor 'box)
+	     (setq evil-visual-state-cursor 'box)
+	     (setq evil-normal-state-cursor 'box)
+	     (setq evil-insert-state-cursor 'bar)
+	     (setq evil-replace-state-cursor 'hbar))
 
 ;;; ============================================================================
 ;;; 编程语言 - Racket
@@ -495,38 +511,38 @@
 (defun my-eglot-racket-server ()
   "Return the preferred Racket LSP server command."
   (if (executable-find "xvfb-run")
-      '("xvfb-run" "-a" "racket" "-l" "racket-langserver")
+    '("xvfb-run" "-a" "racket" "-l" "racket-langserver")
     '("racket" "-l" "racket-langserver")))
 
 (defun my-racket-eglot-ensure ()
   "Start Eglot for Racket when racket-langserver is available."
   (if (my-racket-langserver-installed-p)
-      (eglot-ensure)
+    (eglot-ensure)
     (message "Racket Eglot requires: raco pkg install racket-langserver")))
 
 (use-package racket-mode
-  :ensure t
-  :mode "\\.scrbl\\'"
-  :hook ((racket-mode . my-racket-eglot-ensure)
-	 (racket-mode . company-mode)
-	 (racket-repl-mode . company-mode))
-  :config
-  (add-hook 'racket-xp-mode-hook
-	    (lambda ()
-	      (remove-hook 'pre-redisplay-functions
-			   #'racket-xp-pre-redisplay
-			   t)))
-  (setq racket-mode-help-on-errors nil)
-  :bind (:map racket-mode-map
-	      ("C-c C-d" . racket-doc)
-	      ("C-c C-r" . racket-run)))
+	     :ensure t
+	     :mode "\\.scrbl\\'"
+	     :hook ((racket-mode . my-racket-eglot-ensure)
+		    (racket-mode . company-mode)
+		    (racket-repl-mode . company-mode))
+	     :config
+	     (add-hook 'racket-xp-mode-hook
+		       (lambda ()
+			 (remove-hook 'pre-redisplay-functions
+				      #'racket-xp-pre-redisplay
+				      t)))
+	     (setq racket-mode-help-on-errors nil)
+	     :bind (:map racket-mode-map
+			 ("C-c C-d" . racket-doc)
+			 ("C-c C-r" . racket-run)))
 
 (defun my-scribble-build ()
   "Compile the current Scribble file."
   (interactive)
   (when (buffer-file-name)
     (let ((output (shell-command-to-string
-		   (format "scribble %s" (shell-quote-argument (buffer-file-name))))))
+		    (format "scribble %s" (shell-quote-argument (buffer-file-name))))))
       (message "%s" output))))
 
 (add-hook 'racket-mode-hook
@@ -541,113 +557,113 @@
 ;;; ============================================================================
 
 (use-package haskell-mode
-  :ensure t
-  :config
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-  (setq haskell-stylish-on-save t)
-  (setq haskell-indentation-layout-offset 4)
-  (setq haskell-indentation-starter-offset 4))
+	     :ensure t
+	     :config
+	     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+	     (setq haskell-stylish-on-save t)
+	     (setq haskell-indentation-layout-offset 4)
+	     (setq haskell-indentation-starter-offset 4))
 
 ;;; ============================================================================
 ;;; 编程语言 - Rust
 ;;; ============================================================================
 
 (use-package rust-mode
-  :ensure t
-  :mode "\\.rs\\'"
-  :config
-  (setq rust-format-on-save t))
+	     :ensure t
+	     :mode "\\.rs\\'"
+	     :config
+	     (setq rust-format-on-save t))
 
 ;;; ============================================================================
 ;;; 编程语言 - JavaScript / TypeScript
 ;;; ============================================================================
 
 (use-package typescript-mode
-  :ensure t
-  :demand t
-  :mode ("\\.ts\\'" . typescript-mode)
-  :config
-  (define-derived-mode my-typescript-tsx-mode typescript-mode "TSX"
-    "Major mode for TSX files using `typescript-mode' editing rules.")
-  (put 'my-typescript-tsx-mode 'eglot-language-id "typescriptreact")
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . my-typescript-tsx-mode)))
+	     :ensure t
+	     :demand t
+	     :mode ("\\.ts\\'" . typescript-mode)
+	     :config
+	     (define-derived-mode my-typescript-tsx-mode typescript-mode "TSX"
+				  "Major mode for TSX files using `typescript-mode' editing rules.")
+	     (put 'my-typescript-tsx-mode 'eglot-language-id "typescriptreact")
+	     (add-to-list 'auto-mode-alist '("\\.tsx\\'" . my-typescript-tsx-mode)))
 
 (use-package js
-  :ensure nil
-  :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
+	     :ensure nil
+	     :mode ("\\.mjs\\'" "\\.cjs\\'" "\\.js\\'"))
 
 (use-package eglot
-  :ensure nil
-  :hook ((python-mode . eglot-ensure)
-	 (python-ts-mode . eglot-ensure)
-	 (js-mode . eglot-ensure)
-	 (js-ts-mode . eglot-ensure)
-	 (typescript-mode . eglot-ensure)
-	 (typescript-ts-mode . eglot-ensure)
-	 (tsx-ts-mode . eglot-ensure)
-	 (my-typescript-tsx-mode . eglot-ensure)
-	 (clojure-mode . eglot-ensure)
-	 (clojurescript-mode . eglot-ensure)
-	 (clojurec-mode . eglot-ensure)
-	 (haskell-mode . eglot-ensure)
-	 (rust-mode . eglot-ensure)
-	 (rust-ts-mode . eglot-ensure)
-	 (dart-mode . eglot-ensure)
-	 (eglot-managed-mode . (lambda ()
-				 (flymake-mode 1))))
-  :bind (:map eglot-mode-map
-	      ("C-c C-e r" . eglot-rename)
-	      ("C-c C-e l" . flymake-show-buffer-diagnostics)
-	      ("C-c C-e p" . flymake-show-buffer-diagnostics)
-	      ("C-c C-e C" . eglot-show-workspace-configuration)
-	      ("C-c C-e R" . eglot-reconnect)
-	      ("C-c C-e S" . eglot-shutdown)
-	      ("C-c C-e A" . eglot-shutdown-all)
-	      ("C-c C-e a" . eglot-code-actions)
-	      ("C-c C-e f" . eglot-format)
-	      ("C-c r" . eglot-rename)
-	      ("C-c f" . eglot-code-actions))
-  :config
-  (defun my-eglot-python-server ()
-    "Return the preferred Python LSP server command."
-    (cond
-     ((executable-find "basedpyright-langserver")
-      '("basedpyright-langserver" "--stdio"))
-     ((executable-find "pyright-langserver")
-      '("pyright-langserver" "--stdio"))
-     (t
-      '("npx" "--yes" "pyright" "--stdio"))))
+	     :ensure nil
+	     :hook ((python-mode . eglot-ensure)
+		    (python-ts-mode . eglot-ensure)
+		    (js-mode . eglot-ensure)
+		    (js-ts-mode . eglot-ensure)
+		    (typescript-mode . eglot-ensure)
+		    (typescript-ts-mode . eglot-ensure)
+		    (tsx-ts-mode . eglot-ensure)
+		    (my-typescript-tsx-mode . eglot-ensure)
+		    (clojure-mode . eglot-ensure)
+		    (clojurescript-mode . eglot-ensure)
+		    (clojurec-mode . eglot-ensure)
+		    (haskell-mode . eglot-ensure)
+		    (rust-mode . eglot-ensure)
+		    (rust-ts-mode . eglot-ensure)
+		    (dart-mode . eglot-ensure)
+		    (eglot-managed-mode . (lambda ()
+					    (flymake-mode 1))))
+	     :bind (:map eglot-mode-map
+			 ("C-c C-e r" . eglot-rename)
+			 ("C-c C-e l" . flymake-show-buffer-diagnostics)
+			 ("C-c C-e p" . flymake-show-buffer-diagnostics)
+			 ("C-c C-e C" . eglot-show-workspace-configuration)
+			 ("C-c C-e R" . eglot-reconnect)
+			 ("C-c C-e S" . eglot-shutdown)
+			 ("C-c C-e A" . eglot-shutdown-all)
+			 ("C-c C-e a" . eglot-code-actions)
+			 ("C-c C-e f" . eglot-format)
+			 ("C-c r" . eglot-rename)
+			 ("C-c f" . eglot-code-actions))
+	     :config
+	     (defun my-eglot-python-server ()
+	       "Return the preferred Python LSP server command."
+	       (cond
+		 ((executable-find "basedpyright-langserver")
+		  '("basedpyright-langserver" "--stdio"))
+		 ((executable-find "pyright-langserver")
+		  '("pyright-langserver" "--stdio"))
+		 (t
+		   '("npx" "--yes" "pyright" "--stdio"))))
 
-  (defun my-eglot-ts-server ()
-    "Return the preferred TypeScript/JavaScript LSP server command."
-    (if (executable-find "typescript-language-server")
-	'("typescript-language-server" "--stdio")
-      '("npx" "--yes" "typescript-language-server" "--stdio")))
+	     (defun my-eglot-ts-server ()
+	       "Return the preferred TypeScript/JavaScript LSP server command."
+	       (if (executable-find "typescript-language-server")
+		 '("typescript-language-server" "--stdio")
+		 '("npx" "--yes" "typescript-language-server" "--stdio")))
 
-  (setq eglot-events-buffer-size 0)
-  (add-to-list 'eglot-server-programs
-	       `(racket-mode . ,(my-eglot-racket-server)))
-  (add-to-list 'eglot-server-programs
-	       `((python-mode python-ts-mode) . ,(my-eglot-python-server)))
-  (add-to-list 'eglot-server-programs
-	       `((js-mode
-		  js-ts-mode
-		  typescript-mode
-		  typescript-ts-mode
-		  tsx-ts-mode)
-		 . ,(my-eglot-ts-server)))
-  (add-to-list 'eglot-server-programs
-	       `((my-typescript-tsx-mode :language-id "typescriptreact")
-		 . ,(my-eglot-ts-server)))
-  (add-to-list 'eglot-server-programs
-	       '((rust-mode rust-ts-mode) . ("rust-analyzer")))
-  (add-to-list 'eglot-server-programs
-	       '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
-  (add-to-list 'eglot-server-programs
-	       '(dart-mode . ("dart" "language-server" "--protocol=lsp")))
-  (add-to-list 'eglot-server-programs
-	       '((clojure-mode clojurescript-mode clojurec-mode)
-		 . ("clojure-lsp"))))
+	     (setq eglot-events-buffer-size 0)
+	     (add-to-list 'eglot-server-programs
+			  `(racket-mode . ,(my-eglot-racket-server)))
+	     (add-to-list 'eglot-server-programs
+			  `((python-mode python-ts-mode) . ,(my-eglot-python-server)))
+	     (add-to-list 'eglot-server-programs
+			  `((js-mode
+			      js-ts-mode
+			      typescript-mode
+			      typescript-ts-mode
+			      tsx-ts-mode)
+			    . ,(my-eglot-ts-server)))
+	     (add-to-list 'eglot-server-programs
+			  `((my-typescript-tsx-mode :language-id "typescriptreact")
+			    . ,(my-eglot-ts-server)))
+	     (add-to-list 'eglot-server-programs
+			  '((rust-mode rust-ts-mode) . ("rust-analyzer")))
+	     (add-to-list 'eglot-server-programs
+			  '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
+	     (add-to-list 'eglot-server-programs
+			  '(dart-mode . ("dart" "language-server" "--protocol=lsp")))
+	     (add-to-list 'eglot-server-programs
+			  '((clojure-mode clojurescript-mode clojurec-mode)
+			    . ("clojure-lsp"))))
 
 ;;; ============================================================================
 ;;; 编程语言 - Clojure
@@ -661,22 +677,22 @@
 ;;; ============================================================================
 
 (use-package dart-mode
-  :ensure t
-  :mode "\\.dart\\'"
-  :custom
-  (dart-format-on-save t)
-  :hook ((dart-mode . subword-mode)
-	 (dart-mode . electric-pair-local-mode))
-  :bind (:map dart-mode-map
-	      ("C-c C-c" . eglot-format)))
+	     :ensure t
+	     :mode "\\.dart\\'"
+	     :custom
+	     (dart-format-on-save t)
+	     :hook ((dart-mode . subword-mode)
+		    (dart-mode . electric-pair-local-mode))
+	     :bind (:map dart-mode-map
+			 ("C-c C-c" . eglot-format)))
 
 (use-package flutter
-  :ensure t
-  :after dart-mode
-  :config
-  (let ((flutter-sdk (expand-file-name "~/.local/lib/flutter")))
-    (when (file-directory-p flutter-sdk)
-      (setq flutter-sdk-path flutter-sdk))))
+	     :ensure t
+	     :after dart-mode
+	     :config
+	     (let ((flutter-sdk (expand-file-name "~/.local/lib/flutter")))
+	       (when (file-directory-p flutter-sdk)
+		 (setq flutter-sdk-path flutter-sdk))))
 
 ;;; ============================================================================
 ;;; 编程语言 - Markdown
@@ -685,9 +701,9 @@
 (defun my-markdown-preview-output-file (input-file)
   "Return the HTML preview path for INPUT-FILE."
   (expand-file-name
-   (format "emacs-markdown-preview-%s.html"
-	   (md5 (expand-file-name input-file)))
-   temporary-file-directory))
+    (format "emacs-markdown-preview-%s.html"
+	    (md5 (expand-file-name input-file)))
+    temporary-file-directory))
 
 (defun my-markdown-preview ()
   "Render the current Markdown buffer with pandoc and open it in a browser."
@@ -709,14 +725,14 @@
 			"--output" output-file))
 	 (exit-code (apply #'call-process (car command) nil "*pandoc-preview*" t (cdr command))))
     (if (eq exit-code 0)
-        (progn
-	  (if (display-graphic-p)
-	      (browse-url-of-file output-file)
-	    (eww-open-file output-file))
-	  (message "Markdown preview: %s" output-file))
+      (progn
+	(if (display-graphic-p)
+	  (browse-url-of-file output-file)
+	  (eww-open-file output-file))
+	(message "Markdown preview: %s" output-file))
       (with-current-buffer (get-buffer-create "*pandoc-preview*")
-	(goto-char (point-max))
-	(error "Pandoc preview failed; see *pandoc-preview*")))))
+			   (goto-char (point-max))
+			   (error "Pandoc preview failed; see *pandoc-preview*")))))
 
 (defun my-markdown-mode-setup ()
   "Local setup shared by Markdown buffers."
@@ -730,47 +746,47 @@
   (local-set-key (kbd "C-c C-p") #'my-markdown-preview))
 
 (use-package markdown-mode
-  :ensure t
-  :mode (("README\\.md\\'" . gfm-mode)
-	 ("\\.md\\'" . markdown-mode)
-	 ("\\.markdown\\'" . markdown-mode))
-  :init
-  (setq markdown-command "pandoc")
-  :hook ((markdown-mode . my-markdown-mode-setup)
-	 (markdown-mode . pandoc-mode)
-	 (gfm-mode . my-markdown-mode-setup)
-	 (gfm-mode . pandoc-mode))
-  :bind ((:map markdown-mode-map
-	       ("C-c C-p" . my-markdown-preview))
-	 (:map gfm-mode-map
-	       ("C-c C-p" . my-markdown-preview)))
-  :config
-  (setq markdown-fontify-code-blocks-natively t
-	markdown-enable-math t
-	markdown-asymmetric-header t))
+	     :ensure t
+	     :mode (("README\\.md\\'" . gfm-mode)
+		    ("\\.md\\'" . markdown-mode)
+		    ("\\.markdown\\'" . markdown-mode))
+	     :init
+	     (setq markdown-command "pandoc")
+	     :hook ((markdown-mode . my-markdown-mode-setup)
+		    (markdown-mode . pandoc-mode)
+		    (gfm-mode . my-markdown-mode-setup)
+		    (gfm-mode . pandoc-mode))
+	     :bind ((:map markdown-mode-map
+			  ("C-c C-p" . my-markdown-preview))
+		    (:map gfm-mode-map
+			  ("C-c C-p" . my-markdown-preview)))
+	     :config
+	     (setq markdown-fontify-code-blocks-natively t
+		   markdown-enable-math t
+		   markdown-asymmetric-header t))
 
 (use-package pandoc-mode
-  :ensure t
-  :after markdown-mode
-  :hook ((markdown-mode . pandoc-mode)
-	 (gfm-mode . pandoc-mode))
-  :config
-  (setq pandoc-data-dir (expand-file-name "pandoc/" user-emacs-directory)))
+	     :ensure t
+	     :after markdown-mode
+	     :hook ((markdown-mode . pandoc-mode)
+		    (gfm-mode . pandoc-mode))
+	     :config
+	     (setq pandoc-data-dir (expand-file-name "pandoc/" user-emacs-directory)))
 
 ;;; ============================================================================
 ;;; 编程语言 - Scribble
 ;;; ============================================================================
 
 (use-package scribble-mode
-  :ensure t
-  :mode "\\.scrbl\\'"
-  :config
-  (setq scribble-indent-width 2)
-  (add-hook 'scribble-mode-hook #'company-mode)
-  (add-hook 'scribble-mode-hook #'show-paren-mode)
-  :bind (:map scribble-mode-map
-	      ("C-c C-c" . racket-run)
-	      ("C-c C-k" . racket-check-syntax-mode)))
+	     :ensure t
+	     :mode "\\.scrbl\\'"
+	     :config
+	     (setq scribble-indent-width 2)
+	     (add-hook 'scribble-mode-hook #'company-mode)
+	     (add-hook 'scribble-mode-hook #'show-paren-mode)
+	     :bind (:map scribble-mode-map
+			 ("C-c C-c" . racket-run)
+			 ("C-c C-k" . racket-check-syntax-mode)))
 
 ;;; ============================================================================
 ;;; Flymake
@@ -788,9 +804,9 @@
 (defun org-font-setup ()
   (when (display-graphic-p)
     (font-lock-add-keywords
-     'org-mode
-     '(("^ *\\([-]\\) "
-	(0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+      'org-mode
+      '(("^ *\\([-]\\) "
+	 (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
     (dolist (pair '((org-level-1 . 1.2)
 		    (org-level-2 . 1.15)
 		    (org-level-3 . 1.10)
@@ -802,7 +818,7 @@
       (let* ((face (car pair))
 	     (val (cdr pair))
 	     (height (if (and (numberp val) (< val 3))
-		         (truncate (* val 100))
+		       (truncate (* val 100))
 		       (truncate val))))
 	(set-face-attribute face nil
 			    :font "Ubuntu"
@@ -810,12 +826,12 @@
 			    :height height)))))
 
 (use-package org-bullets
-  :ensure t
-  :after org
-  :hook ((org-mode . org-font-setup)
-	 (org-mode . org-bullets-mode))
-  :custom
-  (org-bullets-bullet-list '("✱" "◉" "◆" "◇" "◈" "✲" "✧" "⊙" "✦" "⊚" "⊛" "○")))
+	     :ensure t
+	     :after org
+	     :hook ((org-mode . org-font-setup)
+		    (org-mode . org-bullets-mode))
+	     :custom
+	     (org-bullets-bullet-list '("✱" "◉" "◆" "◇" "◈" "✲" "✧" "⊙" "✦" "⊚" "⊛" "○")))
 
 (use-package org :ensure t)
 
@@ -824,14 +840,14 @@
 ;;; ============================================================================
 
 (use-package rime
-  :ensure t
-  :custom
-  (default-input-method "rime")
-  (rime-title " 中 ")
-  (rime-user-data-dir "~/.config/rime")
-  :config
-  (setq rime-show-candidate 'minibuffer)
-  (setq rime-inline-ascii-trigger 'shift-l))
+	     :ensure t
+	     :custom
+	     (default-input-method "rime")
+	     (rime-title " 中 ")
+	     (rime-user-data-dir "~/.config/rime")
+	     :config
+	     (setq rime-show-candidate 'minibuffer)
+	     (setq rime-inline-ascii-trigger 'shift-l))
 
 
 ;;; ============================================================================
@@ -846,40 +862,40 @@
 
 ;; 状态栏精简（解决终端下显示不全的问题）
 (use-package minions
-  :ensure t
-  :config
-  (setq minions-mode-line-lighter " [+]") ; 在终端下显示为 [+] 比较整齐
-  (minions-mode 1))
+	     :ensure t
+	     :config
+	     (setq minions-mode-line-lighter " [+]") ; 在终端下显示为 [+] 比较整齐
+	     (minions-mode 1))
 
 
 
 (use-package doom-themes
-  :ensure t
-  :init (load-theme 'doom-one t)
-  :config
-  (doom-themes-org-config)
-  (custom-set-faces
-   `(line-number ((t (:foreground "#54636D"))))))
+	     :ensure t
+	     :init (load-theme 'doom-one t)
+	     :config
+	     (doom-themes-org-config)
+	     (custom-set-faces
+	       `(line-number ((t (:foreground "#54636D"))))))
 
 (use-package keycast
-  :ensure t
-  :custom
-  (keycast-tab-bar-format "[%k]%c%R")
-  (keycast-tab-bar-minimal-width 30)
-  :config
-  (keycast-tab-bar-mode 1))
+	     :ensure t
+	     :custom
+	     (keycast-tab-bar-format "[%k]%c%R")
+	     (keycast-tab-bar-minimal-width 30)
+	     :config
+	     (keycast-tab-bar-mode 1))
 
 (use-package smart-mode-line
-  :ensure t
-  :init
-  (setq sml/no-confirm-load-theme t)
-  (sml/setup))
+	     :ensure t
+	     :init
+	     (setq sml/no-confirm-load-theme t)
+	     (sml/setup))
 
 ;;; packages.el ends here
 
 (use-package imenu-list
-  :ensure t
-  :commands (imenu-list-smart-toggle)
-  :config
-  (setq imenu-list-focus-after-activation t)
-  (setq imenu-list-auto-resize t))
+	     :ensure t
+	     :commands (imenu-list-smart-toggle)
+	     :config
+	     (setq imenu-list-focus-after-activation t)
+	     (setq imenu-list-auto-resize t))
