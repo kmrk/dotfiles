@@ -6,3 +6,6 @@ transient
 tree-sitter
 history
 .lsp-session-v1
+tramp
+url/
+.codex

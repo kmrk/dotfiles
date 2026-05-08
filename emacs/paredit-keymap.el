@@ -1,24 +1,24 @@
 ;;; paredit-keymap.el --- Custom paredit / evil-paredit bindings -*- lexical-binding: t; -*-
+;;; VI-style paredit keybindings
+;;;
 ;;; Commentary:
 ;;
-;;
-;;                       [ M-k ]
-;;                          ^
 ;;                    (WRAP CURRENT)
+;;                       [ M-k ] 
+;;                          ^
 ;;                          |
-;;          [ M-h ] <-------+-------> [ M-l ]
-;;          (SLURP)         |         (SLURP)
+;;     (SLURP L) [ M-h ] <- + -> [ M-l ] (SLURP R)
+;;                          |        
+;;      (BARF L) [ M-H ] <- + -> [ M-L ] (BARF R)
 ;;                          |
-;;          [ M-H ] <-------+-------> [ M-L ]
-;;          ( BARF)         |         ( BARF)
-;;                          |
-;;                    (REMOVE SHELL)
 ;;                          v
-;;                       [ M-j ]
+;;                       [ M-j ] 
+;;                    (REMOVE SHELL)
 ;;
-;;  ─────────────────────────────────────────────────
-;;     NAVIGATE:  [ M-p ]  <─── o ───>  [ M-n ]
-;;  ─────────────────────────────────────────────────
+;;  ──────────────────────────────────────────────────────────────
+;;            NAVIGATE:  [ M-p ]  <─── o ───>  [ M-n ]
+;;  ──────────────────────────────────────────────────────────────
+;;
 ;;
 ;;  [ DESIGN LOGIC ]
 ;;  - Vertical (j/k): Structural Depth (In/Out)
@@ -41,7 +41,6 @@
 ;; - down removes the nearest enclosing shell around point.
 
 ;;; Code:
-
 (use-package paredit
   :ensure t
   :hook ((prog-mode . enable-paredit-mode)
