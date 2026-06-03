@@ -135,6 +135,46 @@ alias rcc="ccr code"
 
 path_prepend "$HOME/.local/share/zig"
 
+__cd_at_path_file="${XDG_CACHE_HOME:-$HOME/.cache}/last-cd-path"
+__cd_at_current_path=$PWD
+
+__record_cd_at_path() {
+    if [ "$PWD" != "$__cd_at_current_path" ]; then
+        mkdir -p "${__cd_at_path_file%/*}"
+        printf '%s\n' "$PWD" > "$__cd_at_path_file"
+        __cd_at_current_path=$PWD
+    fi
+}
+
+cdd() {
+    if [ "$#" -eq 0 ] || { [ "$#" -eq 1 ] && [ "$1" = "@" ]; }; then
+        local target
+
+        if [ ! -s "$__cd_at_path_file" ]; then
+            printf 'cdd: no previous cd path yet\n' >&2
+            return 1
+        fi
+
+        IFS= read -r target < "$__cd_at_path_file"
+        if [ ! -d "$target" ]; then
+            printf 'cdd: recorded path is not a directory: %s\n' "$target" >&2
+            return 1
+        fi
+
+        builtin cd "$target"
+        return
+    fi
+
+    printf 'usage: cdd [@]\n' >&2
+    return 2
+}
+
+if [ -n "${PROMPT_COMMAND:-}" ]; then
+    PROMPT_COMMAND="__record_cd_at_path; $PROMPT_COMMAND"
+else
+    PROMPT_COMMAND="__record_cd_at_path"
+fi
+
 alias winfix='[ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && sudo sh -c "echo \":WSLInterop:M::MZ::/init:PF\" > /proc/sys/fs/binfmt_misc/register"'
 
 # bun
@@ -143,7 +183,6 @@ path_prepend "$BUN_INSTALL/bin"
 
 
 
-export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/icapp/material-resources"
 
 export MVN_INSTALL="/home/ysong/.local/share/maven"
 path_prepend "$MVN_INSTALL/bin"
@@ -188,3 +227,12 @@ fpath(){ selected=$(fdfind -t f | fzf --height 40% --reverse) || return; printf 
 
 alias _history_fzf='READLINE_LINE=$(history | sed "s/ *[0-9]* *//" | sort -u | tac | fzf --height 40% --reverse); READLINE_POINT=${#READLINE_LINE}'
 bind -x '"\C-r": _history_fzf'
+
+
+
+
+
+export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/dianchi/icapp-resources"
+
+
+stty -ixon
