@@ -161,7 +161,8 @@ cdd() {
             return 1
         fi
 
-        builtin cd "$target"
+        builtin cd "$target" || return
+        printf '\033[90m→  %s\033[0m\n' "$PWD"
         return
     fi
 
@@ -235,4 +236,3 @@ bind -x '"\C-r": _history_fzf'
 export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/dianchi/icapp-resources"
 
 
-stty -ixon
