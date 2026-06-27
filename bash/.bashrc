@@ -45,6 +45,9 @@ fi
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    LS_COLORS="${LS_COLORS//ow=34;42/ow=01;37;100}"
+    LS_COLORS="${LS_COLORS//tw=30;42/tw=01;37;100}"
+    export LS_COLORS
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
@@ -234,5 +237,3 @@ bind -x '"\C-r": _history_fzf'
 
 
 export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/dianchi/icapp-resources"
-
-
