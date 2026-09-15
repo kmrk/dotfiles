@@ -237,3 +237,10 @@ bind -x '"\C-r": _history_fzf'
 
 
 export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/dianchi/icapp-resources"
+
+
+alias ssh="ssh -o ServerAliveInterval=50 -o ServerAliveCountMax=3"
+
+
+
+export PATH="//home/ysong/.local/share/mote-0.1.0-linux-headless:$PATH"
