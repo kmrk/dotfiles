@@ -237,3 +237,9 @@ bind -x '"\C-r": _history_fzf'
 
 
 export KEP_COMPILE_RESOURCE_PATH="/home/ysong/codz/dianchi/icapp-resources"
+
+
+alias ssh="ssh -o ServerAliveInterval=50 -o ServerAliveCountMax=3"
+
+export HTTP_PROXY=http://127.0.0.1:8081
+export HTTPS_PROXY=http://127.0.0.1:8081

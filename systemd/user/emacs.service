@@ -1,12 +1,11 @@
 [Unit]
-Description=Emacs Daemon (Guix)
+Description=Emacs Daemon
 
 [Service]
-Environment="LD_LIBRARY_PATH=%h/.guix-profile/lib"
 Environment="COLORTERM=truecolor"
 Environment="TERM=xterm-256color"
 Type=simple
-ExecStart=%h/.guix-profile/bin/emacs --fg-daemon
+ExecStart=/snap/bin/emacs --fg-daemon
 Restart=on-failure
 TimeoutStopSec=10
 
