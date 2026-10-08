@@ -1,18 +1,17 @@
-;;; paredit-keymap.el --- Custom paredit / evil-paredit bindings -*- lexical-binding: t; -*-
-;;; VI-style paredit keybindings
+;;; init-paredit.el --- Paredit + VI 风格结构化编辑键位 -*- lexical-binding: t; -*-
 ;;;
 ;;; Commentary:
 ;;
 ;;                    (WRAP CURRENT)
-;;                       [ M-k ] 
+;;                       [ M-k ]
 ;;                          ^
 ;;                          |
 ;;     (SLURP L) [ M-h ] <- + -> [ M-l ] (SLURP R)
-;;                          |        
+;;                          |
 ;;      (BARF L) [ M-H ] <- + -> [ M-L ] (BARF R)
 ;;                          |
 ;;                          v
-;;                       [ M-j ] 
+;;                       [ M-j ]
 ;;                    (REMOVE SHELL)
 ;;
 ;;  ──────────────────────────────────────────────────────────────
@@ -41,21 +40,15 @@
 ;; - down removes the nearest enclosing shell around point.
 
 ;;; Code:
+
+;; prog-mode 已经覆盖 elisp/lisp/scheme/racket/clojure 等所有编程 mode，
+;; 这里只需额外列出不是从 prog-mode 派生的 REPL 和 minibuffer。
 (use-package paredit
-  :ensure t
   :hook ((prog-mode . enable-paredit-mode)
-	 (emacs-lisp-mode . enable-paredit-mode)
-	 (eval-expression-minibuffer-setup . enable-paredit-mode)
-	 (ielm-mode . enable-paredit-mode)
-	 (lisp-mode . enable-paredit-mode)
-	 (lisp-interaction-mode . enable-paredit-mode)
-	 (scheme-mode . enable-paredit-mode)
-	 (racket-mode . enable-paredit-mode)
-	 (slime-repl-mode . enable-paredit-mode)
-	 (clojure-mode . enable-paredit-mode)
-	 (clojurescript-mode . enable-paredit-mode)
-	 (cider-repl-mode . enable-paredit-mode)
-	 (cider-mode . enable-paredit-mode)))
+         (eval-expression-minibuffer-setup . enable-paredit-mode)
+         (ielm-mode . enable-paredit-mode)
+         (slime-repl-mode . enable-paredit-mode)
+         (cider-repl-mode . enable-paredit-mode)))
 
 (with-eval-after-load 'evil
   (unless (fboundp 'evil-called-interactively-p)
@@ -132,7 +125,6 @@
         (insert (car delims))))))
 
 (use-package evil-paredit
-  :ensure t
   :after (evil paredit)
   :hook (paredit-mode . evil-paredit-mode)
   :config
@@ -147,5 +139,5 @@
   (define-key evil-paredit-mode-map (kbd "M-n") #'paredit-forward)
   (define-key evil-paredit-mode-map (kbd "M-p") #'paredit-backward))
 
-(provide 'paredit-keymap)
-;;; paredit-keymap.el ends here
+(provide 'init-paredit)
+;;; init-paredit.el ends here
