@@ -128,7 +128,7 @@ eval "$(direnv hook bash)"
 alias lll='echo -e "\033[1;34m$(pwd)\033[0m";ls -lh --color=always | awk '\''NR>1 {printf "%-7s %-3s %2s %-5s ", $5, $6, $7, $8; for(i=9; i<=NF; i++) printf $i (i==NF ? "" : " "); print ""}'\'''
 alias emc="emacsclient -nw ."
 alias p4="proxychains4"
-alias cc="claude"
+alias cc="$HOME/.config/bb/cc.clj"   # 多账号启动 claude，原来是 alias cc="claude"
 alias open="explorer.exe"
 alias f="flutter run -d linux"
 alias cls="clear"
