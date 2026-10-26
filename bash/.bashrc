@@ -245,3 +245,10 @@ export HTTP_PROXY=http://127.0.0.1:8081
 export HTTPS_PROXY=http://127.0.0.1:8081
 
 export PATH="//home/ysong/.local/share/mote-0.1.0-linux-headless:$PATH"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/ysong/.local/bin:$PATH"
+
+alias ag="agy --continue --dangerously-skip-permissions --mode auto"
+
