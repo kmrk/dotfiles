@@ -18,3 +18,5 @@ mote/
 tmux/plugins
 
 tlc/
+chromium
+chromium-headless
