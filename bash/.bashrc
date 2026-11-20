@@ -137,39 +137,48 @@ alias rcc="ccr code"
 
 path_prepend "$HOME/.local/share/zig"
 
-__cd_at_path_file="${XDG_CACHE_HOME:-$HOME/.cache}/last-cd-path"
+__cd_at_path_file="${XDG_CACHE_HOME:-$HOME/.cache}/cd-history"
 __cd_at_current_path=$PWD
 
 __record_cd_at_path() {
     if [ "$PWD" != "$__cd_at_current_path" ]; then
-        mkdir -p "${__cd_at_path_file%/*}"
-        printf '%s\n' "$PWD" > "$__cd_at_path_file"
+        local f="$__cd_at_path_file"
+        mkdir -p "${f%/*}"
+        # 把当前目录插到最前面，去重，最多保留 50 条
+        local tmp
+        tmp=$(printf '%s\n' "$PWD"; grep -Fxv "$PWD" "$f" 2>/dev/null | head -49)
+        printf '%s\n' "$tmp" > "$f"
         __cd_at_current_path=$PWD
     fi
 }
 
 cdd() {
-    if [ "$#" -eq 0 ] || { [ "$#" -eq 1 ] && [ "$1" = "@" ]; }; then
-        local target
-
-        if [ ! -s "$__cd_at_path_file" ]; then
-            printf 'cdd: no previous cd path yet\n' >&2
-            return 1
-        fi
-
-        IFS= read -r target < "$__cd_at_path_file"
-        if [ ! -d "$target" ]; then
-            printf 'cdd: recorded path is not a directory: %s\n' "$target" >&2
-            return 1
-        fi
-
-        builtin cd "$target" || return
-        printf '\033[90m→  %s\033[0m\n' "$PWD"
-        return
+    local f="$__cd_at_path_file"
+    if [ ! -s "$f" ]; then
+        printf 'cdd: no history yet\n' >&2; return 1
     fi
+    local target
+    target=$(grep . "$f" | fzf \
+        --height=40% --reverse \
+        --prompt='cd > ' \
+        --no-sort \
+        --exit-0 \
+        2>/dev/tty) || return 0
+    [ -d "$target" ] || { printf 'cdd: not a directory: %s\n' "$target" >&2; return 1; }
+    builtin cd "$target" || return
+    printf '\033[90m→  %s\033[0m\n' "$PWD"
+}
 
-    printf 'usage: cdd [@]\n' >&2
-    return 2
+cdl() {
+    local f="$__cd_at_path_file"
+    if [ ! -s "$f" ]; then
+        printf 'cdl: no history yet\n' >&2; return 1
+    fi
+    local target
+    IFS= read -r target < "$f"
+    [ -d "$target" ] || { printf 'cdl: not a directory: %s\n' "$target" >&2; return 1; }
+    builtin cd "$target" || return
+    printf '\033[90m→  %s\033[0m\n' "$PWD"
 }
 
 if [ -n "${PROMPT_COMMAND:-}" ]; then
@@ -253,4 +262,6 @@ alias ag="agy --continue --dangerously-skip-permissions --mode auto"
 
 export PATH="$HOME/.ghcup/bin:$HOME/.local/bin:$PATH"
 export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
+alias cdx="codex --yolo"
+
 export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"

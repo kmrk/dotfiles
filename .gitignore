@@ -16,3 +16,6 @@ google-chrome-for-testing/
 mote/
 
 tmux/plugins
+
+chromium
+chromium-headless
