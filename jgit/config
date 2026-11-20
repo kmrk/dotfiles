@@ -7,3 +7,6 @@
 [filesystem "Ubuntu|21.0.12.1|/dev/sdd"]
 	timestampResolution = 2695 nanoseconds
 	minRacyThreshold = 7667 microseconds
+[filesystem "Ubuntu|21.0.13.0.3|/dev/sde"]
+	timestampResolution = 3755 nanoseconds
+	minRacyThreshold = 0 nanoseconds

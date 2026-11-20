@@ -254,7 +254,6 @@ export HTTPS_PROXY=http://127.0.0.1:8081
 
 export PATH="//home/ysong/.local/share/mote-0.1.0-linux-headless:$PATH"
 
-
 # Added by Antigravity CLI installer
 export PATH="/home/ysong/.local/bin:$PATH"
 
@@ -265,3 +264,26 @@ export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
 alias cdx="codex --yolo"
 
 export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+
+
+sloc() {
+    local lang="${1,,}" specs=() out
+    case "$lang" in
+      haskell|hs)    specs=('*.hs') ;;
+      python|py)     specs=('*.py') ;;
+      rust|rs)       specs=('*.rs') ;;
+      go)            specs=('*.go') ;;
+      typescript|ts) specs=('*.ts' '*.tsx') ;;
+      javascript|js) specs=('*.js' '*.jsx') ;;
+      markdown|md)   specs=('*.md') ;;
+      c)             specs=('*.c' '*.h') ;;
+      cpp|c++)       specs=('*.cpp' '*.cc' '*.hpp') ;;
+      *)             specs=("*.${lang#.}") ;;
+    esac
+    out=$(git ls-files -z --cached --others --exclude-standard -- "${specs[@]}" \
+          | while IFS= read -r -d '' f; do [ -f "$f" ] && printf '%s\0' "$f"; done \
+          | xargs -0 -r wc -l | tail -1)
+    echo "${out:-      0 total}"
+  }
+
+
